@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 6 – Maahkreaktion</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; padding: 20px; }
+    select, button, input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px; margin: 4px; }
+    .debug { border: 1px dashed #0f0; background: #111; padding: 10px; height: 300px; overflow-y: scroll; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<h1>Phase 6 – Maahkreaktion</h1>
+
+<label>Reagierendes Geschwader:</label>
+<select id="geschwader"></select>
+<label>Ziel-Hex (nur operativ, max 3 Felder):</label>
+<select id="ziel"></select>
+<button onclick="reaktionsbewegung()">Reaktionsbewegung prüfen & ausführen</button>
+
+<div class="debug" id="debug">Debug-Konsole wird geladen…</div>
+
+<script>
+const einheiten = {
+  "5. LIG": { lp: 3, qualitaet: "Veteran", hex: "B10", typ: "Kampf" },
+  "22. Aufkl.": { lp: 3, qualitaet: "Regulär", hex: "B11", typ: "Aufklärer" },
+  "1. RFT": { lp: 3, qualitaet: "Regulär", hex: "B13", typ: "Raumfort" }
+};
+
+const feinde = {
+  "17. Linieng.": { hex: "B11" },
+  "1. IMPG": { hex: "B10" }
+};
+
+const zielHex = ["B08", "B09", "B10", "B11", "B12", "B13"];
+
+function log(msg) {
+  const d = document.getElementById("debug");
+  d.textContent += "\n" + msg;
+  d.scrollTop = d.scrollHeight;
+}
+
+function iniProbe(name) {
+  const quali = einheiten[name].qualitaet;
+  const bonus = { Legendär: 4, Elite: 2, Veteran: 1, Regulär: 0, Grün: -1 }[quali] || 0;
+  const wurf = Math.floor(Math.random() * 20) + 1;
+  const mod = wurf - 10;
+  const gesamt = 7 + bonus + mod;
+  log(`🎲 Initiativeprobe ${name}: 7 + Bonus(${bonus}) + Mod(${mod}) = ${gesamt}`);
+  return gesamt > 10;
+}
+
+function kontrollprobe(name, ziel) {
+  const gegnerImFeld = Object.entries(feinde).filter(([_, data]) => data.hex === ziel);
+  for (const [gegnerName, _] of gegnerImFeld) {
+    log(`⚠️ Kontrollprobe gegen ${gegnerName} in ${ziel}`);
+    if (Math.random() < 0.5) {
+      log(`❌ Bewegung von ${name} durch ${gegnerName} gestoppt.`);
+      return false;
+    } else {
+      log(`✅ ${name} konnte ${gegnerName} passieren.`);
+    }
+  }
+  return true;
+}
+
+function reaktionsbewegung() {
+  const name = document.getElementById("geschwader").value;
+  const ziel = document.getElementById("ziel").value;
+  const einheit = einheiten[name];
+
+  if (einheit.typ === "Raumfort") return log("❌ Raumforts sind immobil.");
+  if (einheit.typ !== "Aufklärer" && !iniProbe(name)) return log("❌ Initiativeprobe nicht bestanden.");
+
+  if (ziel === einheit.hex) return log("⚠️ Ziel = aktuelles Hexfeld – keine Bewegung nötig.");
+
+  const entfernung = 3; // Platzhalter, eigentlich müsste Entfernung berechnet werden
+  if (entfernung > 3) return log("❌ Ziel liegt außerhalb der operativen Reichweite (max 3).");
+
+  if (einheit.typ !== "Aufklärer" && !kontrollprobe(name, ziel)) return;
+
+  einheit.hex = ziel;
+  log(`✅ ${name} hat sich erfolgreich nach ${ziel} bewegt.`);
+}
+
+function fillDropdowns() {
+  const g = document.getElementById("geschwader");
+  const z = document.getElementById("ziel");
+  g.innerHTML = z.innerHTML = "";
+  for (let e in einheiten) g.add(new Option(`${e} (${einheiten[e].hex})`, e));
+  zielHex.forEach(h => z.add(new Option(h, h)));
+}
+
+window.onload = fillDropdowns;
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Methankrieg – Phase 3: Maahk-Reaktion</title>
+  <style>
+    body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+    select, button { background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px; margin: 4px 0; }
+    .debug { background: #111; padding: 10px; border: 1px dashed #0f0; height: 300px; overflow-y: scroll; white-space: pre-wrap; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Phase 3 – Maahk-Reaktion (inkl. Bewegungsstopp & Aufklärerausnahme)</h1>
+
+<label for="geschwader">Maahk-Geschwader wählen:</label>
+<select id="geschwader"></select>
+
+<label for="ziel">Ziel-Hex:</label>
+<select id="ziel"></select>
+
+<button onclick="reaktionBewegung()">Reaktionsbewegung starten</button>
+
+<div class="debug" id="debug">Debug-Konsole wird geladen…</div>
+
+<script>
+const einheiten = {
+  "5. LIG": { lp: 3, qualitaet: "Veteran", hex: "B10", typ: "Kampf", admiral: "Grek 1" },
+  "22. Aufkl.": { lp: 3, qualitaet: "Regulär", hex: "B11", typ: "Aufklärer" },
+  "1. RFT": { lp: 3, qualitaet: "Regulär", hex: "B12", typ: "Raumfort" }
+};
+
+const feinde = {
+  "17. Linieng.": { lp: 3, qualitaet: "Veteran", hex: "B11", typ: "Kampf" },
+  "1. IMPG": { lp: 3, qualitaet: "Legendär", hex: "B10", typ: "Kampf" }
+};
+
+const zielHex = ["B08", "B09", "B10", "B11", "B12", "B13"];
+
+function fillDropdowns() {
+  const gw = document.getElementById("geschwader");
+  const zh = document.getElementById("ziel");
+  gw.innerHTML = ""; zh.innerHTML = "";
+  Object.keys(einheiten).forEach(e => gw.add(new Option(`${e} (${einheiten[e].hex})`, e)));
+  zielHex.forEach(h => zh.add(new Option(h, h)));
+}
+window.onload = fillDropdowns;
+
+function getDebug() { return document.getElementById("debug"); }
+function log(msg) { const d = getDebug(); d.textContent += "\n" + msg; d.scrollTop = d.scrollHeight; }
+function getRandomMod() {
+  const mods = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7,8,9,10];
+  return mods[Math.floor(Math.random() * mods.length)];
+}
+function iniProbe(name) {
+  const basis = 7;
+  const qualiBonus = { Legendär: 4, Elite: 2, Veteran: 1, Regulär: 0, Grün: -1 };
+  const quali = einheiten[name].qualitaet;
+  const mod = getRandomMod();
+  const result = basis + (qualiBonus[quali] || 0) + mod;
+  log(`Initiativeprobe ${name}: Basis 7 + Quali ${qualiBonus[quali] || 0} + Modifikator ${mod} = ${result}`);
+  return result;
+}
+
+function kontrollprobe(ziel, name) {
+  const eigene = einheiten[name];
+  const gegner = Object.entries(feinde).filter(([_, d]) => d.hex === ziel);
+  if (gegner.length === 0 || eigene.typ === "Aufklärer") return true;
+  for (const [fname, fdata] of gegner) {
+    const eigeneProbe = iniProbe(name);
+    const gegnerProbe = iniProbe(fname);
+    log(`Kontrollprobe ${name} gegen ${fname}: ${eigeneProbe} vs ${gegnerProbe}`);
+    if (eigeneProbe <= gegnerProbe) {
+      log(`❌ Bewegung blockiert durch ${fname}`);
+      return false;
+    }
+  }
+  return true;
+}
+
+function reaktionBewegung() {
+  const name = document.getElementById("geschwader").value;
+  const ziel = document.getElementById("ziel").value;
+  const einheit = einheiten[name];
+  log(`\n>>> Reaktion ${name} (${einheit.hex} → ${ziel})`);
+
+  if (einheit.typ === "Raumfort") {
+    log("❌ Raumforts sind immobil und dürfen nicht reagieren.");
+    return;
+  }
+
+  if (einheit.typ === "Aufklärer") {
+    log("🛰️ Aufklärer darf immer reagieren. Bewegung erlaubt.");
+    if (!kontrollprobe(ziel, name)) return;
+    einheit.hex = ziel;
+    log(`✅ ${name} ist jetzt in ${ziel}.`);
+    return;
+  }
+
+  const erfolg = iniProbe(name);
+  if (erfolg <= 10) {
+    log("❌ Reaktions-Initiativeprobe nicht bestanden. Keine Bewegung erlaubt.");
+    return;
+  }
+  log("✅ Reaktions-Initiativeprobe bestanden.");
+  if (!kontrollprobe(ziel, name)) return;
+  einheit.hex = ziel;
+  log(`✅ ${name} ist jetzt in ${ziel}.`);
+}
+</script>
+
+</body>
+</html>

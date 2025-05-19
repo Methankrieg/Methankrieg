@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Methankrieg – Prototypsteuerung</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; padding: 20px; }
+    button { background: #111; color: #0f0; border: 1px solid #0f0; padding: 8px; margin: 4px; cursor: pointer; }
+    iframe { width: 100%; height: 600px; border: 1px solid #0f0; margin-top: 10px; background: #222; }
+    .debug { margin-top: 20px; border: 1px dashed #0f0; background: #111; padding: 10px; height: 200px; overflow-y: scroll; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<h1>Methankrieg – Rundenprototyp</h1>
+
+<div>
+  <button onclick="ladePhase('phase_1_produktion_final.html')">Phase 1: Produktion</button>
+  <button onclick="ladePhase('phase_2_bewegung_arkoniden_final.html')">Phase 2: Bewegung Arkoniden</button>
+  <button onclick="ladePhase('phase_3_reaktion_maahks_final.html')">Phase 3: Reaktion Maahks</button>
+  <button onclick="ladePhase('phase_4_kampf_arkoniden_final.html')">Phase 4: Kampf Arkoniden</button>
+  <button onclick="ladePhase('phase_5_bewegung_maahks_final.html')">Phase 5: Bewegung Maahks</button>
+  <button onclick="ladePhase('phase_6_reaktion_arkoniden_final.html')">Phase 6: Reaktion Arkoniden</button>
+  <button onclick="ladePhase('phase_7_kampf_maahks_final.html')">Phase 7: Kampf Maahks</button>
+  <button onclick="ladePhase('phase_8_rundenfortschritt_final.html')">Phase 8: Rundenfortschritt</button>
+</div>
+
+<iframe id="phasenmodul" src="" title="Modul"></iframe>
+
+<div class="debug" id="debug">🔄 gameState-Konsole wird geladen…</div>
+
+<script>
+const gameState = {
+  runde: 1,
+  maxRunden: 272,
+  einheiten: {},
+  werften: {},
+  fraktionen: {},
+  phasenstatus: {
+    produktion: false,
+    bewegung_arkoniden: false,
+    reaktion_maahks: false,
+    kampf_arkoniden: false,
+    bewegung_maahks: false,
+    reaktion_arkoniden: false,
+    kampf_maahks: false,
+    rundenfortschritt: false
+  }
+};
+
+function ladePhase(datei) {
+  const f = document.getElementById("phasenmodul");
+  f.src = datei;
+  log(`📦 Lade Modul: ${datei}`);
+}
+
+function log(text) {
+  const dbg = document.getElementById("debug");
+  dbg.textContent += "\n" + text;
+  dbg.scrollTop = dbg.scrollHeight;
+}
+</script>
+
+</body>
+</html>

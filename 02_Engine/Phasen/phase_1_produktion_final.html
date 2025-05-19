@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 1 – Produktionsphase mit automatischer Werftwahl</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; padding: 20px; }
+    select, button, input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px; margin: 4px; }
+    .debug { border: 1px dashed #0f0; background: #111; padding: 10px; height: 300px; overflow-y: scroll; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<h1>Phase 1 – Produktionsphase</h1>
+
+<label>Fraktion:</label>
+<select id="fraktion">
+  <option value="arkoniden">Arkoniden</option>
+  <option value="maahks">Maahks</option>
+</select>
+
+<label>System:</label>
+<select id="system">
+  <option value="Trantor">Trantor</option>
+  <option value="Casyat">Casyat</option>
+</select>
+
+<label>Einheitentyp:</label>
+<select id="einheit">
+  <option value="Zerstörer">Zerstörer (5)</option>
+  <option value="Schlachtschiff">Schlachtschiff (10)</option>
+  <option value="Aufklärer">Aufklärer (4)</option>
+</select>
+
+<label>Aktion:</label>
+<select id="aktion">
+  <option value="neubau">Neubau</option>
+  <option value="auffrischung_werft">Auffrischung in der Werft</option>
+  <option value="auffrischung_front">Auffrischung in der Frontlinie</option>
+</select>
+
+<button onclick="produktionStarten()">Produktion starten</button>
+
+<div class="debug" id="debug">Debug-Konsole wird geladen…</div>
+
+<script>
+const werften = {
+  Trantor: [
+    { name: "Werft A", kapazitaet: 12, belegt: 5 },
+    { name: "Werft B", kapazitaet: 10, belegt: 6 }
+  ],
+  Casyat: [
+    { name: "Werft C", kapazitaet: 8, belegt: 2 }
+  ]
+};
+
+const einheitsKosten = {
+  Zerstörer: 5,
+  Schlachtschiff: 10,
+  Aufklärer: 4
+};
+
+function log(txt) {
+  const dbg = document.getElementById("debug");
+  dbg.textContent += "\n" + txt;
+  dbg.scrollTop = dbg.scrollHeight;
+}
+
+function findePassendeWerft(system, bedarf) {
+  const kandidaten = werften[system].filter(w => (w.kapazitaet - w.belegt) >= bedarf);
+  if (kandidaten.length === 0) return null;
+  kandidaten.sort((a, b) => ((a.kapazitaet - a.belegt) - bedarf) - ((b.kapazitaet - b.belegt) - bedarf));
+  return kandidaten[0];
+}
+
+function produktionStarten() {
+  const fraktion = document.getElementById("fraktion").value;
+  const system = document.getElementById("system").value;
+  const einheit = document.getElementById("einheit").value;
+  const aktion = document.getElementById("aktion").value;
+  const bedarf = einheitsKosten[einheit];
+
+  if (aktion === "auffrischung_front") {
+    log(`⚙️ Frontauffrischung für ${einheit} – doppelte Kosten (${bedarf * 2}) verbraucht.`);
+    return;
+  }
+
+  const passendeWerft = findePassendeWerft(system, bedarf);
+  if (!passendeWerft) {
+    log(`❌ Keine passende Werft im System ${system} verfügbar für ${einheit}.`);
+    return;
+  }
+
+  passendeWerft.belegt += bedarf;
+  log(`✅ ${aktion === "neubau" ? "Neubau" : "Auffrischung"} von ${einheit} gestartet in ${passendeWerft.name} (${bedarf} von ${passendeWerft.kapazitaet}).`);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 8 – Rundenfortschritt</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; padding: 20px; }
+    select, button, input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px; margin: 4px; }
+    .debug { border: 1px dashed #0f0; background: #111; padding: 10px; height: 200px; overflow-y: scroll; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<h1>Phase 8 – Rundenfortschritt</h1>
+
+<h2 id="rundenanzeige">Aktuelle Runde: 1 von 272</h2>
+<button onclick="naechsteRunde()">Runde beenden ➜ nächste Runde</button>
+
+<div class="debug" id="debug">Debug-Konsole wird geladen…</div>
+
+<script>
+let runde = 1;
+const maxRunden = 272;
+
+function log(txt) {
+  const dbg = document.getElementById("debug");
+  dbg.textContent += "\n" + txt;
+  dbg.scrollTop = dbg.scrollHeight;
+}
+
+function naechsteRunde() {
+  if (runde < maxRunden) {
+    runde++;
+    document.getElementById("rundenanzeige").textContent = `Aktuelle Runde: ${runde} von ${maxRunden}`;
+    log(`🔄 Runde ${runde - 1} abgeschlossen – Starte Runde ${runde}`);
+  } else {
+    log("🏁 Endrunde erreicht – keine weiteren Runden mehr möglich.");
+  }
+}
+</script>
+
+</body>
+</html>

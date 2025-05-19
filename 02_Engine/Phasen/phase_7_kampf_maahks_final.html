@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 7 – Kampf Maahks (mit Taktik & Rückzugsziel)</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; padding: 20px; }
+    select, button, input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px; margin: 4px; }
+    .debug { border: 1px dashed #0f0; background: #111; padding: 10px; height: 300px; overflow-y: scroll; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<h1>Phase 7 – Kampf der Maahks</h1>
+
+<label>Angreifer:</label>
+<select id="angreifer"></select>
+
+<label>Verteidiger:</label>
+<select id="verteidiger"></select>
+
+<label>Taktisches Manöver:</label>
+<select id="taktik">
+  <option value="normal">Standard</option>
+  <option value="offensiv">Offensiver Fokus (+2/-2)</option>
+  <option value="defensiv">Defensiver Fokus (-2/+2)</option>
+  <option value="nah">Nahentfernung (+5 Bonus)</option>
+  <option value="durchbruch">Durchbruch (Treffer bei Gleichstand)</option>
+</select>
+
+<button onclick="angreifen()">Angriff ausführen</button>
+
+<h2>Rückzug</h2>
+<label>Einheit im Rückzug:</label>
+<select id="rueckzugseinheit"></select>
+
+<label>Rückzugsziel (max 3 Felder):</label>
+<select id="rueckzugsziel">
+  <option value="C10">C10</option>
+  <option value="C11">C11</option>
+  <option value="C12">C12</option>
+  <option value="C13">C13</option>
+  <option value="C14">C14</option>
+</select>
+
+<button onclick="rueckzugDurchfuehren()">Rückzug versuchen</button>
+
+<div class="debug" id="debug">Debug-Konsole wird geladen…</div>
+
+<script>
+const einheiten = {
+  "5. LIG": { lp: 3, typ: "Kampf", hex: "C12", admiral: "Grek 1" },
+  "22. Aufkl.": { lp: 3, typ: "Aufklärer", hex: "C13" },
+  "1. RFT": { lp: 3, typ: "Raumfort", hex: "C14" }
+};
+const feinde = {
+  "1. IMPG": { lp: 3, typ: "Kampf", hex: "C11" },
+  "17. Linieng.": { lp: 3, typ: "Kampf", hex: "C10" }
+};
+
+function log(msg) {
+  const d = document.getElementById("debug");
+  d.textContent += "\n" + msg;
+  d.scrollTop = d.scrollHeight;
+}
+
+function angreifen() {
+  const a = document.getElementById("angreifer").value;
+  const v = document.getElementById("verteidiger").value;
+  const t = document.getElementById("taktik").value;
+
+  if (!einheiten[a] || !feinde[v]) return log("❌ Einheit nicht gefunden.");
+
+  let aWert = 12;
+  let vWert = 10;
+  let bonus = 0;
+  if (t === "offensiv") { aWert += 2; vWert -= 2; log("⚔️ Offensiver Fokus aktiv."); }
+  if (t === "defensiv") { aWert -= 2; vWert += 2; log("🛡 Defensiver Fokus aktiv."); }
+  if (t === "nah") { bonus = 5; log("🤜 Nahentfernung aktiv."); }
+
+  const aWurf = Math.floor(Math.random() * 21) - 10;
+  const vWurf = Math.floor(Math.random() * 21) - 10;
+  const aErg = aWert + aWurf;
+  const vErg = vWert + vWurf;
+  const diff = aErg - vErg + bonus;
+
+  log(`🎯 Angriff: ${a} (${aWert}) + ${aWurf} = ${aErg}`);
+  log(`🛡 Verteidigung: ${v} (${vWert}) + ${vWurf} = ${vErg}`);
+
+  let treffer = 0;
+  if (aWurf === -10) {
+    log("💥 Kritischer Fehlschlag – kein Treffer.");
+  } else if (aWurf === +10 || vWurf === -10) {
+    treffer = 1;
+    log("🎯 Automatischer Treffer!");
+  } else if (vWurf === +10) {
+    log("🛡 Unverwundbar – kein Treffer möglich.");
+  } else if (t === "durchbruch" && diff === 0) {
+    treffer = 1;
+    log("🚀 Durchbruch! Treffer trotz Gleichstand.");
+  } else {
+    if (diff >= 20) treffer = 3;
+    else if (diff >= 10) treffer = 2;
+    else if (diff >= 5) treffer = 1;
+  }
+
+  feinde[v].lp -= treffer;
+  log(`💥 ${v} verliert ${treffer} LP. Verbleiben: ${feinde[v].lp}`);
+  if (feinde[v].lp <= 0) {
+    delete feinde[v];
+    log(`💀 ${v} wurde vernichtet.`);
+  }
+}
+
+function rueckzugDurchfuehren() {
+  const e = document.getElementById("rueckzugseinheit").value;
+  const ziel = document.getElementById("rueckzugsziel").value;
+  const pfad = [einheiten[e].hex, ziel]; // Platzhalterpfadprüfung
+  for (let feld of pfad) {
+    if (Object.values(feinde).some(f => f.hex === feld)) {
+      if (Math.random() < 0.5) {
+        log(`🛑 Rückzug von ${e} gestoppt in ${feld} durch Feind.`);
+        return;
+      } else {
+        log(`🌀 ${e} entkommt im Feld ${feld}.`);
+      }
+    }
+  }
+  einheiten[e].hex = ziel;
+  log(`🏃‍♂️ ${e} zieht sich erfolgreich nach ${ziel} zurück.`);
+}
+
+function fillDropdowns() {
+  const aSel = document.getElementById("angreifer");
+  const vSel = document.getElementById("verteidiger");
+  const rSel = document.getElementById("rueckzugseinheit");
+  aSel.innerHTML = vSel.innerHTML = rSel.innerHTML = "";
+  Object.keys(einheiten).forEach(k => {
+    if (einheiten[k].lp > 0) {
+      aSel.add(new Option(k, k));
+      rSel.add(new Option(k, k));
+    }
+  });
+  Object.keys(feinde).forEach(k => {
+    if (feinde[k].lp > 0) vSel.add(new Option(k, k));
+  });
+}
+
+window.onload = fillDropdowns;
+</script>
+</body>
+</html>

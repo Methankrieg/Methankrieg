@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Methankrieg – Phase 2: Arkonidenbewegung mit Gruppierung</title>
+  <style>
+    body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+    select, button, input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px; margin: 4px 0; }
+    .debug { background: #111; padding: 10px; border: 1px dashed #0f0; height: 300px; overflow-y: scroll; white-space: pre-wrap; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Phase 2 – Arkonidenbewegung inkl. Gruppierungsfunktion</h1>
+
+<label for="geschwader">Geschwader wählen:</label>
+<select id="geschwader"></select>
+
+<label for="bewegungsart">Bewegungsart:</label>
+<select id="bewegungsart">
+  <option value="operativ">Operativ (max. 3 Hexfelder)</option>
+  <option value="strategisch">Strategisch (Sprungrouten)</option>
+  <option value="transition">Transition (Zieltest)</option>
+</select>
+
+<label for="ziel">Ziel-Hex:</label>
+<select id="ziel"></select>
+
+<button onclick="bewege()">Bewegung ausführen</button>
+
+<h2>Admiräle</h2>
+<button onclick="offboardAdmiral()">Admiral absetzen</button>
+<button onclick="onboardAdmiral()">Admiral zuteilen</button>
+
+<h2>Trägerfunktionen</h2>
+<button onclick="onboardJZS()">Jäger/Zerstörer verladen</button>
+
+<h2>Gruppierung</h2>
+<select id="einheitSelect"></select>
+<input type="text" id="gruppenName" placeholder="Gruppenname" />
+<button onclick="einheitZuGruppe()">Zur Gruppe hinzufügen</button>
+<select id="gruppenSelect" onchange="zeigeGruppenmitglieder()"></select>
+<button onclick="gruppeAufloesen()">Gruppe auflösen</button>
+<select id="mitgliedSelect"></select>
+<button onclick="einheitEntfernen()">Aus Gruppe entfernen</button>
+
+<div class="debug" id="debug">Debug-Konsole wird geladen…</div>
+
+<script>
+const einheiten = {
+  "1. IMPG": { lp: 3, qualitaet: "Legendär", hex: "A10", typ: "Kampf", admiral: "Atlan" },
+  "22. Aufkl.": { lp: 3, qualitaet: "Regulär", hex: "A11", typ: "Aufklärer" },
+  "17. Linieng.": { lp: 3, qualitaet: "Veteran", hex: "A12", typ: "Kampf" },
+  "1. TRG": { lp: 3, qualitaet: "Regulär", hex: "A13", typ: "Träger", slots: 4, beladen: [] },
+  "Jäger 1": { lp: 1, qualitaet: "Grün", hex: "A13", typ: "Jäger" },
+  "Zerstörer 1": { lp: 1, qualitaet: "Grün", hex: "A13", typ: "Zerstörer" }
+};
+
+const admirale = {
+  "Atlan": { kommandowert: 4, bonus: 2, zugewiesen: "1. IMPG" }
+};
+
+const sprungrouten = {
+  "A10": ["A11", "A12"],
+  "A11": ["A10", "A13"],
+  "A12": ["A10", "A13"],
+  "A13": ["A11", "A12"]
+};
+
+const zielHex = ["A10", "A11", "A12", "A13", "A14", "A15"];
+const gruppen = {};
+
+function log(msg) {
+  const d = document.getElementById("debug");
+  d.textContent += "\n" + msg;
+  d.scrollTop = d.scrollHeight;
+}
+
+function getRandomMod() {
+  const mods = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7,8,9,10];
+  return mods[Math.floor(Math.random() * mods.length)];
+}
+
+function fillDropdowns() {
+  const gw = document.getElementById("geschwader");
+  const zh = document.getElementById("ziel");
+  const eSel = document.getElementById("einheitSelect");
+  gw.innerHTML = ""; zh.innerHTML = ""; eSel.innerHTML = "";
+  Object.keys(einheiten).forEach(e => {
+    if (!["Jäger", "Zerstörer"].includes(einheiten[e].typ)) {
+      gw.add(new Option(`${e} (${einheiten[e].hex})`, e));
+    }
+    eSel.add(new Option(`${e} (${einheiten[e].hex})`, e));
+  });
+  zielHex.forEach(h => zh.add(new Option(h, h)));
+  updateGruppenSelect();
+}
+
+function bewege() {
+  const name = document.getElementById("geschwader").value;
+  const ziel = document.getElementById("ziel").value;
+  const art = document.getElementById("bewegungsart").value;
+  const einheit = einheiten[name];
+  log(`\n>>> Bewegung ${name} (${einheit.hex} → ${ziel}) mittels ${art.toUpperCase()}`);
+  if (art === "strategisch") {
+    if (!sprungrouten[einheit.hex]?.includes(ziel)) {
+      log("❌ Keine direkte Sprungroute vorhanden!");
+      return;
+    }
+  }
+  if (art === "transition") {
+    if (einheit.typ === "Aufklärer") {
+      log("🛰️ Aufklärer erkannt – Transition gelingt automatisch.");
+    } else {
+      const wurf = Math.floor(Math.random()*20)+1;
+      log(`Transition-Zieltest Wurf: ${wurf}`);
+      if (wurf < 10) {
+        log("❌ Zieltest misslungen.");
+        return;
+      }
+      log("✅ Zieltest bestanden.");
+    }
+  }
+  einheit.hex = ziel;
+  log(`✅ ${name} ist jetzt in ${ziel}.`);
+}
+
+function onboardAdmiral() {
+  const name = document.getElementById("geschwader").value;
+  for (const adm in admirale) {
+    if (!admirale[adm].zugewiesen) {
+      admirale[adm].zugewiesen = name;
+      einheiten[name].admiral = adm;
+      log(`✅ Admiral ${adm} wurde ${name} zugewiesen.`);
+      return;
+    }
+  }
+  log("⚠️ Kein freier Admiral verfügbar.");
+}
+
+function offboardAdmiral() {
+  const name = document.getElementById("geschwader").value;
+  const adm = einheiten[name].admiral;
+  if (!adm) {
+    log("⚠️ Kein Admiral zugewiesen.");
+    return;
+  }
+  admirale[adm].zugewiesen = null;
+  delete einheiten[name].admiral;
+  log(`🛑 Admiral ${adm} wurde von ${name} abgesetzt.`);
+}
+
+function onboardJZS() {
+  const traeger = document.getElementById("geschwader").value;
+  const e = einheiten[traeger];
+  if (e.typ !== "Träger") {
+    log("❌ Kein Träger gewählt.");
+    return;
+  }
+  const freieSlots = e.slots - e.beladen.length;
+  if (freieSlots <= 0) {
+    log("❌ Keine freien Slots.");
+    return;
+  }
+  const kandidaten = Object.entries(einheiten).filter(([n,d]) =>
+    ["Jäger", "Zerstörer"].includes(d.typ) && d.hex === e.hex
+  );
+  if (kandidaten.length === 0) {
+    log("❌ Keine Jäger/Zerstörer im selben Hex.");
+    return;
+  }
+  for (const [n, d] of kandidaten) {
+    if (e.beladen.length >= e.slots) break;
+    e.beladen.push(n);
+    delete einheiten[n];
+    log(`✅ ${n} wurde auf ${traeger} verladen.`);
+  }
+}
+
+function updateGruppenSelect() {
+  const gSel = document.getElementById("gruppenSelect");
+  gSel.innerHTML = "";
+  Object.keys(gruppen).forEach(g => gSel.add(new Option(g, g)));
+  zeigeGruppenmitglieder();
+}
+
+function zeigeGruppenmitglieder() {
+  const g = document.getElementById("gruppenSelect").value;
+  const mSel = document.getElementById("mitgliedSelect");
+  mSel.innerHTML = "";
+  if (gruppen[g]) {
+    gruppen[g].forEach(e => mSel.add(new Option(e, e)));
+  }
+}
+
+function einheitZuGruppe() {
+  const einheit = document.getElementById("einheitSelect").value;
+  const gruppe = document.getElementById("gruppenName").value;
+  if (!gruppe) { log("❌ Gruppenname fehlt."); return; }
+  if (!gruppen[gruppe]) gruppen[gruppe] = [];
+  if (!gruppen[gruppe].includes(einheit)) {
+    gruppen[gruppe].push(einheit);
+    log(`✅ ${einheit} wurde Gruppe '${gruppe}' hinzugefügt.`);
+  } else {
+    log(`⚠️ ${einheit} ist bereits in Gruppe '${gruppe}'.`);
+  }
+  updateGruppenSelect();
+}
+
+function gruppeAufloesen() {
+  const gruppe = document.getElementById("gruppenSelect").value;
+  if (!gruppe) { log("❌ Keine Gruppe ausgewählt."); return; }
+  delete gruppen[gruppe];
+  log(`🗑️ Gruppe '${gruppe}' wurde aufgelöst.`);
+  updateGruppenSelect();
+}
+
+function einheitEntfernen() {
+  const gruppe = document.getElementById("gruppenSelect").value;
+  const einheit = document.getElementById("mitgliedSelect").value;
+  if (!gruppe || !einheit) {
+    log("❌ Gruppe oder Einheit nicht ausgewählt.");
+    return;
+  }
+  const index = gruppen[gruppe].indexOf(einheit);
+  if (index > -1) {
+    gruppen[gruppe].splice(index, 1);
+    log(`↩️ ${einheit} wurde aus Gruppe '${gruppe}' entfernt.`);
+    zeigeGruppenmitglieder();
+  }
+}
+
+window.onload = fillDropdowns;
+</script>
+
+</body>
+</html>

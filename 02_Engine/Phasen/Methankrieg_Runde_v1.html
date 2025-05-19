@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Methankrieg – Rundensteuerung</title>
+  <script src="02_Engine/State/gameState.js"></script>
+  <script src="02_Engine/State/storage.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    button { margin: 5px; padding: 8px 12px; }
+    #debug { margin-top: 20px; font-family: monospace; background: #f4f4f4; padding: 10px; border: 1px solid #ccc; }
+    iframe { width: 100%; height: 500px; border: 1px solid #999; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <h1>Methankrieg – Rundensteuerung</h1>
+
+  <div>
+    <button onclick="saveGameState()">💾 Spiel speichern</button>
+    <input type="file" onchange="loadGameStateFromFile(this)" />
+  </div>
+
+  <div>
+    <h3>Phasensteuerung</h3>
+    <button onclick="ladePhase(1)">Phase 1 – Produktion</button>
+    <button onclick="ladePhase(2)">Phase 2 – Bewegung Arkoniden</button>
+    <button onclick="ladePhase(3)">Phase 3 – Reaktion Maahks</button>
+    <button onclick="ladePhase(4)">Phase 4 – Kampf Arkoniden</button>
+    <button onclick="ladePhase(5)">Phase 5 – Bewegung Maahks</button>
+    <button onclick="ladePhase(6)">Phase 6 – Reaktion Arkoniden</button>
+    <button onclick="ladePhase(7)">Phase 7 – Kampf Maahks</button>
+    <button onclick="ladePhase(8)">Phase 8 – Rundenfortschritt</button>
+  </div>
+
+  <iframe id="phasenFrame" src=""></iframe>
+
+  <div id="debug">
+    <strong>Debug:</strong><br>
+    <pre id="debugLog"></pre>
+  </div>
+
+  <script>
+    function ladePhase(phaseNummer) {
+      gameState.aktivePhase = phaseNummer;
+      gameState.phaseDone[phaseNummer] = true;
+      const frame = document.getElementById("phasenFrame");
+      frame.src = "phasen/phase_" + phaseNummer + "_..._final.html";  // Platzhalter muss ersetzt werden
+      logDebug("Phase " + phaseNummer + " geladen.");
+      zeigeDebug();
+    }
+
+    function logDebug(msg) {
+      const timestamp = new Date().toISOString();
+      gameState.debugLog.push("[" + timestamp + "] " + msg);
+    }
+
+    function zeigeDebug() {
+      const log = gameState.debugLog.slice(-10).join("\n");
+      document.getElementById("debugLog").textContent = 
+        "Runde: " + gameState.runde + 
+        " | Phase: " + gameState.aktivePhase + 
+        " | Fraktion: " + gameState.aktiveFraktion + 
+        "\n" + log;
+    }
+
+    window.onload = zeigeDebug;
+  </script>
+
+</body>
+</html>

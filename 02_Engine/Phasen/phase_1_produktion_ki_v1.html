@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 1 – Produktion mit KI</title>
+  <script src="einheiten_zugriff_v1.js"></script>
+  <script src="ki_common_v2.js"></script>
+  <script src="ki_maahks_v3.js"></script>
+  <script src="ki_arkoniden_ranglogik_4.js"></script>
+  <script src="ki_lernmodul_v1.js"></script>
+</head>
+<body>
+<h1>Produktionsphase – KI-gesteuert</h1>
+<pre id="debug"></pre>
+
+<script>
+async function startePhase1MitKI() {
+  const debug = document.getElementById("debug");
+  debug.innerText = "Phase 1 gestartet...";
+
+  // Lade benötigte Daten
+  const gameState = await fetch("gameState_v1.js").then(r => r.text()).then(eval);
+  const einheitenDaten = await fetch("einheiten_datenbank_final_v2.json").then(r => r.json());
+  const szenario = await fetch("szenario_umkaempftes_casyat_mit_verstaerkungen_v2.json").then(r => r.json());
+
+  // Initialisierung
+  const aktuelleRunde = gameState.runde;
+  const kiAktiv = gameState.ki_aktiv || { arkoniden: true, maahks: true };
+  const phase1Protokoll = [];
+
+  // MAHAAKS PRODUKTION
+  if (kiAktiv.maahks && typeof ki_maahks_produziere === "function") {
+    const resMaahk = ki_maahks_produziere(gameState, einheitenDaten, aktuelleRunde);
+    phase1Protokoll.push(...resMaahk.protokoll || []);
+    ki_lernFeedback("maahks", "produktion", resMaahk.erfolg || 0);
+  }
+
+  // ARKONIDEN PRODUKTION
+  if (kiAktiv.arkoniden && typeof ki_arkoniden_produziere === "function") {
+    const resArk = ki_arkoniden_produziere(gameState, einheitenDaten, aktuelleRunde);
+    phase1Protokoll.push(...resArk.protokoll || []);
+    ki_lernFeedback("arkoniden", "produktion", resArk.erfolg || 0);
+  }
+
+  // VERSTÄRKUNGEN
+  const verstaerkungen = szenario.umkaempftes_casyat?.verstaerkungen || {};
+  const verstaerkungDieseRunde = verstaerkungen["runde_" + aktuelleRunde];
+  if (verstaerkungDieseRunde) {
+    for (const eintrag of verstaerkungDieseRunde) {
+      phase1Protokoll.push(`Verstärkung (${eintrag.fraktion}): ${eintrag.einheit} bei ${eintrag.feld}`);
+    }
+  }
+
+  // ZIELVERFOLGUNG
+  const siegziele = szenario.umkaempftes_casyat?.siegbedingungen || [];
+  for (const ziel of siegziele) {
+    phase1Protokoll.push(`Zielbedingung (${ziel.fraktion}): ${ziel.bedingung}`);
+  }
+
+  debug.innerText = phase1Protokoll.join("\n");
+}
+
+window.onload = startePhase1MitKI;
+</script>
+</body>
+</html>

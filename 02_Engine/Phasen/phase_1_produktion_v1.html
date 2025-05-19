@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Methankrieg – Phase 1 Produktion & Auffrischung mit Systemen und Werften</title>
+<style>
+  body { background: #000; color: #0f0; font-family: sans-serif; padding: 20px; }
+  button, select, input { padding: 8px; margin: 5px; background: #111; color: #0f0; border: 1px solid #0f0; }
+  .debug { background: #111; padding: 10px; border: 1px dashed #0f0; margin-top: 20px; white-space: pre-wrap; height: 300px; overflow-y: auto; }
+  label, h1 { display: block; margin-top: 10px; }
+  .section { margin-bottom: 15px; }
+</style>
+</head>
+<body>
+
+<h1>Phase 1: Produktion & Auffrischung</h1>
+
+<div class="section">
+  <label for="fraktionProd">Fraktion wählen:</label>
+  <select id="fraktionProd" onchange="fillDropdownProd(); fillDropdownSysteme(); resetDebug();">
+    <option value="Arkoniden">Arkoniden</option>
+    <option value="Maahks">Maahks</option>
+  </select>
+</div>
+
+<div class="section">
+  <label for="systemProd">Industriesystem wählen:</label>
+  <select id="systemProd" onchange="fillDropdownWerften(); resetDebug();">
+    <!-- Dynamisch gefüllt -->
+  </select>
+</div>
+
+<div class="section">
+  <label for="werftProd">Werft im System wählen:</label>
+  <select id="werftProd" onchange="resetDebug();">
+    <!-- Dynamisch gefüllt -->
+  </select>
+</div>
+
+<div class="section">
+  <label for="prodGeschwader">Geschwader wählen:</label>
+  <select id="prodGeschwader" onchange="resetDebug();">
+    <!-- Dynamisch gefüllt -->
+  </select>
+</div>
+
+<div class="section">
+  <label for="aktionProd">Aktion wählen:</label>
+  <select id="aktionProd" onchange="resetDebug();">
+    <option value="neu">Neu produzieren</option>
+    <option value="werft">In Werft auffrischen</option>
+    <option value="frontlinie">In Frontlinie auffrischen</option>
+  </select>
+</div>
+
+<div class="section">
+  <h3>Ressourcenpool</h3>
+  <label for="mp">Materialpunkte (MP):</label>
+  <input type="number" id="mp" value="100" min="0" />
+  <label for="pp">Personalpunkte (PP):</label>
+  <input type="number" id="pp" value="100" min="0" />
+</div>
+
+<button onclick="produktion()">Produktion starten</button>
+
+<div class="debug" id="debug">Debug-Ausgabe erscheint hier…</div>
+
+<script>
+// --- Datenstruktur ---
+
+// Beispiel-Sektoren mit Systemen, Werften, Kapazitäten, Besitzern
+const sektoren = {
+  "Arkoniden": {
+    "Arkon": {
+      werften: ["Werft A1", "Werft A2"],
+      materialpunkte: 50,
+      personalpunkte: 50
+    },
+    "Trantor": {
+      werften: ["Werft T1"],
+      materialpunkte: 30,
+      personalpunkte: 30
+    },
+    "Gonozal": {
+      werften: [],
+      materialpunkte: 10,
+      personalpunkte: 10
+    }
+  },
+  "Maahks": {
+    "Vasat": {
+      werften: ["Werft V1"],
+      materialpunkte: 40,
+      personalpunkte: 45
+    },
+    "Illa": {
+      werften: [],
+      materialpunkte: 20,
+      personalpunkte: 25
+    }
+  }
+};
+
+// Einheiten mit Kosten, Bauzeit und Zustand (LP)
+let einheiten = {
+  "Arkoniden": {
+    "1. IMPG": { lp: 3, qualitaet: "Legendär", mpKosten: 30, ppKosten: 30, bauzeit: 4 },
+    "22. Aufkl.": { lp: 3, qualitaet: "Regulär", mpKosten: 15, ppKosten: 15, bauzeit: 2, aufklaerer: true },
+    "17. Linieng.": { lp: 3, qualitaet: "Veteran", mpKosten: 20, ppKosten: 20, bauzeit: 3 }
+  },
+  "Maahks": {
+    "5. LIG": { lp: 3, qualitaet: "Linie", mpKosten: 15, ppKosten: 20, bauzeit: 3 },
+    "1. TRG": { lp: 3, qualitaet: "Träger", mpKosten: 40, ppKosten: 25, bauzeit: 5, slots: 8, beladen: [] },
+    "22. Aufkl.": { lp: 3, qualitaet: "Aufklärer", mpKosten: 15, ppKosten: 15, bauzeit: 2, aufklaerer: true }
+  }
+};
+
+// Ressourcenpools initial
+let resPool = {
+  "Arkoniden": { mp: 100, pp: 100 },
+  "Maahks": { mp: 100, pp: 100 }
+};
+
+// --- UI-Funktionen ---
+
+function resetDebug(){
+  document.getElementById("debug").textContent = "";
+}
+
+function fillDropdownProd(){
+  const fraktion = document.getElementById("fraktionProd").value;
+  const select = document.getElementById("prodGeschwader");
+  select.innerHTML = "";
+  const units = einheiten[fraktion];
+  Object.entries(units).forEach(([name, data]) => {
+    if(data.lp > 0 || document.getElementById("aktionProd").value === "neu"){
+      let opt = new Option(`${name} (${data.lp} LP)`, name);
+      select.add(opt);
+    }
+  });
+}
+
+function fillDropdownSysteme(){
+  const fraktion = document.getElementById("fraktionProd").value;
+  const select = document.getElementById("systemProd");
+  select.innerHTML = "";
+  const systems = sektoren[fraktion];
+  Object.keys(systems).forEach(sysName => {
+    let opt = new Option(sysName, sysName);
+    select.add(opt);
+  });
+  fillDropdownWerften();
+}
+
+function fillDropdownWerften(){
+  const fraktion = document.getElementById("fraktionProd").value;
+  const system = document.getElementById("systemProd").value;
+  const select = document.getElementById("werftProd");
+  select.innerHTML = "";
+  if(!system) return;
+  const werften = sektoren[fraktion][system].werften;
+  if(werften.length === 0){
+    let opt = new Option("Keine Werft vorhanden", "");
+    select.add(opt);
+  } else {
+    werften.forEach(w => {
+      let opt = new Option(w, w);
+      select.add(opt);
+    });
+  }
+}
+
+// --- Produktions- und Auffrischungslogik ---
+
+function produktion(){
+  resetDebug();
+  const fraktion = document.getElementById("fraktionProd").value;
+  const gw = document.getElementById("prodGeschwader").value;
+  const aktion = document.getElementById("aktionProd").value;
+  const system = document.getElementById("systemProd").value;
+  const werft = document.getElementById("werftProd").value;
+
+  const debug = document.getElementById("debug");
+  debug.textContent += `Runde: Produktion/Auffrischung für ${gw} (${fraktion}) in System '${system}'\nAktion: ${aktion}`;
+
+  let data = einheiten[fraktion][gw];
+  let pool = resPool[fraktion];
+  let sysRess = sektoren[fraktion][system];
+
+  if(!data){
+    debug.textContent += "\nFehler: Geschwader nicht gefunden.";
+    return;
+  }
+
+  if(aktion === "neu"){
+    // Neubau kostet volle Kosten & volle Bauzeit, Werft muss gewählt sein
+    if(!werft){
+      debug.textContent += "\nFehler: Keine Werft gewählt für Neubau!";
+      return;
+    }
+    if(pool.mp < data.mpKosten || pool.pp < data.ppKosten){
+      debug.textContent += `\nNicht genug Ressourcen! Benötigt MP: ${data.mpKosten}, PP: ${data.ppKosten}`;
+      return;
+    }
+    pool.mp -= data.mpKosten;
+    pool.pp -= data.ppKosten;
+    debug.textContent += `\nNeubau ${gw} in ${werft} gestartet.\nKosten: MP ${data.mpKosten}, PP ${data.ppKosten}\nBauzeit: ${data.bauzeit} Runden`;
+    data.lp = 3;
+  } else if(aktion === "werft"){
+    // Auffrischung nur, wenn Werft gewählt & Geschwader beschädigt
+    if(!werft){
+      debug.textContent += "\nFehler: Keine Werft gewählt für Auffrischung!";
+      return;
+    }
+    if(data.lp >= 3){
+      debug.textContent += `\n${gw} ist bereits bei voller Stärke. Auffrischung nicht nötig.`;
+      return;
+    }
+    let fehlLP = 3 - data.lp;
+    let kostenMP = Math.ceil((fehlLP/3) * data.mpKosten);
+    let kostenPP = Math.ceil((fehlLP/3) * data.ppKosten);
+    if(pool.mp < kostenMP || pool.pp < kostenPP){
+      debug.textContent += `\nNicht genug Ressourcen für Auffrischung! Benötigt MP: ${kostenMP}, PP: ${kostenPP}`;
+      return;
+    }
+    pool.mp -= kostenMP;
+    pool.pp -= kostenPP;
+    debug.textContent += `\nAuffrischung von ${gw} in Werft ${werft} gestartet.\nKosten: MP ${kostenMP}, PP ${kostenPP}\nBauzeit: ${data.bauzeit} Runden`;
+    data.lp = 3;
+  } else if(aktion === "frontlinie"){
+    // Auffrischung in Frontlinie, doppelte Kosten, keine Werft nötig, sofort voll einsatzbereit
+    if(data.lp >=3){
+      debug.textContent += `\n${gw} ist bereits bei voller Stärke. Auffrischung nicht nötig.`;
+      return;
+    }
+    let fehlLP = 3 - data.lp;
+    let kostenMP = Math.ceil((fehlLP/3) * data.mpKosten)*2;
+    let kostenPP = Math.ceil((fehlLP/3) * data.ppKosten)*2;
+    if(pool.mp < kostenMP || pool.pp < kostenPP){
+      debug.textContent += `\nNicht genug Ressourcen für Frontlinien-Auffrischung! Benötigt MP: ${kostenMP}, PP: ${kostenPP}`;
+      return;
+    }
+    pool.mp -= kostenMP;
+    pool.pp -= kostenPP;
+    debug.textContent += `\nAuffrischung von ${gw} in Frontlinie gestartet.\nKosten: MP ${kostenMP}, PP ${kostenPP}\nBauzeit: 0 (sofort einsatzbereit)`;
+    data.lp = 3;
+  } else {
+    debug.textContent += "\nUnbekannte Aktion.";
+  }
+
+  // Ressourcenpool anzeigen
+  debug.textContent += `\nVerbleibende Ressourcen - MP: ${pool.mp}, PP: ${pool.pp}`;
+  debug.scrollTop = debug.scrollHeight;
+
+  // Aktualisiere Ressourceneingabefelder
+  document.getElementById("mp").value = pool.mp;
+  document.getElementById("pp").value = pool.pp;
+}
+
+// Initialisierung bei Laden der Seite
+window.onload = function(){
+  fillDropdownProd();
+  fillDropdownSysteme();
+  fillDropdownWerften();
+};
+
+</script>
+
+<!-- Ressourcenpool Anzeigen -->
+<div class="section">
+  <h3>Ressourcenpool Übersicht</h3>
+  <label for="mp">Materialpunkte (MP):</label>
+  <input type="number" id="mp" value="100" min="0" readonly />
+  <label for="pp">Personalpunkte (PP):</label>
+  <input type="number" id="pp" value="100" min="0" readonly />
+</div>
+
+</body>
+</html>

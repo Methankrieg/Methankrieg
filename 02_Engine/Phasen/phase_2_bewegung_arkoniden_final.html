@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 2 – Arkonidenbewegung (vollständig)</title>
+  <style>
+    body { background-color: black; color: lime; font-family: monospace; padding: 20px; }
+    select, button, input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px; margin: 4px; }
+    .debug { border: 1px dashed #0f0; background: #111; padding: 10px; height: 300px; overflow-y: scroll; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<h1>Phase 2 – Arkonidenbewegung</h1>
+
+<label>Geschwader:</label>
+<select id="geschwader"></select>
+
+<label>Bewegungstyp:</label>
+<select id="bewegungsart">
+  <option value="operativ">Operativ</option>
+  <option value="strategisch">Strategisch</option>
+  <option value="transition">Transition</option>
+</select>
+
+<label>Ziel-Hex:</label>
+<select id="ziel"></select>
+
+<button onclick="bewege()">Bewegung ausführen</button>
+
+<h2>Admiräle</h2>
+<button onclick="offboardAdmiral()">Admiral absetzen</button>
+<button onclick="onboardAdmiral()">Admiral zuteilen</button>
+
+<h2>Trägerfunktionen</h2>
+<button onclick="onboardJZS()">Jäger/Zerstörer verladen</button>
+
+<h2>Gruppierung</h2>
+<select id="einheitSelect"></select>
+<input type="text" id="gruppenName" placeholder="Gruppenname">
+<button onclick="einheitZuGruppe()">Zur Gruppe hinzufügen</button>
+<select id="gruppenSelect" onchange="zeigeGruppenmitglieder()"></select>
+<button onclick="gruppeAufloesen()">Gruppe auflösen</button>
+<select id="mitgliedSelect"></select>
+<button onclick="einheitEntfernen()">Aus Gruppe entfernen</button>
+
+<div class="debug" id="debug">Debug-Konsole wird geladen…</div>
+
+<script>
+const einheiten = {
+  "17. Linieng.": { lp: 3, qualitaet: "Veteran", hex: "A10", typ: "Kampf", admiral: "Atlan" },
+  "22. Aufkl.": { lp: 3, qualitaet: "Regulär", hex: "A11", typ: "Aufklärer" },
+  "1. TRG": { lp: 3, qualitaet: "Regulär", hex: "A12", typ: "Träger", slots: 4, beladen: [] },
+  "Jäger 1": { lp: 1, qualitaet: "Grün", hex: "A12", typ: "Jäger" },
+  "Zerstörer 1": { lp: 1, qualitaet: "Grün", hex: "A12", typ: "Zerstörer" },
+  "1. RFT": { lp: 3, qualitaet: "Regulär", hex: "A13", typ: "Raumfort" }
+};
+
+const feinde = {
+  "5. LIG": { lp: 3, qualitaet: "Veteran", hex: "A11" },
+  "22. LIG": { lp: 3, qualitaet: "Legendär", hex: "A10" }
+};
+
+const zielHex = ["A08", "A09", "A10", "A11", "A12", "A13", "A14", "A15"];
+const gruppen = {};
+
+function log(msg) {
+  const d = document.getElementById("debug");
+  d.textContent += "\n" + msg;
+  d.scrollTop = d.scrollHeight;
+}
+
+function kontrollprobe(name, ziel) {
+  const gegnerImFeld = Object.entries(feinde).filter(([_, data]) => data.hex === ziel);
+  for (const [gegnerName, gegner] of gegnerImFeld) {
+    log(`Kontrollprobe: ${name} vs ${gegnerName} in ${ziel}`);
+    if (Math.random() < 0.5) {
+      log(`❌ ${name} wird durch ${gegnerName} gestoppt!`);
+      return false;
+    } else {
+      log(`✅ ${name} entkommt ${gegnerName}.`);
+    }
+  }
+  return true;
+}
+
+function pruefeStrategisch(name, ziel) {
+  const route = ["A10", "A11", "A12"];
+  for (let hex of [einheiten[name].hex, ziel, ...route]) {
+    if (Object.values(feinde).some(e => e.hex === hex)) {
+      log(`❌ Strategisch: ${hex} ist feindbesetzt.`);
+      return false;
+    }
+  }
+  return true;
+}
+
+function pruefeTransition(name, ziel) {
+  if (einheiten[name].typ === "Aufklärer") return ziel;
+  const entfernung = 5; // Dummywert
+  if (entfernung > 10) {
+    log(`❌ Ziel zu weit entfernt (>10 Felder)`);
+    return null;
+  }
+  const wurf = Math.floor(Math.random() * 20) + 1;
+  if (wurf === 10 || wurf === 20) {
+    log(`🎯 Glückstreffer: ${ziel}`);
+    return ziel;
+  } else if (wurf === 1) {
+    log(`💥 Fehlsprung! Zufälliges Feld.`);
+    return "A14";
+  } else {
+    log(`🎲 Zieltest erfolgreich: ${ziel}`);
+    return ziel;
+  }
+}
+
+function bewege() {
+  const name = document.getElementById("geschwader").value;
+  const art = document.getElementById("bewegungsart").value;
+  let ziel = document.getElementById("ziel").value;
+  if (einheiten[name].typ === "Raumfort") return log("❌ Raumfort ist immobil.");
+
+  if (art === "strategisch") {
+    if (!pruefeStrategisch(name, ziel)) return;
+  }
+  if (art === "transition") {
+    const res = pruefeTransition(name, ziel);
+    if (!res) return;
+    ziel = res;
+  }
+  if (art === "operativ") {
+    if (Object.values(feinde).some(f => f.hex === ziel) && einheiten[name].typ !== "Aufklärer") {
+      if (!kontrollprobe(name, ziel)) return;
+    }
+  }
+  einheiten[name].hex = ziel;
+  log(`✅ ${name} bewegt sich nach ${ziel}`);
+}
+
+function offboardAdmiral() {
+  const name = document.getElementById("geschwader").value;
+  if (einheiten[name].admiral) {
+    log(`🧍 Admiral ${einheiten[name].admiral} entfernt von ${name}`);
+    delete einheiten[name].admiral;
+  }
+}
+function onboardAdmiral() {
+  const name = document.getElementById("geschwader").value;
+  if (!einheiten[name].admiral) {
+    einheiten[name].admiral = "Atlan";
+    log(`🧍 Admiral Atlan zugewiesen an ${name}`);
+  }
+}
+function onboardJZS() {
+  einheiten["1. TRG"].beladen = ["Jäger 1", "Zerstörer 1"];
+  log("🚀 1. TRG mit Jäger 1 & Zerstörer 1 beladen.");
+}
+function fillDropdowns() {
+  const g = document.getElementById("geschwader");
+  const z = document.getElementById("ziel");
+  const eSel = document.getElementById("einheitSelect");
+  g.innerHTML = z.innerHTML = eSel.innerHTML = "";
+  for (let e in einheiten) {
+    if (!e.includes("Jäger") && !e.includes("Zerstörer"))
+      g.add(new Option(`${e} (${einheiten[e].hex})`, e));
+    eSel.add(new Option(`${e} (${einheiten[e].hex})`, e));
+  }
+  zielHex.forEach(h => z.add(new Option(h, h)));
+  updateGruppenSelect();
+}
+function einheitZuGruppe() {
+  const e = document.getElementById("einheitSelect").value;
+  const g = document.getElementById("gruppenName").value;
+  if (!gruppen[g]) gruppen[g] = [];
+  if (!gruppen[g].includes(e)) gruppen[g].push(e);
+  log(`📦 ${e} → Gruppe '${g}'`);
+  updateGruppenSelect();
+}
+function gruppeAufloesen() {
+  const g = document.getElementById("gruppenSelect").value;
+  delete gruppen[g];
+  log(`🗑️ Gruppe '${g}' gelöscht`);
+  updateGruppenSelect();
+}
+function einheitEntfernen() {
+  const g = document.getElementById("gruppenSelect").value;
+  const e = document.getElementById("mitgliedSelect").value;
+  const i = gruppen[g].indexOf(e);
+  if (i > -1) gruppen[g].splice(i, 1);
+  log(`↩️ ${e} entfernt aus '${g}'`);
+  zeigeGruppenmitglieder();
+}
+function updateGruppenSelect() {
+  const gSel = document.getElementById("gruppenSelect");
+  gSel.innerHTML = "";
+  Object.keys(gruppen).forEach(g => gSel.add(new Option(g, g)));
+  zeigeGruppenmitglieder();
+}
+function zeigeGruppenmitglieder() {
+  const g = document.getElementById("gruppenSelect").value;
+  const mSel = document.getElementById("mitgliedSelect");
+  mSel.innerHTML = "";
+  if (gruppen[g]) gruppen[g].forEach(e => mSel.add(new Option(e, e)));
+}
+window.onload = fillDropdowns;
+</script>
+</body>
+</html>
