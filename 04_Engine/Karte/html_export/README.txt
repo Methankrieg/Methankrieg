@@ -1,1 +1,0 @@
-Dies ist der Ordner 04_Assets/Karten/HTML_export. Lege hier die entsprechenden Dateien ab.

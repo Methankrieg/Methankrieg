@@ -1,1 +1,0 @@
-console.log("karte_marker_v1.js geladen – bereit für Markerlogik.");
