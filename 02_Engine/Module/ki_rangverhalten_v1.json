@@ -1,0 +1,32 @@
+{
+    "imperator": {
+        "risikobereitschaft": 0.2,
+        "zielsucht": 0.9,
+        "gruppenbindung": 1.0
+    },
+    "reichsadmiral": {
+        "risikobereitschaft": 0.3,
+        "zielsucht": 0.85,
+        "gruppenbindung": 1.0
+    },
+    "3-sonnentraeger": {
+        "risikobereitschaft": 0.5,
+        "zielsucht": 0.7,
+        "gruppenbindung": 0.8
+    },
+    "2-sonnentraeger": {
+        "risikobereitschaft": 0.7,
+        "zielsucht": 0.6,
+        "gruppenbindung": 0.5
+    },
+    "1-sonnentraeger": {
+        "risikobereitschaft": 0.9,
+        "zielsucht": 0.4,
+        "gruppenbindung": 0.3
+    },
+    "default": {
+        "risikobereitschaft": 0.5,
+        "zielsucht": 0.5,
+        "gruppenbindung": 0.5
+    }
+}
