@@ -1,0 +1,179 @@
+{
+    "F-4112": {
+        "name": "Custordth",
+        "typ": "industriesystem",
+        "mp": 9,
+        "pp": 6,
+        "werften": [
+            {
+                "kapazitaet": 49
+            },
+            {
+                "kapazitaet": 12
+            },
+            {
+                "kapazitaet": 12
+            },
+            {
+                "kapazitaet": 12
+            }
+        ],
+        "sektor": "Erkud"
+    },
+    "F-4215": {
+        "name": "Fayarb",
+        "typ": "industriesystem",
+        "mp": 8,
+        "pp": 3,
+        "werften": [
+            {
+                "kapazitaet": 38
+            },
+            {
+                "kapazitaet": 38
+            },
+            {
+                "kapazitaet": 38
+            },
+            {
+                "kapazitaet": 25
+            },
+            {
+                "kapazitaet": 25
+            }
+        ],
+        "sektor": "Erkud"
+    },
+    "F-4219": {
+        "name": "Stypu",
+        "typ": "industriesystem",
+        "mp": 3,
+        "pp": 2,
+        "werften": [
+            {
+                "kapazitaet": 30
+            },
+            {
+                "kapazitaet": 19
+            },
+            {
+                "kapazitaet": 19
+            }
+        ],
+        "sektor": "Erkud"
+    },
+    "F-4122": {
+        "name": "Thismeth",
+        "typ": "industriesystem",
+        "mp": 8,
+        "pp": 3,
+        "werften": [
+            {
+                "kapazitaet": 33
+            },
+            {
+                "kapazitaet": 33
+            },
+            {
+                "kapazitaet": 11
+            },
+            {
+                "kapazitaet": 11
+            }
+        ],
+        "sektor": "Erkud"
+    },
+    "F-4020": {
+        "name": "Surnirn",
+        "typ": "industriesystem",
+        "mp": 2,
+        "pp": 4,
+        "werften": [
+            {
+                "kapazitaet": 39
+            },
+            {
+                "kapazitaet": 24
+            }
+        ],
+        "sektor": "Erkud"
+    },
+    "F-3922": {
+        "name": "Vyrdernm",
+        "typ": "industriesystem",
+        "mp": 16,
+        "pp": 5,
+        "werften": [
+            {
+                "kapazitaet": 37
+            },
+            {
+                "kapazitaet": 16
+            }
+        ],
+        "sektor": "Erkud"
+    },
+    "F-4307": {
+        "name": "Vingerni",
+        "typ": "industriesystem",
+        "mp": 8,
+        "pp": 5,
+        "werften": [
+            {
+                "kapazitaet": 48
+            },
+            {
+                "kapazitaet": 21
+            }
+        ],
+        "sektor": "Luvanaar"
+    },
+    "F-4110": {
+        "name": "Rine",
+        "typ": "industriesystem",
+        "mp": 3,
+        "pp": 2,
+        "werften": [
+            {
+                "kapazitaet": 28
+            },
+            {
+                "kapazitaet": 13
+            }
+        ],
+        "sektor": "Luvanaar"
+    },
+    "F-3909": {
+        "name": "Morderth",
+        "typ": "industriesystem",
+        "mp": 1,
+        "pp": 2,
+        "werften": [
+            {
+                "kapazitaet": 13
+            }
+        ],
+        "sektor": "Luvanaar"
+    },
+    "F-3611": {
+        "name": "Casyat",
+        "typ": "industriesystem",
+        "mp": 3,
+        "pp": 4,
+        "werften": [
+            {
+                "kapazitaet": 27
+            },
+            {
+                "kapazitaet": 12
+            },
+            {
+                "kapazitaet": 12
+            },
+            {
+                "kapazitaet": 12
+            }
+        ],
+        "sektor": "Luvanaar"
+    }
+}

@@ -1,0 +1,34 @@
+{
+    "umkaempftes_casyat": {
+        "name": "Umk\u00e4mpftes Casyat",
+        "start_runde": 4,
+        "end_runde": 12,
+        "g\u00fcltige_sektoren": [
+            "Erkud",
+            "Luvanaar"
+        ],
+        "start_besitz": {
+            "f-4112": "maahks",
+            "f-4215": "maahks",
+            "f-4307": "arkoniden",
+            "f-4110": "arkoniden",
+            "f-3909": "arkoniden",
+            "f-3611": "arkoniden",
+            "f-3812": "arkoniden"
+        },
+        "start_marker": [],
+        "verstaerkungen": {
+            "runde_6": []
+        },
+        "siegbedingungen": [
+            {
+                "fraktion": "maahks",
+                "bedingung": "F3611 muss am Ende des Szenarios in Besitz und frei von Arkoniden sein"
+            },
+            {
+                "fraktion": "arkoniden",
+                "bedingung": "Maahks d\u00fcrfen F3611 nicht kontrollieren"
+            }
+        ]
+    }
+}

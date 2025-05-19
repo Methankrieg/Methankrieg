@@ -1,0 +1,32 @@
+{
+    "arkoniden": {
+        "Imperator_Gonozal_VII": {
+            "kommandowert": 3,
+            "bonus": 2,
+            "rang": "imperator",
+            "politische_beschraenkung": true,
+            "anmerkung": "nicht in Arkon einsetzbar, loyal zur Garde"
+        },
+        "Orbanaschol": {
+            "kommandowert": 2,
+            "bonus": 1,
+            "rang": "reichsadmiral",
+            "verbannt_legend\u00e4re_garde": true,
+            "anmerkung": "schaltet Gonozal aus, verpflichtet Kristallgarde"
+        }
+    },
+    "maahks": {
+        "Grek_1": {
+            "kommandowert": 2,
+            "bonus": 1,
+            "rang": "flottenadmiral",
+            "anmerkung": "Prim\u00e4rer Flottenf\u00fchrer im Norden"
+        },
+        "Zurk_9": {
+            "kommandowert": 1,
+            "bonus": 2,
+            "rang": "taktiker",
+            "anmerkung": "Spezialisiert auf Hinterhalte"
+        }
+    }
+}

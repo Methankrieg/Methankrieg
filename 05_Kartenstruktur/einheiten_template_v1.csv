@@ -1,0 +1,43 @@
+Fraktion,Typ,Technologielevel,Angriff,Verteidigung,Personalkosten,Materialkosten,Bauzeit (Monate),Erfahrungslevel,Lebenspunkte
+Arkoniden,Liniengeschwader,State of the Art,19,23,14,8,5,Elite,2
+Arkoniden,Liniengeschwader,Standard,18,22,12,8,5,Veteran,2
+Arkoniden,Liniengeschwader,Veraltet,17,21,8,8,5,Regulär,2
+Arkoniden,Kreuzergeschwader,State of the Art,15,21,7,6,3,Elite,2
+Arkoniden,Kreuzergeschwader,Standard,14,20,6,6,3,Veteran,2
+Arkoniden,Kreuzergeschwader,Veraltet,13,19,4,6,3,Regulär,2
+Maahks,Liniengeschwader,State of the Art,17,20,20,24,5,Elite,2
+Maahks,Liniengeschwader,Standard,16,19,15,18,5,Veteran,2
+Maahks,Liniengeschwader,Veraltet,15,18,10,12,5,Regulär,2
+Arkoniden,Schlachtkreuzergeschwader,State of the Art,21,17,8,12,4,Elite,2
+Arkoniden,Schlachtkreuzergeschwader,Standard,20,16,8,10,4,Veteran,2
+Arkoniden,Schlachtkreuzergeschwader,Veraltet,19,15,8,8,4,Regulär,2
+Arkoniden,Aufklärungsgeschwader,State of the Art,14,16,6,7,2,Elite,2
+Arkoniden,Aufklärungsgeschwader,Standard,13,15,5,5,2,Veteran,2
+Arkoniden,Aufklärungsgeschwader,Veraltet,12,14,3,4,2,Regulär,2
+Arkoniden,Raumfort,State of the Art,16,24,8,12,5,Regulär,3
+Arkoniden,Raumfort,Standard,14,20,5,10,5,Regulär,3
+Arkoniden,Raumfort,Veraltet,12,14,3,8,4,Regulär,3
+Arkoniden,Reservegeschwader,Standard,14,16,3,4,3,Regulär,2
+Arkoniden,Reservegeschwader,Veraltet,12,14,2,4,3,Grün,2
+Arkoniden,Einsatzgeschwader,Standard,12,16,3,4,2,Regulär,2
+Arkoniden,Einsatzgeschwader,Veraltet,11,15,2,3,2,Grün,2
+Maahks,Schlachtkreuzergeschwader,State of the Art,15,17,12,15,4,Veteran,2
+Maahks,Schlachtkreuzergeschwader,Standard,14,16,8,10,4,Regulär,2
+Maahks,Schlachtkreuzergeschwader,Veraltet,13,15,7,9,4,Grün,2
+Maahks,Kreuzergeschwader,State of the Art,10,13,12,16,3,Elite,2
+Maahks,Kreuzergeschwader,Standard,9,12,9,12,3,Veteran,2
+Maahks,Kreuzergeschwader,Veraltet,8,11,6,8,3,Regulär,2
+Maahks,Aufklärungsgeschwader,State of the Art,5,12,4,6,2,Veteran,2
+Maahks,Aufklärungsgeschwader,Standard,4,11,3,5,1,Regulär,2
+Maahks,Aufklärungsgeschwader,Veraltet,3,10,2,4,1,Grün,2
+Maahks,Schlachtschiffgeschwader,State of the Art,20,22,24,30,5,Elite,3
+Maahks,Schlachtschiffgeschwader,Standard,19,21,18,24,5,Veteran,3
+Maahks,Schlachtschiffgeschwader,Veraltet,18,20,12,16,5,Regulär,3
+Maahks,Leichtes Trägergeschwader,Standard,5,7,2,3,1,Regulär,2
+Maahks,Leichtes Trägergeschwader,Veraltet,4,6,1,2,1,Grün,2
+Maahks,Angriffsträgergeschwader,Standard,12,9,14,10,3,Regulär,2
+Maahks,Schweres Trägergeschwader,State of the Art,9,11,18,14,2,Veteran,2
+Maahks,Schweres Trägergeschwader,Standard,8,10,12,9,2,Regulär,2
+Maahks,Schweres Trägergeschwader,Veraltet,7,9,12,9,2,Regulär,2
+Maahks,Jägergeschwader,Standard,1,1,6,3,1,Regulär,1
+Maahks,Zerstörergeschwader,Standard,2,1,8,5,1,Regulär,1

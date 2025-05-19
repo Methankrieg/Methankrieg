@@ -1,0 +1,1 @@
+Dies ist der Ordner 05_Kartenstruktur. Lege hier die entsprechenden Dateien ab.

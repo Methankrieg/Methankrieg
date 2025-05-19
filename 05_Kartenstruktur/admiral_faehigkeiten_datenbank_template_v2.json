@@ -1,0 +1,22 @@
+{
+    "kristallgarde_loyalit\u00e4t": {
+        "beschreibung": "Erlaubt gezielte Rekrutierung von Kristallgardeeinheiten.",
+        "verf\u00fcgbar_ab": "Feldzug_1",
+        "effekt_typ": "bau_beschleunigung"
+    },
+    "gardeverbot_arkon": {
+        "beschreibung": "Verhindert den Einsatz legend\u00e4rer Garde im System Arkon.",
+        "verf\u00fcgbar_ab": "Feldzug_1",
+        "effekt_typ": "einschr\u00e4nkung"
+    },
+    "taktischer_r\u00fcckzug": {
+        "beschreibung": "Erlaubt R\u00fcckzugsversuch nach der ersten Kampfrunde ohne Test.",
+        "verf\u00fcgbar_ab": "Beta",
+        "effekt_typ": "kampfreaktion"
+    },
+    "frontlinien_mobilisierung": {
+        "beschreibung": "Einmal pro Spiel: kostenlose Auffrischung eines Geschwaders im Frontgebiet.",
+        "verf\u00fcgbar_ab": "Beta",
+        "effekt_typ": "einmaleffekt"
+    }
+}

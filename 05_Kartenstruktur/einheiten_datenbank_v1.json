@@ -1,0 +1,78 @@
+{
+    "arkoniden": {
+        "liniengeschwader": {
+            "angriff": 6,
+            "verteidigung": 5,
+            "strukturpunkte": 2,
+            "qualit\u00e4t": "regul\u00e4r",
+            "technologie": "standard"
+        },
+        "imperatorengarde": {
+            "angriff": 10,
+            "verteidigung": 9,
+            "strukturpunkte": 3,
+            "qualit\u00e4t": "legend\u00e4r",
+            "technologie": "state_of_the_art",
+            "bonus": 4
+        },
+        "kristallgarde": {
+            "angriff": 6,
+            "verteidigung": 6,
+            "strukturpunkte": 2,
+            "qualit\u00e4t": "regul\u00e4r",
+            "technologie": "standard"
+        },
+        "raumfort": {
+            "angriff": 7,
+            "verteidigung": 10,
+            "strukturpunkte": 3,
+            "qualit\u00e4t": "regul\u00e4r",
+            "technologie": "standard",
+            "stationaer": true
+        }
+    },
+    "maahks": {
+        "13_LIG": {
+            "angriff": 5,
+            "verteidigung": 4,
+            "strukturpunkte": 2,
+            "qualit\u00e4t": "regul\u00e4r",
+            "technologie": "standard"
+        },
+        "tr\u00e4ger_angriff": {
+            "angriff": 5,
+            "verteidigung": 6,
+            "strukturpunkte": 3,
+            "qualit\u00e4t": "veteran",
+            "technologie": "standard",
+            "kapazitaet": 8,
+            "beladung": {
+                "jaeger": 1,
+                "zerstoerer": 2
+            }
+        },
+        "jaeger": {
+            "angriff": 2,
+            "verteidigung": 5,
+            "strukturpunkte": 0,
+            "qualit\u00e4t": "regul\u00e4r",
+            "technologie": "standard",
+            "gebunden_an_traeger": true
+        },
+        "zerstoerer": {
+            "angriff": 5,
+            "verteidigung": 3,
+            "strukturpunkte": 0,
+            "qualit\u00e4t": "regul\u00e4r",
+            "technologie": "standard",
+            "gebunden_an_traeger": true
+        },
+        "schlachtschiff": {
+            "angriff": 10,
+            "verteidigung": 10,
+            "strukturpunkte": 3,
+            "qualit\u00e4t": "veteran",
+            "technologie": "state_of_the_art"
+        }
+    }
+}

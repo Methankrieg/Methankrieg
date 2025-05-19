@@ -1,0 +1,34 @@
+{
+    "arkoniden": {
+        "Ruzik": {
+            "kommandowert": 4,
+            "bonus": 2,
+            "rang": "2-Sonnentr\u00e4ger",
+            "f\u00e4higkeiten": [],
+            "anmerkung": ""
+        }
+    },
+    "maahks": {
+        "Grek-18": {
+            "kommandowert": 7,
+            "bonus": 1,
+            "rang": "18",
+            "f\u00e4higkeiten": [],
+            "anmerkung": ""
+        },
+        "Grek-48": {
+            "kommandowert": 2,
+            "bonus": 2,
+            "rang": "48",
+            "f\u00e4higkeiten": [],
+            "anmerkung": ""
+        },
+        "Grek-8": {
+            "kommandowert": 8,
+            "bonus": 2,
+            "rang": "8",
+            "f\u00e4higkeiten": [],
+            "anmerkung": ""
+        }
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "umkaempftes_casyat": {
+        "name": "Umk\u00e4mpftes Casyat",
+        "start_runde": 4,
+        "end_runde": 12,
+        "g\u00fcltige_sektoren": [
+            "Erkud",
+            "Luvanaar"
+        ],
+        "start_besitz": {
+            "f-4112": "maahks",
+            "f-4215": "maahks",
+            "f-4307": "arkoniden",
+            "f-4110": "arkoniden",
+            "f-3909": "arkoniden",
+            "f-3611": "arkoniden",
+            "f-3812": "arkoniden"
+        },
+        "start_marker": [],
+        "verstaerkungen": {
+            "runde_6": [
+                {
+                    "fraktion": "maahks",
+                    "feld": "f-4215",
+                    "einheit": "admiral_grek-8"
+                },
+                {
+                    "fraktion": "maahks",
+                    "feld": "f-4215",
+                    "einheit": "2. liniengeschwader",
+                    "qualit\u00e4t": "veteranen",
+                    "technologie": "state_of_the_art",
+                    "struktur": 2
+                },
+                {
+                    "fraktion": "maahks",
+                    "feld": "f-4215",
+                    "einheit": "32. schlachtkreuzergeschwader",
+                    "qualit\u00e4t": "gr\u00fcn",
+                    "technologie": "veraltet",
+                    "struktur": 3
+                },
+                {
+                    "fraktion": "maahks",
+                    "feld": "f-4215",
+                    "einheit": "40. kreuzergeschwader",
+                    "qualit\u00e4t": "regul\u00e4r",
+                    "technologie": "standard",
+                    "struktur": 2
+                },
+                {
+                    "fraktion": "maahks",
+                    "feld": "f-4215",
+                    "einheit": "188. kreuzergeschwader",
+                    "qualit\u00e4t": "gr\u00fcn",
+                    "technologie": "veraltet",
+                    "struktur": 2
+                }
+            ],
+            "runde_8": [
+                {
+                    "fraktion": "arkoniden",
+                    "feld": "f-3511",
+                    "einheit": "imperiales gardegeschwader",
+                    "qualit\u00e4t": "legend\u00e4r",
+                    "technologie": "state_of_the_art",
+                    "struktur": 3
+                }
+            ]
+        },
+        "siegbedingungen": [
+            {
+                "fraktion": "maahks",
+                "bedingung": "F3611 muss am Ende des Szenarios in Besitz und frei von Arkoniden sein"
+            },
+            {
+                "fraktion": "arkoniden",
+                "bedingung": "Maahks d\u00fcrfen F3611 nicht kontrollieren"
+            }
+        ]
+    }
+}
