@@ -1,0 +1,1 @@
+Dies ist der Ordner 04_Assets/Karten/SVG. Lege hier die entsprechenden Dateien ab.
