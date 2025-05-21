@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Kartenanzeige mit Scroll & Zoom</title>
+  <script src="gameState_v1_marker.js"></script>
+  <script src="karte_marker_v2.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background-color: #111;
+    }
+    #container {
+      width: 100vw;
+      height: 100vh;
+      overflow: scroll;
+      background: #222;
+    }
+    #karte_svg {
+      transform-origin: 0 0;
+      transition: transform 0.05s ease-out;
+    }
+    .marker {
+      position: absolute;
+      pointer-events: none;
+      z-index: 10;
+    }
+    #debug-panel {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.7);
+      color: #0f0;
+      font-family: monospace;
+      padding: 10px;
+      font-size: 12px;
+      border: 1px solid #0f0;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+<div id="container">
+  <object id="karte_obj" type="image/svg+xml" data="Sektor_Template_mit_MarkerTargets.svg"></object>
+</div>
+<div id="debug-panel">Debug: Initialisiert...</div>
+
+<script>
+let scale = 1;
+const container = document.getElementById("container");
+const debugPanel = document.getElementById("debug-panel");
+
+container.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const direction = e.deltaY > 0 ? -0.1 : 0.1;
+  scale = Math.min(Math.max(0.2, scale + direction), 5);
+  const obj = document.getElementById("karte_obj");
+  obj.style.transform = `scale(${scale})`;
+});
+
+document.getElementById("karte_obj").addEventListener("load", () => {
+  const svgDoc = document.getElementById("karte_obj").contentDocument;
+  if (!svgDoc) {
+    debugPanel.textContent = "Fehler: SVG-Dokument nicht gefunden.";
+    return;
+  }
+
+  const startmarker = gameState.startaufstellung || [];
+  let platzierteMarker = 0;
+  debugPanel.innerHTML = `Startmarker erkannt: ${startmarker.length}<br>`;
+
+  startmarker.forEach(marker => {
+    const hex = svgDoc.getElementById(marker.feld.toLowerCase());
+    if (!hex) {
+      debugPanel.innerHTML += `Feld nicht gefunden: ${marker.feld}<br>`;
+      return;
+    }
+
+    let templateKey = "";
+    if (marker.einheit.startsWith("admiral")) {
+      templateKey = marker.fraktion + "_admiral";
+    } else if (marker.einheit.includes("raumfort")) {
+      templateKey = "arkoniden_raumfort";
+    } else if (marker.einheit.includes("trägersch")) {
+      templateKey = "maahks_traeger";
+    } else if (marker.einheit.includes("jäger")) {
+      templateKey = "maahks_jaeger";
+    } else {
+      templateKey = marker.fraktion + "_standard";
+    }
+
+    const template = markerTemplates[templateKey];
+    if (!template) {
+      debugPanel.innerHTML += `Kein Template für: ${templateKey}<br>`;
+      return;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("marker");
+    wrapper.innerHTML = template;
+
+    // Position berechnen anhand BoundingBox
+    const bbox = hex.getBoundingClientRect();
+    const svgBBox = svgDoc.documentElement.getBoundingClientRect();
+    wrapper.style.left = `${bbox.left - svgBBox.left}px`;
+    wrapper.style.top = `${bbox.top - svgBBox.top}px`;
+
+    document.body.appendChild(wrapper);
+    platzierteMarker++;
+  });
+
+  debugPanel.innerHTML += `Platzierte Marker: ${platzierteMarker}<br>`;
+});
+</script>
+</body>
+</html>
