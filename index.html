@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg SVG Testmodul – mit Panzoom</title>
+  <title>Methankrieg Interaktive Karte – Polygonselektion + Panzoom CDN</title>
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
   <style>
     html, body {
@@ -34,6 +34,15 @@
       display: none;
       z-index: 1000;
     }
+    #contextmenu {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #666;
+      padding: 6px;
+      display: none;
+      z-index: 1001;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    }
     #log {
       height: 30px;
       line-height: 30px;
@@ -42,6 +51,10 @@
       padding-left: 10px;
       font-size: 14px;
     }
+    .selected {
+      stroke: orange;
+      stroke-width: 3;
+    }
   </style>
 </head>
 <body>
@@ -49,18 +62,22 @@
     <div id="svgwrapper"></div>
   </div>
   <div id="tooltip"></div>
+  <div id="contextmenu"></div>
   <div id="log">[DEBUG] System bereit.</div>
 
   <script>
-    const container = document.getElementById("svgwrapper");
+    const wrapper = document.getElementById("svgwrapper");
     const tooltip = document.getElementById("tooltip");
+    const contextmenu = document.getElementById("contextmenu");
     const log = document.getElementById("log");
+
+    let selectedHex = null;
 
     fetch("Sektor_TEMPLATE_PERFEKT_LayerFix_mitHintergrund.svg")
       .then(response => response.text())
       .then(data => {
-        container.innerHTML = data;
-        const svg = container.querySelector("svg");
+        wrapper.innerHTML = data;
+        const svg = wrapper.querySelector("svg");
 
         // Panzoom aktivieren
         const panzoom = Panzoom(svg, {
@@ -69,53 +86,39 @@
           minScale: 0.2,
           startScale: 0.5
         });
-        container.addEventListener('wheel', panzoom.zoomWithWheel);
+        wrapper.addEventListener('wheel', panzoom.zoomWithWheel);
 
         const polygons = svg.querySelectorAll("#Hex_grid_02 polygon");
-        const gridLayer = svg.getElementById("Hex_grid_02");
 
         polygons.forEach(poly => {
           poly.style.cursor = "pointer";
 
-          poly.addEventListener("mouseenter", (e) => {
-            tooltip.textContent = poly.id;
-            tooltip.style.left = (e.clientX + 10) + "px";
-            tooltip.style.top = (e.clientY + 10) + "px";
-            tooltip.style.display = "block";
-            log.textContent = "[DEBUG] Hover über " + poly.id;
-          });
-
-          poly.addEventListener("mouseleave", () => {
-            tooltip.style.display = "none";
-          });
-
+          // Linksklick: Selektieren
           poly.addEventListener("click", (e) => {
-            const center = getPolygonCenter(poly);
-            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", center.x);
-            circle.setAttribute("cy", center.y);
-            circle.setAttribute("r", 20);
-            circle.setAttribute("fill", "red");
-            gridLayer.appendChild(circle);
-            log.textContent = "[DEBUG] Marker auf " + poly.id + " gesetzt.";
+            e.stopPropagation();
+            e.preventDefault();
+            if (selectedHex) selectedHex.classList.remove("selected");
+            selectedHex = poly;
+            poly.classList.add("selected");
+            log.textContent = "[DEBUG] Hexfeld ausgewählt: " + poly.id;
+            contextmenu.style.display = "none";
+          });
+
+          // Rechtsklick: Kontextmenü anzeigen
+          poly.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            contextmenu.innerHTML = "<strong>Kontextmenü für:</strong><br>" + poly.id + "<br>(Layerdaten folgen)";
+            contextmenu.style.left = e.pageX + "px";
+            contextmenu.style.top = e.pageY + "px";
+            contextmenu.style.display = "block";
+            log.textContent = "[DEBUG] Rechtsklick auf: " + poly.id;
           });
         });
 
-        function getPolygonCenter(polygon) {
-          const points = polygon.points;
-          let sumX = 0, sumY = 0;
-          for (let i = 0; i < points.numberOfItems; i++) {
-            sumX += points.getItem(i).x;
-            sumY += points.getItem(i).y;
-          }
-          return {
-            x: sumX / points.numberOfItems,
-            y: sumY / points.numberOfItems
-          };
-        }
-      })
-      .catch(err => {
-        log.textContent = "[FEHLER] SVG konnte nicht geladen werden: " + err;
+        // Klick außerhalb schließt Kontextmenü
+        document.addEventListener("click", () => {
+          contextmenu.style.display = "none";
+        });
       });
   </script>
 </body>
