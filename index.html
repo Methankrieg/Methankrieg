@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg SVG Inline Testmodul</title>
+  <title>Methankrieg SVG Inline Testmodul (LayerFix)</title>
   <style>
     html, body {
       margin: 0;
@@ -53,14 +53,13 @@
     const tooltip = document.getElementById("tooltip");
     const log = document.getElementById("log");
 
-    // SVG laden und inline einfügen
-    fetch("Sektor_TEMPLATE_PERFEKT.svg")
+    fetch("Sektor_TEMPLATE_PERFEKT_LayerFix.svg")
       .then(response => response.text())
       .then(data => {
         container.innerHTML = data;
         const svg = container.querySelector("svg");
-        const polygons = svg.querySelectorAll("#02_Hex_grid polygon");
-        const gridLayer = svg.getElementById("02_Hex_grid");
+        const polygons = svg.querySelectorAll("#Hex_grid_02 polygon");
+        const gridLayer = svg.getElementById("Hex_grid_02");
 
         polygons.forEach(poly => {
           poly.style.cursor = "pointer";
