@@ -1,94 +1,36 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg Cursor Test – dynamisch JS</title>
-  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+  <title>Methankrieg – Kontextmenü-Test</title>
   <style>
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background: white;
+      background: #222;
+      color: white;
       font-family: sans-serif;
     }
-    #container {
+    #debugDisplay {
+      background: #111;
+      color: #0f0;
+      padding: 10px;
+      font-family: monospace;
+      position: fixed;
+      bottom: 0;
       width: 100%;
-      height: calc(100% - 30px);
-      background: white;
+      z-index: 9999;
     }
-    #svgwrapper {
+    object {
       width: 100%;
-      height: 100%;
-    }
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-    #log {
-      height: 30px;
-      line-height: 30px;
-      background: #eee;
-      border-top: 1px solid #ccc;
-      padding-left: 10px;
-      font-size: 14px;
-    }
-    .selected {
-      stroke: orange;
-      stroke-width: 3;
+      height: calc(100vh - 50px);
+      display: block;
     }
   </style>
 </head>
 <body>
-  <div id="container">
-    <div id="svgwrapper"></div>
-  </div>
-  <div id="log">[DEBUG] System bereit.</div>
-
-  <script>
-    const wrapper = document.getElementById("svgwrapper");
-    const log = document.getElementById("log");
-    let selectedHex = null;
-
-    fetch("Sektor_TEMPLATE_INTERAKTIV_LAYERBEREINIGT_withRoot.svg")
-      .then(response => response.text())
-      .then(data => {
-        wrapper.innerHTML = data;
-        const svg = wrapper.querySelector("svg");
-
-        const panzoom = Panzoom(svg, {
-          contain: 'outside',
-          maxScale: 5,
-          minScale: 0.2,
-          startScale: 0.5
-        });
-        wrapper.addEventListener('wheel', panzoom.zoomWithWheel);
-
-        const polygons = svg.querySelectorAll("#Hex_grid_02 polygon");
-        log.textContent = "[DEBUG] Polygone gefunden: " + polygons.length;
-
-        polygons.forEach(poly => {
-          poly.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (selectedHex) selectedHex.classList.remove("selected");
-            selectedHex = poly;
-            poly.classList.add("selected");
-            log.textContent = "[DEBUG] Klick auf Hex: " + poly.id;
-          });
-          poly.addEventListener("mouseenter", () => {
-            poly.style.cursor = "pointer";
-          });
-          poly.addEventListener("mouseleave", () => {
-            poly.style.cursor = "default";
-          });
-        });
-      })
-      .catch(err => {
-        log.textContent = "[FEHLER] SVG konnte nicht geladen werden: " + err;
-      });
-  </script>
-<script src="kontextmenue_interaktion.js"></script>
+  <object id="svgEmbed" type="image/svg+xml" data="Sektor_TEMPLATE_OBJEKTE_POSITIONIERT.svg"></object>
+  <div id="debugDisplay">System bereit.</div>
+  <script src="kontextmenue_interaktion_objectfix.js"></script>
 </body>
 </html>
