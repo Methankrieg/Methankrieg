@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg Interaktive Karte – Polygonselektion + Panzoom CDN</title>
+  <title>Methankrieg Interaktive Karte – Fixierte Polygoninitialisierung</title>
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
   <style>
     html, body {
@@ -77,48 +77,61 @@
       .then(response => response.text())
       .then(data => {
         wrapper.innerHTML = data;
-        const svg = wrapper.querySelector("svg");
 
-        // Panzoom aktivieren
-        const panzoom = Panzoom(svg, {
-          contain: 'outside',
-          maxScale: 5,
-          minScale: 0.2,
-          startScale: 0.5
-        });
-        wrapper.addEventListener('wheel', panzoom.zoomWithWheel);
+        requestAnimationFrame(() => {
+          const svg = wrapper.querySelector("svg");
 
-        const polygons = svg.querySelectorAll("#Hex_grid_02 polygon");
+          if (!svg) {
+            log.textContent = "[FEHLER] SVG nicht korrekt geladen.";
+            return;
+          }
 
-        polygons.forEach(poly => {
-          poly.style.cursor = "pointer";
+          // Panzoom aktivieren
+          const panzoom = Panzoom(svg, {
+            contain: 'outside',
+            maxScale: 5,
+            minScale: 0.2,
+            startScale: 0.5
+          });
+          wrapper.addEventListener('wheel', panzoom.zoomWithWheel);
 
-          // Linksklick: Selektieren
-          poly.addEventListener("click", (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            if (selectedHex) selectedHex.classList.remove("selected");
-            selectedHex = poly;
-            poly.classList.add("selected");
-            log.textContent = "[DEBUG] Hexfeld ausgewählt: " + poly.id;
+          const polygons = svg.querySelectorAll("#Hex_grid_02 polygon");
+
+          if (polygons.length === 0) {
+            log.textContent = "[FEHLER] Keine Polygone gefunden (Layer Hex_grid_02 leer?)";
+            return;
+          }
+
+          polygons.forEach(poly => {
+            poly.style.cursor = "pointer";
+
+            poly.addEventListener("click", (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (selectedHex) selectedHex.classList.remove("selected");
+              selectedHex = poly;
+              poly.classList.add("selected");
+              log.textContent = "[DEBUG] Hexfeld ausgewählt: " + poly.id;
+              contextmenu.style.display = "none";
+            });
+
+            poly.addEventListener("contextmenu", (e) => {
+              e.preventDefault();
+              contextmenu.innerHTML = "<strong>Kontextmenü für:</strong><br>" + poly.id + "<br>(Layerdaten folgen)";
+              contextmenu.style.left = e.pageX + "px";
+              contextmenu.style.top = e.pageY + "px";
+              contextmenu.style.display = "block";
+              log.textContent = "[DEBUG] Rechtsklick auf: " + poly.id;
+            });
+          });
+
+          document.addEventListener("click", () => {
             contextmenu.style.display = "none";
           });
-
-          // Rechtsklick: Kontextmenü anzeigen
-          poly.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-            contextmenu.innerHTML = "<strong>Kontextmenü für:</strong><br>" + poly.id + "<br>(Layerdaten folgen)";
-            contextmenu.style.left = e.pageX + "px";
-            contextmenu.style.top = e.pageY + "px";
-            contextmenu.style.display = "block";
-            log.textContent = "[DEBUG] Rechtsklick auf: " + poly.id;
-          });
         });
-
-        // Klick außerhalb schließt Kontextmenü
-        document.addEventListener("click", () => {
-          contextmenu.style.display = "none";
-        });
+      })
+      .catch(err => {
+        log.textContent = "[FEHLER] SVG konnte nicht geladen werden: " + err;
       });
   </script>
 </body>
