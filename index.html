@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg Debug Karte – Cursor und Klicktest</title>
+  <title>Methankrieg Cursor Test – dynamisch JS</title>
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
   <style>
     html, body {
@@ -22,10 +22,10 @@
     #svgwrapper {
       width: 100%;
       height: 100%;
-      cursor: move;
     }
-    svg polygon {
-      cursor: pointer;
+    svg {
+      width: 100%;
+      height: 100%;
     }
     #log {
       height: 30px;
@@ -50,7 +50,6 @@
   <script>
     const wrapper = document.getElementById("svgwrapper");
     const log = document.getElementById("log");
-
     let selectedHex = null;
 
     fetch("Sektor_TEMPLATE_INTERAKTIV_LAYERBEREINIGT.svg")
@@ -77,6 +76,12 @@
             selectedHex = poly;
             poly.classList.add("selected");
             log.textContent = "[DEBUG] Klick auf Hex: " + poly.id;
+          });
+          poly.addEventListener("mouseenter", () => {
+            poly.style.cursor = "pointer";
+          });
+          poly.addEventListener("mouseleave", () => {
+            poly.style.cursor = "default";
           });
         });
       })
