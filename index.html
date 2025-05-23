@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg SVG Inline Testmodul (LayerFix)</title>
+  <title>Methankrieg SVG Inline Testmodul – Finalfix</title>
   <style>
     html, body {
       margin: 0;
@@ -11,12 +11,13 @@
       height: 100%;
       overflow: hidden;
       font-family: sans-serif;
-      background: #111;
+      background: white;
     }
     #container {
       width: 100%;
       height: calc(100% - 30px);
       overflow: scroll;
+      background: white;
     }
     svg {
       width: 200%;
@@ -53,7 +54,7 @@
     const tooltip = document.getElementById("tooltip");
     const log = document.getElementById("log");
 
-    fetch("Sektor_TEMPLATE_PERFEKT_LayerFix.svg")
+    fetch("Sektor_TEMPLATE_PERFEKT_LayerFix_mitHintergrund.svg")
       .then(response => response.text())
       .then(data => {
         container.innerHTML = data;
