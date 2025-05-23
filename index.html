@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Methankrieg SVG Inline Testmodul</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+      background: #111;
+    }
+    #container {
+      width: 100%;
+      height: calc(100% - 30px);
+      overflow: scroll;
+    }
+    svg {
+      width: 200%;
+      height: 200%;
+    }
+    #tooltip {
+      position: absolute;
+      background: #222;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      pointer-events: none;
+      display: none;
+      z-index: 1000;
+    }
+    #log {
+      height: 30px;
+      line-height: 30px;
+      background: #eee;
+      border-top: 1px solid #ccc;
+      padding-left: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <div id="tooltip"></div>
+  <div id="log">[DEBUG] System bereit.</div>
+
+  <script>
+    const container = document.getElementById("container");
+    const tooltip = document.getElementById("tooltip");
+    const log = document.getElementById("log");
+
+    // SVG laden und inline einfügen
+    fetch("Sektor_TEMPLATE_PERFEKT.svg")
+      .then(response => response.text())
+      .then(data => {
+        container.innerHTML = data;
+        const svg = container.querySelector("svg");
+        const polygons = svg.querySelectorAll("#02_Hex_grid polygon");
+        const gridLayer = svg.getElementById("02_Hex_grid");
+
+        polygons.forEach(poly => {
+          poly.style.cursor = "pointer";
+
+          poly.addEventListener("mouseenter", (e) => {
+            tooltip.textContent = poly.id;
+            tooltip.style.left = (e.clientX + 10) + "px";
+            tooltip.style.top = (e.clientY + 10) + "px";
+            tooltip.style.display = "block";
+            log.textContent = "[DEBUG] Hover über " + poly.id;
+          });
+
+          poly.addEventListener("mouseleave", () => {
+            tooltip.style.display = "none";
+          });
+
+          poly.addEventListener("click", (e) => {
+            const center = getPolygonCenter(poly);
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", center.x);
+            circle.setAttribute("cy", center.y);
+            circle.setAttribute("r", 20);
+            circle.setAttribute("fill", "red");
+            gridLayer.appendChild(circle);
+            log.textContent = "[DEBUG] Marker auf " + poly.id + " gesetzt.";
+          });
+        });
+
+        function getPolygonCenter(polygon) {
+          const points = polygon.points;
+          let sumX = 0, sumY = 0;
+          for (let i = 0; i < points.numberOfItems; i++) {
+            sumX += points.getItem(i).x;
+            sumY += points.getItem(i).y;
+          }
+          return {
+            x: sumX / points.numberOfItems,
+            y: sumY / points.numberOfItems
+          };
+        }
+      })
+      .catch(err => {
+        log.textContent = "[FEHLER] SVG konnte nicht geladen werden: " + err;
+      });
+  </script>
+</body>
+</html>
