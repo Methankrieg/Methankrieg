@@ -3579,8 +3579,8 @@
   <g id="Sektorstatus_08" style="pointer-events: none;"/>
   <g id="Sektorgrenze_09" style="pointer-events: none;"/>
   <g id="Systeme_10" style="pointer-events: none;"/>
-  <g id="Industriesysteme_11" style="pointer-events: none;"><circle cx="150" cy="4155" r="18" fill="none" stroke="gold" stroke-width="3"/><circle id="F-0201" cx="103.92" cy="3779.89" r="15" fill="blue" data-hex="F-0201"/></g>
+  <g id="Industriesysteme_11" style="pointer-events: none;"><circle cx="150" cy="4155" r="18" fill="none" stroke="gold" stroke-width="3"/><circle id="F-0201" cx="150" cy="4155" r="15" fill="blue" data-hex="F-0201"/></g>
   <g id="Systemname_12" style="pointer-events: none;"/>
-  <g id="Marker_13"><circle id="F-0101" cx="51.96" cy="3869.89" r="15" fill="red" data-hex="F-0101"/></g>
+  <g id="Marker_13"><circle id="F-0101" cx="150" cy="4260" r="15" fill="red" data-hex="F-0101"/></g>
   <g id="Kontextmenu_14" style="pointer-events: none;"/>
 </svg>
