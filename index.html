@@ -3,25 +3,25 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg SVG Inline Testmodul – Finalfix</title>
+  <title>Methankrieg SVG Testmodul – mit Panzoom</title>
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
-      font-family: sans-serif;
       background: white;
+      font-family: sans-serif;
     }
     #container {
       width: 100%;
       height: calc(100% - 30px);
-      overflow: scroll;
       background: white;
     }
-    svg {
-      width: 200%;
-      height: 200%;
+    #svgwrapper {
+      width: 100%;
+      height: 100%;
     }
     #tooltip {
       position: absolute;
@@ -45,12 +45,14 @@
   </style>
 </head>
 <body>
-  <div id="container"></div>
+  <div id="container">
+    <div id="svgwrapper"></div>
+  </div>
   <div id="tooltip"></div>
   <div id="log">[DEBUG] System bereit.</div>
 
   <script>
-    const container = document.getElementById("container");
+    const container = document.getElementById("svgwrapper");
     const tooltip = document.getElementById("tooltip");
     const log = document.getElementById("log");
 
@@ -59,6 +61,16 @@
       .then(data => {
         container.innerHTML = data;
         const svg = container.querySelector("svg");
+
+        // Panzoom aktivieren
+        const panzoom = Panzoom(svg, {
+          contain: 'outside',
+          maxScale: 5,
+          minScale: 0.2,
+          startScale: 0.5
+        });
+        container.addEventListener('wheel', panzoom.zoomWithWheel);
+
         const polygons = svg.querySelectorAll("#Hex_grid_02 polygon");
         const gridLayer = svg.getElementById("Hex_grid_02");
 
