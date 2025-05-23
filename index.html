@@ -1,36 +1,35 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Methankrieg – Kontextmenü-Test</title>
+  <meta charset="UTF-8" />
+  <title>Methankrieg – Panzoom + Kontextmenü</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background: #222;
-      color: white;
-      font-family: sans-serif;
-    }
-    #debugDisplay {
       background: #111;
       color: #0f0;
-      padding: 10px;
       font-family: monospace;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      z-index: 9999;
     }
-    object {
+    #svgEmbed {
       width: 100%;
-      height: calc(100vh - 50px);
+      height: calc(100vh - 40px);
       display: block;
+      border: none;
+    }
+    #debugDisplay {
+      height: 40px;
+      background: #222;
+      color: #0f0;
+      padding: 10px;
+      box-sizing: border-box;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
 </head>
 <body>
   <object id="svgEmbed" type="image/svg+xml" data="Sektor_TEMPLATE_OBJEKTE_POSITIONIERT.svg"></object>
-  <div id="debugDisplay">System bereit.</div>
-  <script src="kontextmenue_interaktion_objectfix.js"></script>
+  <div id="debugDisplay">[DEBUG] System bereit.</div>
+  <script src="kontextmenue_interaktion_panzoom.js"></script>
 </body>
 </html>
