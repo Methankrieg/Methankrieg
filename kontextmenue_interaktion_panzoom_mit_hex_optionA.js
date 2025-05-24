@@ -1,8 +1,5 @@
 
-function initKontext(svg) {
-  const kontextLayer = svg.getElementById("Kontextmenu_14");
-  const debug = document.getElementById("log");
-
+document.getElementById("svgEmbed").addEventListener("load", function () {
   const svgDoc = this.contentDocument;
   const svg = svgDoc.querySelector("svg");
   const kontextLayer = svg.getElementById("Kontextmenu_14");
