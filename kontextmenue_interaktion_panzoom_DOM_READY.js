@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("svgContainer");
+  const container = document.getElementById("svgwrapper");
   const debug = document.getElementById("log");
 
   fetch("Sektor_TEMPLATE_MIT_INDUSTRIESYSTEM_4111_FINAL.svg")
