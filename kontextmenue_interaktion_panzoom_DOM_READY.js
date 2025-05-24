@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-function initKontext(svg) {
-
+  const svg = document.querySelector("svg");
+  const kontextLayer = svg.getElementById("Kontextmenu_14");
   const debug = document.getElementById("debugDisplay");
 
   // Panzoom aktivieren
@@ -20,7 +20,6 @@ function initKontext(svg) {
     clearContextMenu();
 
     kontextLayer.style.pointerEvents = "auto";
-
     const menu = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     menu.setAttribute('id', 'contextMenu');
 
@@ -85,7 +84,10 @@ function initKontext(svg) {
 
     layer.querySelectorAll('*').forEach(elem => {
       const type =
-      layerId === 'Hex_grid_02' ? 'hex' : layerId === 'Marker_13' ? 'marker' : 'industrie';
+        layerId === 'Hex_grid_02' ? 'hex' :
+        layerId === 'Marker_13' ? 'marker' :
+        'industrie';
+
       const hexId = elem.id || elem.getAttribute('data-hex') || '[unbekannt]';
 
       elem.addEventListener('click', evt => {
@@ -102,5 +104,4 @@ function initKontext(svg) {
   });
 
   svg.addEventListener('click', () => clearContextMenu());
-
-});
+}); // <-- Hier ist jetzt wirklich Schluss!
