@@ -57,6 +57,7 @@
       .then(data => {
         wrapper.innerHTML = data;
         const svg = wrapper.querySelector("svg");
+        if (typeof initKontext === "function") initKontext(svg);
 
         const panzoom = Panzoom(svg, {
           contain: 'outside',
