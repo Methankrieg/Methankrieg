@@ -102,3 +102,4 @@ function initKontext(svg) {
   });
 
   svg.addEventListener('click', () => clearContextMenu());
+  }
