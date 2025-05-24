@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const svg = document.querySelector("svg");
   const kontextLayer = svg.getElementById("Kontextmenu_14");
-  const debug = document.getElementById("debugDisplay");
+  const debug = document.getElementById("log");
 
   // Panzoom aktivieren
   const panzoomInstance = panzoom(svg, {
