@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg Cursor Test – dynamisch JS</title>
+  <title>Methankrieg – Kontextmenü Test</title>
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
   <style>
     html, body {
@@ -17,7 +17,6 @@
     #container {
       width: 100%;
       height: calc(100% - 30px);
-      background: white;
     }
     #svgwrapper {
       width: 100%;
@@ -35,7 +34,7 @@
       padding-left: 10px;
       font-size: 14px;
     }
-    .selected {
+    .highlight {
       stroke: orange;
       stroke-width: 3;
     }
@@ -47,49 +46,6 @@
   </div>
   <div id="log">[DEBUG] System bereit.</div>
 
-  <script>
-    const wrapper = document.getElementById("svgwrapper");
-    const log = document.getElementById("log");
-    let selectedHex = null;
-
-    fetch("Sektor_TEMPLATE_MIT_INDUSTRIESYSTEM_4111_FINAL.svg")
-      .then(response => response.text())
-      .then(data => {
-        wrapper.innerHTML = data;
-        const svg = wrapper.querySelector("svg");
-        if (typeof initKontext === "function") initKontext(svg);
-
-        const panzoom = Panzoom(svg, {
-          contain: 'outside',
-          maxScale: 5,
-          minScale: 0.2,
-          startScale: 0.5
-        });
-        wrapper.addEventListener('wheel', panzoom.zoomWithWheel);
-
-        const polygons = svg.querySelectorAll("#Hex_grid_02 polygon");
-        log.textContent = "[DEBUG] Polygone gefunden: " + polygons.length;
-
-        polygons.forEach(poly => {
-          poly.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (selectedHex) selectedHex.classList.remove("selected");
-            selectedHex = poly;
-            poly.classList.add("selected");
-            log.textContent = "[DEBUG] Klick auf Hex: " + poly.id;
-          });
-          poly.addEventListener("mouseenter", () => {
-            poly.style.cursor = "pointer";
-          });
-          poly.addEventListener("mouseleave", () => {
-            poly.style.cursor = "default";
-          });
-        });
-      })
-      .catch(err => {
-        log.textContent = "[FEHLER] SVG konnte nicht geladen werden: " + err;
-      });
-  </script>
-<script src="kontextmenue_interaktion_panzoom_DOM_READY.js"></script>
+  <script src="kontextmenue_interaktion_panzoom_funktionierend.js"></script>
 </body>
 </html>
