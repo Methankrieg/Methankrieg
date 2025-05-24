@@ -1,9 +1,6 @@
 
 function initKontext(svg) {
 
-  const svgDoc = this.contentDocument;
-  const svg = svgDoc.querySelector("svg");
-  const kontextLayer = svg.getElementById("Kontextmenu_14");
   const debug = document.getElementById("debugDisplay");
 
   // Panzoom aktivieren
