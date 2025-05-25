@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const detailPanel = document.getElementById("detailpanel-container");
   const detailFrame = document.getElementById("detailpanel-frame");
 
-  fetch("Sektor_TEMPLATE_MIT_MARKER_F3910.svg")
+  fetch("SVG_MARKER_F3910_GEOMETRISCH_ZENTRIERT.svg")
     .then(response => response.text())
     .then(data => {
       container.innerHTML = data;
