@@ -197,7 +197,7 @@ function selectElement(elem) {
 
       svg.addEventListener('click', () => clearContextMenu());
     }) // Ende .then(data => ...)
-    }) // Ende .then(data => ...)
+    
     .catch(err => {
       debug.textContent = `[FEHLER] SVG konnte nicht geladen werden: ${err}`;
     });
