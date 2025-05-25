@@ -144,12 +144,19 @@ function selectElement(elem) {
           text.setAttribute('pointer-events', 'none');
           text.textContent = label;
 
-          rect.addEventListener('click', (evt) => {
-            evt.stopPropagation();
-            clearContextMenu();
-            const elem = svg.getElementById(hexId);
-            debug.textContent = `[AKTION] ${label} für ${hexId}`;
-          });
+         rect.addEventListener('click', (evt) => {
+    evt.stopPropagation();
+    if (label === 'Details') {
+      showDetailPanel(hexId);
+      clearContextMenu();
+    } else if (submenuItems[label]) {
+      createSubmenu(menu, menuX, y, submenuItems[label]);
+    } else {
+      clearContextMenu();
+      const elem = svg.getElementById(hexId);
+      debug.textContent = `[AKTION] ${label} für ${hexId}`;
+    }
+  });
 
           menu.appendChild(rect);
           menu.appendChild(text);
