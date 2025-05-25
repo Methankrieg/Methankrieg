@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (panel && frame) {
           frame.src = "detailpanel.html?hex=" + encodeURIComponent(hexId);
           panel.style.display = "block";
+          }
       }  // Ende showDetailPanel
 
       function createSubmenu(menu, baseX, baseY, options) {
