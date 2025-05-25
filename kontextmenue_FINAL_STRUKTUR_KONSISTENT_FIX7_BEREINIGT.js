@@ -149,7 +149,6 @@ function selectElement(elem) {
     if (label === 'Details') {
       showDetailPanel(hexId);
       clearContextMenu();
-    } 
     } else if (label === 'Bewege nach hier') {
       const eintraege = getNaheMarker(hexId);
       if (eintraege.length > 0) {
