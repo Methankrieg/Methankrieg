@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
           panel.style.display = "block";
           }
       }  // Ende showDetailPanel
+      
       svg.addEventListener('click', () => clearContextMenu());
     })
     .catch(err => {
