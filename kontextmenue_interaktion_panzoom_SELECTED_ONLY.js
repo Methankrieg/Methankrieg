@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const wrapper = document.getElementById("svgwrapper");
   const debug = document.getElementById("log");
 
-  fetch("Sektor_TEMPLATE_MIT_INDUSTRIESYSTEM_4111_FINAL.svg")
+  fetch("Sektor_TEMPLATE_INTERAKTIV_LAYERBEREINIGT_withRoot_stroked.svg")
     .then(response => response.text())
     .then(data => {
       wrapper.innerHTML = data;
