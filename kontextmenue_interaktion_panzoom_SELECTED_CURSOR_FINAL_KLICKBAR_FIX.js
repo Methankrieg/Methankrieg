@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("svgwrapper");
   const debug = document.getElementById("log");
 
-  fetch("SVG_MIT_MARKER_AUF_HEXGRID_F3910.svg")
+  fetch("SVG_MARKER_F3910_GEOMETRISCH_ZENTRIERT.svg")
     .then(response => response.text())
     .then(data => {
       container.innerHTML = data;
