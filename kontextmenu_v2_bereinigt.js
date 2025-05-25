@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
           panel.style.display = "block";
           }
       }  // Ende showDetailPanel
-    
+    })
     .catch(err => {
       debug.textContent = `[FEHLER] SVG konnte nicht geladen werden: ${err}`;
     });
