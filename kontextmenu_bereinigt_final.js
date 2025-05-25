@@ -52,11 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-          menu.appendChild(rect);
-          menu.appendChild(text);
-        });
-      }
-function selectElement(elem) {
+  function selectElement(elem) {
         if (selectedElement) selectedElement.classList.remove('selected');
         selectedElement = elem;
         elem.classList.add('selected');
