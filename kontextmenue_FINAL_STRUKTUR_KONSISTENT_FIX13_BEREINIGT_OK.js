@@ -292,11 +292,6 @@ function getNaheMarker(zielHex) {
       });
     }
   });
-
-        name: einheit.einheit,
-        feld: einheit.feld,
-        markerId: "marker-" + einheit.einheit,
-        distanz: dist
       });
     }
   });
