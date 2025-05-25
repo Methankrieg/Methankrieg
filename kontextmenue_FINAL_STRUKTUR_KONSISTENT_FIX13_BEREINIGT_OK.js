@@ -292,9 +292,5 @@ function getNaheMarker(zielHex) {
       });
     }
   });
-      });
-    }
-  });
-
   return eintraege;
 }
