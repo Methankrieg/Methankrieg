@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
           panel.style.display = "block";
       }  // Ende showDetailPanel
     } // Ende DOMContentLoaded
-      }
 
       function createSubmenu(menu, baseX, baseY, options) {
         options.forEach((item, i) => {
