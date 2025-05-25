@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("svgwrapper");
   const debug = document.getElementById("log");
 
-  fetch("Sektor_TEMPLATE_MIT_INDUSTRIESYSTEM_4111_FINAL_stroked.svg")
+  fetch("Sektor_TEMPLATE_MIT_MARKER_F3910.svg")
     .then(response => response.text())
     .then(data => {
       container.innerHTML = data;
