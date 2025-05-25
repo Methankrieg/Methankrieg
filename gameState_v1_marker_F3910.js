@@ -1,4 +1,4 @@
-const gameState = {
+window.gameState = {
   "runde": 4,
   "aktivePhase": 1,
   "aktiveFraktion": "arkoniden",
