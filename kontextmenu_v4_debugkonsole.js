@@ -113,11 +113,11 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
             showDetailPanel(hexId);
             clearContextMenu();
           } else if (item.name === 'Bewege nach hier') {
-            console.log('[DEBUG] Bewege nach hier ausgewählt für Ziel:', hexId);
-            const eintraege = getNaheMarker(hexId);
+            console.log('[DEBUG] Bewege nach hier ausgewählt für Ziel:', zielHex);
+            const eintraege = getNaheMarker(zielHex);
             console.log('[DEBUG] getNaheMarker Ergebnis:', eintraege);
             if (eintraege.length > 0) {
-              createSubmenu(menu, menuX, menuY + (index + 1) * 20, eintraege, hexId);
+              createSubmenu(menu, menuX, menuY + (index + 1) * 20, eintraege, zielHex);
             } else {
               const msg = '[INFO] Kein Marker in Reichweite für Bewegung.';
               debug.textContent = msg;
@@ -125,7 +125,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
               clearContextMenu();
             }
           } else {
-            const msg = `[AKTION] ${item.name} für ${hexId}`;
+            const msg = `[AKTION] ${item.name} für ${zielHex}`;
             debug.textContent = msg;
             console.log('[DEBUG]', msg);
             clearContextMenu();
