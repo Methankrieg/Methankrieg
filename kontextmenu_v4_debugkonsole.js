@@ -88,7 +88,6 @@ svg.addEventListener('click', () => clearContextMenu());
 
 
 function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
-  const debug = document.getElementById("log");
   eintraege.forEach((item, i) => {
     const y = baseY + i * 20;
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -110,6 +109,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
     rect.addEventListener('click', (evt) => {
           evt.stopPropagation();
+          const debug = document.getElementById("log");
           if (item.name === 'Details') {
             showDetailPanel(zielHex);
             clearContextMenu();
