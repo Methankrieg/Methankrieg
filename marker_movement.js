@@ -36,7 +36,7 @@ function verschiebeMarker(markerId, zielHex) {
   const marker = document.getElementById(markerId);
   const pos = berechneXY(zielHex);
   if (marker && pos) {
-    marker.setAttribute("transform", `translate(${pos.x}, ${pos.y})`);
+    marker.setAttribute("transform", `translate(${pos.x - 25}, ${pos.y - 25})`);
     marker.setAttribute("data-hex", zielHex);
     console.log(`[SPRUNG] ${markerId} → ${zielHex} @ (${pos.x}, ${pos.y})`);
   }
@@ -53,8 +53,8 @@ function verschiebeMarkerAnimiert(markerId, startHex, zielHex, dauer = 400) {
   function step(timestamp) {
     if (!startTime) startTime = timestamp;
     const progress = Math.min((timestamp - startTime) / dauer, 1);
-    const x = start.x + (ziel.x - start.x) * progress;
-    const y = start.y + (ziel.y - start.y) * progress;
+    const x = start.x + (ziel.x - start.x) * progress - 25;
+    const y = start.y + (ziel.y - start.y) * progress - 25;
     marker.setAttribute("transform", `translate(${x}, ${y})`);
     if (progress < 1) {
       requestAnimationFrame(step);
