@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       
       function showDetailPanel(hexId) {
+        console.log("[DEBUG] showDetailPanel aufgerufen mit:", hexId);
         let panel = document.getElementById("detailpanel-container");
         let frame = document.getElementById("detailpanel-frame");
         if (panel && frame) {
