@@ -237,7 +237,7 @@ function getNaheMarker(zielHex) {
     if (!einheit.einheit || !einheit.feld) return;
     const dist = hexDistanz(einheit.feld, zielHex);
     console.log(`→ geprüft: ${einheit.einheit}, feld: ${einheit.feld}, distanz zu ${zielHex}: ${dist}`);
-    if (dist <= 3) {
+    if (dist <= 10) {
       eintraege.push({
         name: einheit.einheit,
         feld: einheit.feld,
