@@ -30,8 +30,7 @@ function berechneXY(hexId) {
   x: Math.round(x * 10000) / 10000,
   y: Math.round(y * 10000) / 10000
 };
-
-
+}
 
 // Bewegung: SOFORTSPRUNG
 function verschiebeMarker(markerId, zielHex) {
