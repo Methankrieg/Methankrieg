@@ -26,8 +26,10 @@ function berechneXY(hexId) {
   const x = x0 + (spalte - 1) * hexBreite + xOffset;
   const y = y0 - (zeile - 1) * hexHoehe;
 
-  return { x, y };
-}
+  return {
+  x: Math.round(x * 10000) / 10000,
+  y: Math.round(y * 10000) / 10000
+};
 
 
 
