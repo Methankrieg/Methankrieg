@@ -80,83 +80,89 @@ svg.addEventListener('click', () => clearContextMenu());
 
 
 function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
-  eintraege.forEach((item, i) => {
-    const y = baseY + i * 20;
+  eintraege
+    .filter(item => !item.bereitsBewegt) // ✳️ Nur noch nicht bewegte anzeigen
+    .forEach((item, i) => {
+      const y = baseY + i * 20;
 
-    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    rect.setAttribute('x', baseX + 140);
-    rect.setAttribute('y', y);
-    rect.setAttribute('width', '180');
-    rect.setAttribute('height', '18');
-    rect.setAttribute('fill', '#eee');
-    rect.setAttribute('stroke', '#666');
-    rect.setAttribute('pointer-events', 'all');
-    rect.setAttribute('style', 'cursor: pointer;');
+      // ✳️ Bewegungsart bestimmen
+      const bewegungsart = item.distanz <= 3 ? "taktisch" : "transition";
 
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', baseX + 145);
-    text.setAttribute('y', y + 13);
-    text.setAttribute('font-size', '12');
-    text.setAttribute('fill', '#000');
-    text.setAttribute('pointer-events', 'none');
-    text.textContent = item.name + " (" + item.distanz + ")";
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', baseX + 140);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', '180');
+      rect.setAttribute('height', '18');
+      rect.setAttribute('fill', '#eee');
+      rect.setAttribute('stroke', '#666');
+      rect.setAttribute('pointer-events', 'all');
+      rect.setAttribute('style', 'cursor: pointer;');
 
-    rect.addEventListener('click', (evt) => {
-      evt.stopPropagation();
-      const debug = document.getElementById("log");
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', baseX + 145);
+      text.setAttribute('y', y + 13);
+      text.setAttribute('font-size', '12');
+      text.setAttribute('fill', '#000');
+      text.setAttribute('pointer-events', 'none');
+      text.textContent = `${item.name} (${item.distanz}) [${bewegungsart}]`;
 
-      // ✳️ Sonderfall: Detailpanel
-      if (item.name === 'Details') {
-        showDetailPanel(zielHex);
-        clearContextMenu();
+      rect.addEventListener('click', (evt) => {
+        evt.stopPropagation();
+        const debug = document.getElementById("log");
 
-      // ✳️ Sonderfall: Neue Submenüs für Bewegung
-      } else if (item.name === 'Bewege nach hier') {
-        console.log('[DEBUG] Bewege nach hier ausgewählt für Ziel:', zielHex);
-        const eintraege = getNaheMarker(zielHex);
-        console.log('[DEBUG] getNaheMarker Ergebnis:', eintraege);
-        if (eintraege.length > 0) {
-          createSubmenu(menu, baseX, baseY + (i + 1) * 20, eintraege, zielHex);
+        // ✳️ Sonderfall: Detailpanel
+        if (item.name === 'Details') {
+          showDetailPanel(zielHex);
+          clearContextMenu();
+
+        // ✳️ Sonderfall: Neue Submenüs für Bewegung
+        } else if (item.name === 'Bewege nach hier') {
+          console.log('[DEBUG] Bewege nach hier ausgewählt für Ziel:', zielHex);
+          const eintraege = getNaheMarker(zielHex);
+          console.log('[DEBUG] getNaheMarker Ergebnis:', eintraege);
+          if (eintraege.length > 0) {
+            createSubmenu(menu, baseX, baseY + (i + 1) * 20, eintraege, zielHex);
+          } else {
+            const msg = '[INFO] Kein Marker in Reichweite für Bewegung.';
+            debug.textContent = msg;
+            console.log('[DEBUG]', msg);
+            clearContextMenu();
+          }
+
+        // ✳️ Standardaktion: Markerbewegung
         } else {
-          const msg = '[INFO] Kein Marker in Reichweite für Bewegung.';
-          debug.textContent = msg;
-          console.log('[DEBUG]', msg);
+          const markerId = "marker-" + item.feld;
+          const marker = document.getElementById(markerId);
+          const startHex = marker?.getAttribute("data-hex") || item.feld;
+          const ziel = zielHex;
+
+          console.log('[DEBUG] Starte Bewegung:', markerId, startHex, '→', ziel, `(${bewegungsart})`);
+          if (typeof bewegeMarker === 'function') {
+            bewegeMarker(markerId, startHex, ziel, bewegungsart);
+          } else {
+            console.warn('[WARNUNG] bewegeMarker nicht definiert!');
+          }
+
+          debug.textContent = `[AKTION] ${item.name} für ${zielHex}`;
           clearContextMenu();
         }
+      });
 
-      // ✳️ Standardaktion: Markerbewegung
-      } else {
-        const markerId = "marker-" + item.feld;
-        const marker = document.getElementById(markerId);
-        const startHex = marker?.getAttribute("data-hex") || item.feld;
-        const ziel = zielHex;
+      rect.addEventListener("mouseenter", () => {
+        rect.setAttribute("fill", "#ccc");
+        rect.style.cursor = "pointer";
+      });
 
-        console.log('[DEBUG] Starte Bewegung:', markerId, startHex, '→', ziel);
-        if (typeof bewegeMarker === 'function') {
-          bewegeMarker(markerId, startHex, ziel, "taktisch");
-        } else {
-          console.warn('[WARNUNG] bewegeMarker nicht definiert!');
-        }
+      rect.addEventListener("mouseleave", () => {
+        rect.setAttribute("fill", "#eee");
+        rect.style.cursor = "default";
+      });
 
-        debug.textContent = `[AKTION] ${item.name} für ${zielHex}`;
-        clearContextMenu();
-      }
+      menu.appendChild(rect);
+      menu.appendChild(text);
     });
-
-    rect.addEventListener("mouseenter", () => {
-      rect.setAttribute("fill", "#ccc");
-      rect.style.cursor = "pointer";
-    });
-
-    rect.addEventListener("mouseleave", () => {
-      rect.setAttribute("fill", "#eee");
-      rect.style.cursor = "default";
-    });
-
-    menu.appendChild(rect);
-    menu.appendChild(text);
-  });
 }
+
 
 
 
