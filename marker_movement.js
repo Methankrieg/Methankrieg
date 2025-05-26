@@ -67,3 +67,5 @@ function bewegeMarker(markerId, startHex, zielHex, bewegungsart = "taktisch") {
     verschiebeMarkerAnimiert(markerId, startHex, zielHex); // animiert
   }
 }
+// Funktion global verfügbar machen:
+window.bewegeMarker = bewegeMarker;
