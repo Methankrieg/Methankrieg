@@ -109,10 +109,10 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
     rect.addEventListener('click', (evt) => {
           evt.stopPropagation();
-          if (label === 'Details') {
+          if (item.name === 'Details') {
             showDetailPanel(hexId);
             clearContextMenu();
-          } else if (label === 'Bewege nach hier') {
+          } else if (item.name === 'Bewege nach hier') {
             console.log('[DEBUG] Bewege nach hier ausgewählt für Ziel:', hexId);
             const eintraege = getNaheMarker(hexId);
             console.log('[DEBUG] getNaheMarker Ergebnis:', eintraege);
@@ -125,7 +125,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
               clearContextMenu();
             }
           } else {
-            const msg = `[AKTION] ${label} für ${hexId}`;
+            const msg = `[AKTION] ${item.name} für ${hexId}`;
             debug.textContent = msg;
             console.log('[DEBUG]', msg);
             clearContextMenu();
