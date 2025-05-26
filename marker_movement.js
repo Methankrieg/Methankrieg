@@ -10,19 +10,22 @@ function berechneXY(hexId) {
   const match = hexId.match(/F-(\d{2})(\d{2})/);
   if (!match) return null;
 
-  const spalte = parseInt(match[1], 10); // 01–27
-  const zeile  = parseInt(match[2], 10); // 01–44
+  const col = parseInt(match[1], 10); // Spalte (q)
+  const row = parseInt(match[2], 10); // Zeile (r)
 
-  const hexBreite = 103.92; // Pixel-Abstand horizontal
-  const hexHoehe  = 89.0;   // angenommener Abstand vertikal (aus SVG ableiten)
-  const x0 = 51.96;         // Startpunkt F-0101.x
-  const y0 = 3869.89;       // Startpunkt F-0101.y
+  const hexBreite = 103.92;
+  const hexHoehe  = 89.0;
 
-  const x = x0 + (spalte - 1) * hexBreite;
-  const y = y0 - (zeile - 1) * hexHoehe; // SVG wächst von unten nach oben
+  const x0 = 51.96;   // Zentrum F-0101.x
+  const y0 = 3869.89; // Zentrum F-0101.y
+
+  const xOffset = (row % 2 === 1) ? hexBreite / 2 : 0; // ungerade Zeilen nach rechts versetzt
+  const x = x0 + (col - 1) * hexBreite + xOffset;
+  const y = y0 - (row - 1) * hexHoehe;
 
   return { x, y };
 }
+
 
 // Bewegung: SOFORTSPRUNG
 function verschiebeMarker(markerId, zielHex) {
