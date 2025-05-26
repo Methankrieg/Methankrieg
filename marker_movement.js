@@ -10,27 +10,26 @@ function berechneXY(hexId) {
   const match = hexId.match(/F-(\d{2})(\d{2})/);
   if (!match) return null;
 
-  const zeile = parseInt(match[1], 10); // 01–44 (von unten nach oben)
+  const zeile = parseInt(match[1], 10);  // 01–44 (von unten nach oben)
   const spalte = parseInt(match[2], 10); // 01–27 (von links nach rechts)
 
-  // Maße – basierend auf SVG-Hexstruktur
-  const hexBreite = 103.92; // Abstand von Spitze zu Spitze in X
-  const hexHoehe = 89.0;    // Abstand zwischen Hex-Zentren in Y
+  // Exakte Maße aus dem SVG
+  const hexBreite = 103.92000000000002;
+  const hexHoehe  = 89.99735996127947;
 
-  const x0 = 51.96;         // Zentrum F-0101.x
-  const y0 = 3869.89;       // Zentrum F-0101.y
+  // Exakter Mittelpunkt von F-0101 aus dem Polygon
+  const x0 = 51.960000000000015;
+  const y0 = 3869.887358347899;
 
-  // Halber Versatz bei **geraden Zeilen** (nicht Spalten!)
+  // Gerade Zeilen sind eingerückt
   const xOffset = (zeile % 2 === 0) ? hexBreite / 2 : 0;
 
   const x = x0 + (spalte - 1) * hexBreite + xOffset;
   const y = y0 - (zeile - 1) * hexHoehe;
 
-  return {
-  x: Math.round(x * 10000) / 10000,
-  y: Math.round(y * 10000) / 10000
-};
+  return { x, y };
 }
+
 
 // Bewegung: SOFORTSPRUNG
 function verschiebeMarker(markerId, zielHex) {
