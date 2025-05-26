@@ -76,6 +76,15 @@
 <!-- 3️⃣ Menü und UI-Funktionen -->
 <script src="kontextmenu_v4_debugkonsole.js"></script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    await ladeDatenbanken(); // ✅ lade alle JSONs
+
+    // 🔁 Starte Spielinitialisierung hier (Karte anzeigen, Menü aktivieren etc.)
+    console.log("[INIT] Datenbanken geladen. Jetzt kann das Spiel starten.");
+  });
+</script>
+
 
 </body>
 </html>
