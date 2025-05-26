@@ -177,7 +177,7 @@ function getNaheMarker(zielHex) {
       eintraege.push({
         name: einheit.einheit,
         feld: einheit.feld,
-        markerId: "marker-" + einheit.einheit,
+        markerId: "marker-" + einheit.feld,
         distanz: dist
       });
     }
