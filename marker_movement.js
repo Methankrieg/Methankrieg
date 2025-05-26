@@ -10,21 +10,25 @@ function berechneXY(hexId) {
   const match = hexId.match(/F-(\d{2})(\d{2})/);
   if (!match) return null;
 
-  const r = parseInt(match[1], 10); // Zeile
-  const q = parseInt(match[2], 10); // Spalte
+  const zeile = parseInt(match[1], 10); // 01–44 (von unten nach oben)
+  const spalte = parseInt(match[2], 10); // 01–27 (von links nach rechts)
 
-  const hexBreite = 103.92;
-  const hexHoehe  = 89.0;
+  // Maße – basierend auf SVG-Hexstruktur
+  const hexBreite = 103.92; // Abstand von Spitze zu Spitze in X
+  const hexHoehe = 89.0;    // Abstand zwischen Hex-Zentren in Y
 
-  const x0 = 51.96;   // Mittelpunkt von F-0101.x
-  const y0 = 3869.89; // Mittelpunkt von F-0101.y
+  const x0 = 51.96;         // Zentrum F-0101.x
+  const y0 = 3869.89;       // Zentrum F-0101.y
 
-  const x = x0 + (q - 1) * hexBreite;
-  const yOffset = (q % 2 === 0) ? hexHoehe / 2 : 0; // ➜ gerade Spalten: Versatz
-  const y = y0 - (r - 1) * hexHoehe - yOffset;
+  // Halber Versatz bei **geraden Zeilen** (nicht Spalten!)
+  const xOffset = (zeile % 2 === 0) ? hexBreite / 2 : 0;
+
+  const x = x0 + (spalte - 1) * hexBreite + xOffset;
+  const y = y0 - (zeile - 1) * hexHoehe;
 
   return { x, y };
 }
+
 
 
 // Bewegung: SOFORTSPRUNG
