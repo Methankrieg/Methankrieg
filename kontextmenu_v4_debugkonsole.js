@@ -88,94 +88,121 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
     .forEach((item, i) => {
       const y = baseY + i * 20;
 
-      // ✳️ Bewegungsart bestimmen
-      const bewegungsart = item.distanz <= 3 ? "taktisch" : "transition";
+      // ✳️ Neue Bewegungsauswahl pro Einheit – bis zu 3 Buttons
+      const einheit = gameState.startaufstellung.find(e => e.einheit === item.name);
+      if (!einheit) return;
 
-      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      rect.setAttribute('x', baseX + 140);
-      rect.setAttribute('y', y);
-      rect.setAttribute('width', '180');
-      rect.setAttribute('height', '18');
-      rect.setAttribute('fill', '#eee');
-      rect.setAttribute('stroke', '#666');
-      rect.setAttribute('pointer-events', 'all');
-      rect.setAttribute('style', 'cursor: pointer;');
+      let buttonOffset = 0; // vertikale Verschiebung pro Button
 
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', baseX + 145);
-      text.setAttribute('y', y + 13);
-      text.setAttribute('font-size', '12');
-      text.setAttribute('fill', '#000');
-      text.setAttribute('pointer-events', 'none');
-      text.textContent = `${item.name} (${item.distanz}) [${bewegungsart}]`;
+      // 🔧 Platzhalterlisten – später dynamisch ersetzen
+      const feindlicheFelder = []; // z.B. ["F-3911"]
+      const dunkelwolkenFelder = []; // z.B. ["F-3922"]
+      const sprungrouten = []; // z.B. [["F-3909", "F-4010"], ["F-4010", "F-4111"]]
 
-      rect.addEventListener('click', (evt) => {
-        evt.stopPropagation();
-        const debug = document.getElementById("log");
+      // 🔹 1. Taktisch
+      if (Bewegungslogik.isTaktischMoeglich(einheit.feld, zielHex, feindlicheFelder, dunkelwolkenFelder)) {
+        const yOffset = y + buttonOffset * 20;
 
-        // ✳️ Sonderfall: Detailpanel
-        if (item.name === 'Details') {
-          showDetailPanel(zielHex);
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', baseX + 140);
+        rect.setAttribute('y', yOffset);
+        rect.setAttribute('width', '180');
+        rect.setAttribute('height', '18');
+        rect.setAttribute('fill', '#eee');
+        rect.setAttribute('stroke', '#666');
+        rect.setAttribute('pointer-events', 'all');
+        rect.setAttribute('style', 'cursor: pointer;');
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', baseX + 145);
+        text.setAttribute('y', yOffset + 13);
+        text.setAttribute('font-size', '12');
+        text.setAttribute('fill', '#000');
+        text.setAttribute('pointer-events', 'none');
+        text.textContent = `${item.name} (${item.distanz}) [taktisch]`;
+
+        rect.addEventListener('click', () => {
+          bewegeMarker("marker-" + item.feld, einheit.feld, zielHex, "taktisch");
+          einheit.bereitsBewegt = true;
+          einheit.bewegungsArt = "taktisch";
           clearContextMenu();
+        });
 
-        // ✳️ Sonderfall: Neue Submenüs für Bewegung
-        } else if (item.name === 'Bewege nach hier') {
-          console.log('[DEBUG] Bewege nach hier ausgewählt für Ziel:', zielHex);
-          const eintraege = getNaheMarker(zielHex);
-          console.log('[DEBUG] getNaheMarker Ergebnis:', eintraege);
-          if (eintraege.length > 0) {
-            createSubmenu(menu, baseX, baseY + (i + 1) * 20, eintraege, zielHex);
-          } else {
-            const msg = '[INFO] Kein Marker in Reichweite für Bewegung.';
-            debug.textContent = msg;
-            console.log('[DEBUG]', msg);
-            clearContextMenu();
-          }
+        menu.appendChild(rect);
+        menu.appendChild(text);
+        buttonOffset++;
+      }
 
-        // ✳️ Standardaktion: Markerbewegung
-        } else {
-          const markerId = "marker-" + item.feld;
-          const marker = document.getElementById(markerId);
-          const startHex = marker?.getAttribute("data-hex") || item.feld;
-          const ziel = zielHex;
+      // 🔹 2. Transition
+      if (Bewegungslogik.isTransitionMoeglich(einheit.feld, zielHex)) {
+        const yOffset = y + buttonOffset * 20;
 
-          console.log('[DEBUG] Starte Bewegung:', markerId, startHex, '→', ziel, `(${bewegungsart})`);
-          if (typeof bewegeMarker === 'function') {
-            bewegeMarker(markerId, startHex, ziel, bewegungsart);
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', baseX + 140);
+        rect.setAttribute('y', yOffset);
+        rect.setAttribute('width', '180');
+        rect.setAttribute('height', '18');
+        rect.setAttribute('fill', '#eef');
+        rect.setAttribute('stroke', '#666');
+        rect.setAttribute('pointer-events', 'all');
+        rect.setAttribute('style', 'cursor: pointer;');
 
-            // ✅ Bewegung im gameState protokollieren
-            const einheit = gameState.startaufstellung.find(e => e.einheit === item.name);
-            if (einheit) {
-              einheit.bereitsBewegt = true;
-              einheit.bewegungsArt = bewegungsart;
-              console.log(`[DEBUG] ${einheit.einheit} als ${bewegungsart} bewegt.`);
-            } else {
-              console.warn(`[WARNUNG] Einheit ${item.name} nicht im gameState gefunden.`);
-            }
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', baseX + 145);
+        text.setAttribute('y', yOffset + 13);
+        text.setAttribute('font-size', '12');
+        text.setAttribute('fill', '#000');
+        text.setAttribute('pointer-events', 'none');
+        text.textContent = `${item.name} (${item.distanz}) [transition]`;
 
-          } else {
-            console.warn('[WARNUNG] bewegeMarker nicht definiert!');
-          }
-
-          debug.textContent = `[AKTION] ${item.name} für ${zielHex}`;
+        rect.addEventListener('click', () => {
+          bewegeMarker("marker-" + item.feld, einheit.feld, zielHex, "transition");
+          einheit.bereitsBewegt = true;
+          einheit.bewegungsArt = "transition";
           clearContextMenu();
-        }
-      });
+        });
 
-      rect.addEventListener("mouseenter", () => {
-        rect.setAttribute("fill", "#ccc");
-        rect.style.cursor = "pointer";
-      });
+        menu.appendChild(rect);
+        menu.appendChild(text);
+        buttonOffset++;
+      }
 
-      rect.addEventListener("mouseleave", () => {
-        rect.setAttribute("fill", "#eee");
-        rect.style.cursor = "default";
-      });
+      // 🔹 3. Operativ
+      if (Bewegungslogik.isOperativMoeglich(einheit.feld, zielHex, sprungrouten, feindlicheFelder)) {
+        const yOffset = y + buttonOffset * 20;
 
-      menu.appendChild(rect);
-      menu.appendChild(text);
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', baseX + 140);
+        rect.setAttribute('y', yOffset);
+        rect.setAttribute('width', '180');
+        rect.setAttribute('height', '18');
+        rect.setAttribute('fill', '#efe');
+        rect.setAttribute('stroke', '#666');
+        rect.setAttribute('pointer-events', 'all');
+        rect.setAttribute('style', 'cursor: pointer;');
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', baseX + 145);
+        text.setAttribute('y', yOffset + 13);
+        text.setAttribute('font-size', '12');
+        text.setAttribute('fill', '#000');
+        text.setAttribute('pointer-events', 'none');
+        text.textContent = `${item.name} [operativ]`;
+
+        rect.addEventListener('click', () => {
+          bewegeMarker("marker-" + item.feld, einheit.feld, zielHex, "operativ");
+          einheit.bereitsBewegt = true;
+          einheit.bewegungsArt = "operativ";
+          clearContextMenu();
+        });
+
+        menu.appendChild(rect);
+        menu.appendChild(text);
+        buttonOffset++;
+      }
     });
 }
+
 
 // =========================================
 // Ergänzung: Hexdistanz + Markerumkreislogik
