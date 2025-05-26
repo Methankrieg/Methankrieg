@@ -127,7 +127,8 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       // ✳️ Standardaktion: Markerbewegung
       } else {
         const markerId = "marker-" + item.feld;
-        const startHex = item.feld;
+        const marker = document.getElementById(markerId);
+        const startHex = marker?.getAttribute("data-hex") || item.feld;
         const ziel = zielHex;
 
         console.log('[DEBUG] Starte Bewegung:', markerId, startHex, '→', ziel);
@@ -156,6 +157,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
     menu.appendChild(text);
   });
 }
+
 
 
 // =========================================
