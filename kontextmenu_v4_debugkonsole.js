@@ -37,15 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       
-      function showDetailPanel(hexId) {
-        console.log("[DEBUG] showDetailPanel aufgerufen mit:", hexId);
-        let panel = document.getElementById("detailpanel-container");
-        let frame = document.getElementById("detailpanel-frame");
-        if (panel && frame) {
-          frame.src = "detailpanel.html?hex=" + encodeURIComponent(hexId);
-          panel.style.display = "block";
-          }
-      }  // Ende showDetailPanel
+ 
       
       
       ['Marker_13', 'Industriesysteme_11', 'Hex_grid_02'].forEach(layerId => {
@@ -203,6 +195,16 @@ function selectElement(elem) {
   debug.textContent = `[AUSGEWÄHLT] ${elem.id || elem.getAttribute("data-hex")}`;
       console.log('[DEBUG]', `[AUSGEWÄHLT] ${elem.id || elem.getAttribute("data-hex")}`);
 }
+
+  function showDetailPanel(hexId) {
+    console.log("[DEBUG] showDetailPanel aufgerufen mit:", hexId);
+    let panel = document.getElementById("detailpanel-container");
+    let frame = document.getElementById("detailpanel-frame");
+    if (panel && frame) {
+    frame.src = "detailpanel.html?hex=" + encodeURIComponent(hexId);
+    panel.style.display = "block";
+          }
+  }  // Ende showDetailPanel
 
 function showContextMenu(evt, hexId, type) {
   clearContextMenu();
