@@ -10,20 +10,22 @@ function berechneXY(hexId) {
   const match = hexId.match(/F-(\d{2})(\d{2})/);
   if (!match) return null;
 
-  const q = parseInt(match[1], 10); // Spalte
-  const r = parseInt(match[2], 10); // Zeile
+  const r = parseInt(match[1], 10); // Zeile
+  const q = parseInt(match[2], 10); // Spalte
 
   const hexBreite = 103.92;
   const hexHoehe  = 89.0;
 
-  const x0 = 0 + hexBreite / 2;  // halbe Breite als Anfangsverschiebung
-  const y0 = 3869.89;            // höchste Zeile, Top-Down SVG
+  const x0 = 51.96;   // Mittelpunkt von F-0101.x
+  const y0 = 3869.89; // Mittelpunkt von F-0101.y
 
-  const x = x0 + (q - 1) * hexBreite + ((r % 2 === 1) ? hexBreite / 2 : 0);
-  const y = y0 - (r - 1) * (hexHoehe * 0.75); // 0.75-Faktor durch vertikale Überlappung
+  const x = x0 + (q - 1) * hexBreite;
+  const yOffset = (q % 2 === 0) ? hexHoehe / 2 : 0; // ➜ gerade Spalten: Versatz
+  const y = y0 - (r - 1) * hexHoehe - yOffset;
 
   return { x, y };
 }
+
 
 // Bewegung: SOFORTSPRUNG
 function verschiebeMarker(markerId, zielHex) {
