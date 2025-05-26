@@ -110,14 +110,14 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
     rect.addEventListener('click', (evt) => {
           evt.stopPropagation();
           if (item.name === 'Details') {
-            showDetailPanel(hexId);
+            showDetailPanel(zielHex);
             clearContextMenu();
           } else if (item.name === 'Bewege nach hier') {
             console.log('[DEBUG] Bewege nach hier ausgewählt für Ziel:', zielHex);
             const eintraege = getNaheMarker(zielHex);
             console.log('[DEBUG] getNaheMarker Ergebnis:', eintraege);
             if (eintraege.length > 0) {
-              createSubmenu(menu, menuX, menuY + (index + 1) * 20, eintraege, zielHex);
+              createSubmenu(menu, baseX, baseY + (i + 1) * 20, eintraege, zielHex);
             } else {
               const msg = '[INFO] Kein Marker in Reichweite für Bewegung.';
               debug.textContent = msg;
