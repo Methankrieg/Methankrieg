@@ -1,0 +1,83 @@
+/* ===========================================
+   karte.css – Zentrale Style-Datenbank Methankrieg
+   Version: initial – Mai 2025
+=========================================== */
+
+/* === Systeme === */
+.system {
+  fill: green;
+  stroke: silver;
+  stroke-width: 2px;
+  r: 10px;
+}
+
+.industriesystem {
+  fill: darkblue;
+  stroke: gold;
+  stroke-width: 3px;
+  r: 15px;
+}
+
+/* === Sprungrouten === */
+.sprungroute {
+  stroke: #00ccff;
+  stroke-width: 4px;
+  fill: none;
+}
+
+/* === Gebietsstatus === */
+.hex-dunkelwolke {
+  fill: #222;
+  fill-opacity: 1;
+}
+
+.hex-navigation {
+  fill: #eeeeee;
+  fill-opacity: 1;
+}
+
+/* === Standard-Polygone === */
+.hex-standard {
+  fill: transparent;
+  stroke: none;
+}
+
+.hex-selektiert {
+  fill: transparent;
+  stroke: orange;
+  stroke-width: 2px;
+}
+
+/* === Arkoniden Marker === */
+.marker-arkoniden {
+  fill: red;
+  width: 50px;
+  height: 50px;
+  shape-rendering: crispEdges;
+}
+
+.marker-arkoniden-admiral {
+  fill: black;
+  stroke: gold;
+  stroke-width: 5px;
+  width: 45px;
+  height: 45px;
+  shape-rendering: crispEdges;
+}
+
+/* === Maahk Marker === */
+.marker-maahk {
+  fill: darkgreen;
+  width: 30px;
+  height: 50px;
+  shape-rendering: crispEdges;
+}
+
+.marker-maahk-admiral {
+  fill: purple;
+  stroke: silver;
+  stroke-width: 5px;
+  width: 20px;
+  height: 40px;
+  shape-rendering: crispEdges;
+}
