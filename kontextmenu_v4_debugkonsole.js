@@ -81,7 +81,10 @@ svg.addEventListener('click', () => clearContextMenu());
 
 function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
   eintraege
-    .filter(item => !item.bereitsBewegt) // ✳️ Nur noch nicht bewegte anzeigen
+    .filter(item => {
+      const einheit = gameState.startaufstellung.find(e => e.einheit === item.name);
+      return einheit && einheit.bereitsBewegt === false;
+    }) // ✳️ Nur noch nicht bewegte anzeigen
     .forEach((item, i) => {
       const y = baseY + i * 20;
 
@@ -139,6 +142,17 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
           console.log('[DEBUG] Starte Bewegung:', markerId, startHex, '→', ziel, `(${bewegungsart})`);
           if (typeof bewegeMarker === 'function') {
             bewegeMarker(markerId, startHex, ziel, bewegungsart);
+
+            // ✅ Bewegung im gameState protokollieren
+            const einheit = gameState.startaufstellung.find(e => e.einheit === item.name);
+            if (einheit) {
+              einheit.bereitsBewegt = true;
+              einheit.bewegungsArt = bewegungsart;
+              console.log(`[DEBUG] ${einheit.einheit} als ${bewegungsart} bewegt.`);
+            } else {
+              console.warn(`[WARNUNG] Einheit ${item.name} nicht im gameState gefunden.`);
+            }
+
           } else {
             console.warn('[WARNUNG] bewegeMarker nicht definiert!');
           }
@@ -162,9 +176,6 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       menu.appendChild(text);
     });
 }
-
-
-
 
 // =========================================
 // Ergänzung: Hexdistanz + Markerumkreislogik
