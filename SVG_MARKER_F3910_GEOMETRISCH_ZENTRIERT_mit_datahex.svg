@@ -3582,7 +3582,7 @@
 <g id="Industriesysteme_11" style="pointer-events: none;"><circle cx="150" cy="4155" fill="none" r="18" stroke="gold" stroke-width="3"/><circle cx="1091.16" cy="269.99" data-hex="F-4111" fill="none" r="17" stroke="gold" stroke-width="2" style="pointer-events: none;"/><circle cx="1091.16" cy="269.99" data-hex="F-4111" fill="blue" id="Industrie-F-4111" r="15" style="pointer-events: auto;"/></g>
 <g id="Systemname_12" style="pointer-events: none;"/>
 <g id="Marker_13">
- <g id="marker-F-3910" data-hex="F-3910" transform="translate(962.24, 424.99)"><rect x="-25" y="-25" width="50" height="50" fill="red" stroke="black" stroke-width="1" /></g>
+ <g id="marker-F-3910" data-hex="F-3910" transform="translate(962.24, 424.99)"><rect x="0" y="0" width="50" height="50" fill="red" stroke="black" stroke-width="1" /></g>
 </g>
 <g id="Kontextmenu_14" style="pointer-events: none;"/>
 </svg>
