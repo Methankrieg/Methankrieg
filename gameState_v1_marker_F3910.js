@@ -244,7 +244,7 @@ window.gameState = {
     {
       "feld": "F-3910",
       "fraktion": "arkoniden",
-      "einheit": "f3910",
+      "einheit": "F-3910",
       "qualitaet": "regul\u00e4r",
       "technologie": "standard",
       "struktur": 1
