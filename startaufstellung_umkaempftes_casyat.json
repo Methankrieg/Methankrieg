@@ -34,12 +34,12 @@
   {
     "feld": "F-3610",
     "fraktion": "arkoniden",
-    "einheit": "admiral_ruzik"
+    "einheit": "Ruzik"
   },
   {
     "feld": "F-3610",
     "fraktion": "arkoniden",
-    "einheit": "15. raumfortgeschwader",
+    "einheit": "15. raumfort",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 3
@@ -87,7 +87,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "admiral_grek-18"
+    "einheit": "Grek-18"
   },
   {
     "feld": "F-4112",
@@ -124,7 +124,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "10. leichtes trägergeschwader",
+    "einheit": "10. leichtes_tr\u00e4gergeschwader",
     "qualitaet": "grün",
     "technologie": "veraltet",
     "struktur": 2
@@ -156,7 +156,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "admiral_grek-48"
+    "einheit": "Grek-48"
   },
   {
     "feld": "F-4214",
