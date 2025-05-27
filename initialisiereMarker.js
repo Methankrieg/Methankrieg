@@ -1,7 +1,6 @@
 
-// initialisiereMarker_debug.js
-// Erstellt Marker für Einheiten und Admiräle aus der startaufstellung
-// Debugversion mit ausführlicher Konsolenausgabe
+// initialisiereMarker_berechnet.js
+// Erstellt Marker aus gameState.startaufstellung mit koordinierter Positionierung via berechneXY()
 
 function initialisiereMarker(svg) {
   const markerLayer = svg.getElementById("Marker_13");
@@ -14,21 +13,18 @@ function initialisiereMarker(svg) {
   const einheitenDB = window.einheitenDaten || {};
   const admiraleDB = window.admiraleDaten || {};
 
-  startdaten.forEach((einheit, index) => {
+  startdaten.forEach((einheit) => {
     const feldId = einheit.feld;
-    const hex = svg.getElementById(feldId);
+    const fraktion = einheit.fraktion?.toLowerCase() || "unbekannt";
+    const isAdmiral = einheit.einheit.startsWith("admiral_");
 
-    if (!hex) {
-      console.warn(`[FEHLER] Feld ${feldId} nicht im SVG gefunden – Marker ${einheit.einheit} wird NICHT gesetzt.`);
+    // 📍 Berechne x/y mit Standardfunktion
+    const pos = typeof berechneXY === "function" ? berechneXY(feldId) : null;
+    if (!pos) {
+      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen.`);
       return;
     }
-
-    const bbox = hex.getBBox();
-    const cx = bbox.x + bbox.width / 2;
-    const cy = bbox.y + bbox.height / 2;
-
-    const isAdmiral = einheit.einheit.startsWith("admiral_");
-    const fraktion = einheit.fraktion.toLowerCase();
+    const { x, y } = pos;
 
     let markerElement = null;
 
@@ -42,28 +38,25 @@ function initialisiereMarker(svg) {
       }
 
       markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      markerElement.setAttribute("x", cx - 22.5);
-      markerElement.setAttribute("y", cy - 22.5);
       markerElement.setAttribute("width", 45);
       markerElement.setAttribute("height", 45);
       markerElement.setAttribute("class", `marker-admiral marker-${fraktion}`);
+      markerElement.setAttribute("transform", `translate(${x - 22.5}, ${y - 22.5})`);
     } else {
       const typ = einheit.einheit.split(". ")[1]?.split(" ")[0]?.toLowerCase();
       const technologie = einheit.technologie?.toLowerCase();
-
       const template = einheitenDB?.[fraktion]?.[typ]?.[technologie];
 
       if (!template) {
-        console.warn(`[FEHLER] Einheit "${einheit.einheit}" (${typ}/${technologie}) in ${fraktion} nicht gefunden.`);
+        console.warn(`[FEHLER] Einheit "${einheit.einheit}" (${typ}/${technologie}) nicht gefunden.`);
         return;
       }
 
       markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      markerElement.setAttribute("x", cx - 25);
-      markerElement.setAttribute("y", cy - 25);
       markerElement.setAttribute("width", 50);
       markerElement.setAttribute("height", 50);
       markerElement.setAttribute("class", `marker-einheit marker-${fraktion}`);
+      markerElement.setAttribute("transform", `translate(${x - 25}, ${y - 25})`);
     }
 
     if (markerElement) {
@@ -71,10 +64,9 @@ function initialisiereMarker(svg) {
       markerElement.setAttribute("data-hex", feldId);
       markerElement.setAttribute("data-name", einheit.einheit);
       markerLayer.appendChild(markerElement);
-
-      console.log(`[MARKER] ${einheit.einheit} gesetzt auf ${feldId} (${fraktion})`);
+      console.log(`[MARKER] ${einheit.einheit} gesetzt auf ${feldId} (${fraktion}) → x:${x}, y:${y}`);
     }
   });
 
-  console.log(`[MARKER] Alle Marker wurden ins SVG gesetzt.`);
+  console.log("[MARKER] Initiale Markerplatzierung abgeschlossen.");
 }
