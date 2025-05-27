@@ -1,4 +1,4 @@
-// initialisiereMarker.js – Markerplatzierung exakt wie gefordert
+// initialisiereMarker.js – Marker für Einheiten & Admirale setzen
 
 function initialisiereMarker(svg) {
   const markerLayer = svg.getElementById("Marker_13");
@@ -8,8 +8,8 @@ function initialisiereMarker(svg) {
   }
 
   const startdaten = window.gameState?.startaufstellung || [];
-  const einheitenDB = window.einheitenDaten || {};
-  const admiraleDB = window.admiraleDaten || {};
+  const einheitenDB = window.einheiten_datenbank || {};
+  const admiraleDB = window.admirale_datenbank || {};
 
   startdaten.forEach((einheit) => {
     const feldId = einheit.feld;
@@ -21,29 +21,25 @@ function initialisiereMarker(svg) {
       console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen.`);
       return;
     }
-
     const { x, y } = pos;
-    let markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+    let markerElement = null;
 
     if (isAdmiral) {
-      const admiralName = einheit.einheit.replace("admiral_", "").toLowerCase();
-      const admiral = admiraleDB?.[fraktion]?.find(a => a.name.toLowerCase() === admiralName);
+      const admiralId = einheit.einheit.replace("admiral_", "").toLowerCase();
+      const admiralObjekte = admiraleDB?.[fraktion];
+      const admiralData = admiralObjekte?.find(a => a.name.toLowerCase() === admiralId);
 
-      if (!admiral) {
-        console.warn(`[FEHLER] Admiral '${admiralName}' nicht in Datenbank für ${fraktion} gefunden.`);
+      if (!admiralData) {
+        console.warn(`[FEHLER] Admiral '${admiralId}' nicht in Datenbank für ${fraktion} gefunden.`);
         return;
       }
 
-      const { breite, hoehe, klasse } = (
-        fraktion === "arkoniden"
-          ? { breite: 45, hoehe: 45, klasse: "marker-admiral marker-arkoniden" }
-          : { breite: 20, hoehe: 40, klasse: "marker-admiral marker-maahks" }
-      );
-
-      markerElement.setAttribute("width", breite);
-      markerElement.setAttribute("height", hoehe);
-      markerElement.setAttribute("class", klasse);
-      markerElement.setAttribute("transform", `translate(${x - breite / 2}, ${y - hoehe / 2})`);
+      markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      markerElement.setAttribute("width", 45);
+      markerElement.setAttribute("height", 45);
+      markerElement.setAttribute("class", `marker-admiral marker-${fraktion}`);
+      markerElement.setAttribute("transform", `translate(${x - 22.5}, ${y - 22.5})`);
     } else {
       const typ = einheit.einheit.split(". ")[1]?.split(" ")[0]?.toLowerCase();
       const technologie = einheit.technologie?.toLowerCase();
@@ -54,25 +50,36 @@ function initialisiereMarker(svg) {
         return;
       }
 
+      markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       markerElement.setAttribute("width", 50);
       markerElement.setAttribute("height", 50);
       markerElement.setAttribute("class", `marker-einheit marker-${fraktion}`);
       markerElement.setAttribute("transform", `translate(${x - 25}, ${y - 25})`);
     }
 
-    markerElement.setAttribute("id", `marker-${feldId}`);
-    markerElement.setAttribute("data-hex", feldId);
-    markerElement.setAttribute("data-name", einheit.einheit);
-    markerElement.classList.add("cursor-pointer");
+    if (markerElement) {
+      markerElement.setAttribute("id", `marker-${feldId}`);
+      markerElement.setAttribute("data-hex", feldId);
+      markerElement.setAttribute("data-name", einheit.einheit);
 
-    markerElement.addEventListener("contextmenu", evt => {
-      evt.preventDefault();
-      evt.stopPropagation();
-      showContextMenu(evt, feldId, "marker");
-    });
+      // Rechtsklick: Kontextmenü
+      markerElement.addEventListener("contextmenu", evt => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        showContextMenu(evt, feldId, "marker");
+      });
 
-    markerLayer.appendChild(markerElement);
-    console.log(`[MARKER] ${einheit.einheit} (${isAdmiral ? "Admiral" : "Einheit"}) gesetzt auf ${feldId} (${fraktion}) → x:${x}, y:${y}`);
+      // Linksklick: Auswahl
+      markerElement.addEventListener("click", evt => {
+        evt.stopPropagation();
+        selectElement(markerElement);
+      });
+
+      markerElement.classList.add("cursor-pointer");
+
+      markerLayer.appendChild(markerElement);
+      console.log(`[MARKER] ${einheit.einheit} gesetzt auf ${feldId} (${fraktion}) → x:${x}, y:${y}`);
+    }
   });
 
   console.log("[MARKER] Initiale Markerplatzierung abgeschlossen.");
