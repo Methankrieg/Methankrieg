@@ -104,39 +104,49 @@
   <script src="aktualisiereHexfeldStile.js"></script>
   <script src="sprungrouten_anzeige.js"></script>
 
-  <script>
+<script>
   async function spielStarten() {
-    // 🎯 Szenario aus Dropdown holen
+    // 🎯 Szenario aus Dropdown lesen
     const szenario = document.getElementById("szenarioAuswahl").value;
 
-    // ✅ GameState vorbereiten
+    // 🧠 GameState vorbereiten
     window.gameState = {
       ziele: {
         szenario: szenario
       }
     };
 
-    // 💬 Auswahlbereich ausblenden, Spielbereich einblenden
+    // 💬 UI umschalten: Auswahl ausblenden, Spielbereich zeigen
     document.getElementById("auswahlbereich").style.display = "none";
     document.getElementById("spielbereich").style.display = "block";
 
-    // 🔁 Spielmodule initialisieren
-    await ladeDatenbanken(); // JSON-Daten laden
-    const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper"); // SVG laden
+    // 📦 Alle Datenbanken laden
+    await ladeDatenbanken(); // JSON: Szenario, Startaufstellung, Systeme, Admiräle, Einheiten, etc.
+
+    // 🗺️ Karte (SVG) laden
+    const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper");
 
     if (svg) {
+      // 🧭 Kontextmenü initialisieren
       initialisiereKontextmenu(svg);
-      initialisiereMarker(svg); // ✅ Marker anzeigen
 
+      // 🚀 Marker für Einheiten & Admiräle setzen
+      if (typeof initialisiereMarker === "function") {
+        initialisiereMarker(svg);
+      }
+
+      // 🖌️ Hexfeld-Stile anwenden (z. B. Dunkelwolken, Navigation)
       if (typeof aktualisiereHexfeldStile === "function") {
         aktualisiereHexfeldStile(svg);
       }
+
+      // 🔷 Sprungrouten einzeichnen
       if (typeof zeichneSprungrouten === "function" && typeof sprungrouten_datenbank !== "undefined") {
         zeichneSprungrouten(svg, sprungrouten_datenbank);
       }
     }
 
-    console.log("[INIT] Karte, Menü, Stile und Sprungrouten initialisiert.");
+    console.log("[INIT] Spiel erfolgreich initialisiert mit Szenario:", szenario);
   }
 </script>
 
