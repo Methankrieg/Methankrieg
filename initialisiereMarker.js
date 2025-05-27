@@ -1,95 +1,79 @@
-
-// ==============================================
-// initialisiereMarker.js – Marker für Einheiten & Admirale setzen
-// ==============================================
+// initialisiereMarker.js – Markerplatzierung exakt wie gefordert
 
 function initialisiereMarker(svg) {
-  const layer = svg.getElementById("Marker_13");
-  if (!layer) {
-    console.error("[FEHLER] Layer 'Marker_13' nicht gefunden.");
+  const markerLayer = svg.getElementById("Marker_13");
+  if (!markerLayer) {
+    console.warn("[FEHLER] Layer 'Marker_13' nicht gefunden!");
     return;
   }
 
-  if (!window.startaufstellung_daten || !window.einheiten_datenbank || !window.admirale_datenbank) {
-    console.error("[FEHLER] Benötigte Datenbanken nicht geladen.");
-    return;
-  }
+  const startdaten = window.gameState?.startaufstellung || [];
+  const einheitenDB = window.einheitenDaten || {};
+  const admiraleDB = window.admiraleDaten || {};
 
-  const startdaten = window.startaufstellung_daten;
-  const einheitenDB = window.einheiten_datenbank;
-  const admiralDB = window.admirale_datenbank;
+  startdaten.forEach((einheit) => {
+    const feldId = einheit.feld;
+    const fraktion = einheit.fraktion?.toLowerCase() || "unbekannt";
+    const isAdmiral = einheit.einheit.toLowerCase().startsWith("admiral_");
 
-  startdaten.forEach(einheit => {
-    const name = einheit.einheit;
-    const fraktion = einheit.fraktion.toLowerCase();
-    const feld = einheit.feld;
-
-    // 👉 Position berechnen
-    const pos = typeof berechneXY === "function" ? berechneXY(feld) : null;
+    const pos = typeof berechneXY === "function" ? berechneXY(feldId) : null;
     if (!pos) {
-      console.warn(`[⚠️ FEHLER] Koordinaten für ${name} auf ${feld} nicht berechnet.`);
+      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen.`);
       return;
     }
 
-    const marker = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    let markerKlasse = "";
-    let breite = 50;
-    let hoehe = 50;
+    const { x, y } = pos;
+    let markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 
-    // 👉 Admiral oder Einheit unterscheiden
-    const istAdmiral = name.toLowerCase().startsWith("admiral_");
+    if (isAdmiral) {
+      const admiralName = einheit.einheit.replace("admiral_", "").toLowerCase();
+      const admiral = admiraleDB?.[fraktion]?.find(a => a.name.toLowerCase() === admiralName);
 
-    if (istAdmiral) {
-      const admiralName = name.replace("admiral_", "").toLowerCase();
-      const admiral = admiralDB[fraktion]?.find(a => a.name.toLowerCase() === admiralName);
       if (!admiral) {
-        console.warn(`[⚠️ FEHLER] Admiral "${admiralName}" nicht in Datenbank für ${fraktion} gefunden.`);
+        console.warn(`[FEHLER] Admiral '${admiralName}' nicht in Datenbank für ${fraktion} gefunden.`);
         return;
       }
 
-      // Größe & Klasse je Fraktion
-      if (fraktion === "arkoniden") {
-        breite = 45;
-        hoehe = 45;
-        markerKlasse = "marker marker-arkoniden marker-arkoniden-admiral";
-      } else {
-        breite = 20;
-        hoehe = 40;
-        markerKlasse = "marker marker-maahks marker-maahks-admiral";
-      }
+      const { breite, hoehe, klasse } = (
+        fraktion === "arkoniden"
+          ? { breite: 45, hoehe: 45, klasse: "marker-admiral marker-arkoniden" }
+          : { breite: 20, hoehe: 40, klasse: "marker-admiral marker-maahks" }
+      );
+
+      markerElement.setAttribute("width", breite);
+      markerElement.setAttribute("height", hoehe);
+      markerElement.setAttribute("class", klasse);
+      markerElement.setAttribute("transform", `translate(${x - breite / 2}, ${y - hoehe / 2})`);
     } else {
+      const typ = einheit.einheit.split(". ")[1]?.split(" ")[0]?.toLowerCase();
       const technologie = einheit.technologie?.toLowerCase();
-      const typ = name.split(". ")[1]; // z. B. "einsatzgeschwader"
-      const einheitsTemplate = einheitenDB[fraktion]?.[technologie]?.find(e => e.typ === typ);
+      const template = einheitenDB?.[fraktion]?.[typ]?.[technologie];
 
-      if (!einheitsTemplate) {
-        console.warn(`[⚠️ FEHLER] Einheit "${name}" (${typ}/${technologie}) in ${fraktion} nicht gefunden.`);
+      if (!template) {
+        console.warn(`[FEHLER] Einheit "${einheit.einheit}" (${typ}/${technologie}) nicht gefunden.`);
         return;
       }
 
-      markerKlasse = `marker marker-${fraktion} marker-${fraktion}-${typ}`;
+      markerElement.setAttribute("width", 50);
+      markerElement.setAttribute("height", 50);
+      markerElement.setAttribute("class", `marker-einheit marker-${fraktion}`);
+      markerElement.setAttribute("transform", `translate(${x - 25}, ${y - 25})`);
     }
 
-    marker.setAttribute("x", pos.x);
-    marker.setAttribute("y", pos.y);
-    marker.setAttribute("width", breite);
-    marker.setAttribute("height", hoehe);
-    marker.setAttribute("transform", `translate(${pos.x}, ${pos.y})`);
-    marker.setAttribute("class", markerKlasse);
-    marker.setAttribute("data-hex", feld);
-    marker.setAttribute("id", "marker-" + feld);
+    markerElement.setAttribute("id", `marker-${feldId}`);
+    markerElement.setAttribute("data-hex", feldId);
+    markerElement.setAttribute("data-name", einheit.einheit);
+    markerElement.classList.add("cursor-pointer");
 
-    // 👉 Event-Handler: Kontextmenü
-    marker.addEventListener("contextmenu", evt => {
+    markerElement.addEventListener("contextmenu", evt => {
       evt.preventDefault();
       evt.stopPropagation();
-      showContextMenu(evt, feld, "marker");
+      showContextMenu(evt, feldId, "marker");
     });
 
-    // 👉 Cursor
-    marker.classList.add("cursor-pointer");
-
-    layer.appendChild(marker);
-    console.log(`[MARKER] ${name} (${istAdmiral ? "Admiral" : "Einheit"}) → ${feld} gesetzt (${pos.x}, ${pos.y})`);
+    markerLayer.appendChild(markerElement);
+    console.log(`[MARKER] ${einheit.einheit} (${isAdmiral ? "Admiral" : "Einheit"}) gesetzt auf ${feldId} (${fraktion}) → x:${x}, y:${y}`);
   });
+
+  console.log("[MARKER] Initiale Markerplatzierung abgeschlossen.");
 }
