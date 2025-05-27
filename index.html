@@ -1,13 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <title>Methankrieg – Kontextmenü Test</title>
-<!-- ✅ Zentrale CSS-Datei für Hex-Stile und Cursor -->
+
+  <!-- ✅ Zentrale CSS-Datei für Hex-Stile und Cursor -->
   <link rel="stylesheet" href="karte.css">
 
+  <!-- ✅ Zoom-Tool (Panzoom) -->
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+
   <style>
     html, body {
       margin: 0;
@@ -43,65 +45,78 @@
     }
   </style>
 </head>
+
 <body>
   <div id="container">
     <div id="svgwrapper"></div>
   </div>
   <div id="log">[DEBUG] System bereit.</div>
 
-<div id="detailpanel-container" style="
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 320px;
-  height: 100%;
-  background: white;
-  border-left: 1px solid #ccc;
-  display: none;
-  z-index: 2000;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
-">
-  <button onclick="document.getElementById('detailpanel-container').style.display='none'"
-          style="position:absolute; top:10px; right:10px; z-index:2100;">
-    ✖
-  </button>
-  <iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+  <!-- ✅ Detail-Panel für Systeminformationen -->
+  <div id="detailpanel-container" style="
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100%;
+    background: white;
+    border-left: 1px solid #ccc;
+    display: none;
+    z-index: 2000;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);">
+    <button onclick="document.getElementById('detailpanel-container').style.display='none'"
+            style="position:absolute; top:10px; right:10px; z-index:2100;">
+      ✖
+    </button>
+    <iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
   </div>
 
-<!-- 1️⃣ Spiellogik und Zustände -->
-<script src="gameState_v2_bewegung_erweitert.js"></script>
-<script src="lade_datenbanken.js"></script>
+  <!-- 1️⃣ Spiellogik und Zustände -->
+  <script src="gameState_v2_bewegung_erweitert.js"></script>
+  <script src="lade_datenbanken.js"></script>
 
-<!-- 2️⃣ Kartenlade-Logik -->
-<script src="kartenloader.js"></script> <!-- ✅ NEU eingefügt -->
+  <!-- 2️⃣ Kartenlade-Logik -->
+  <script src="kartenloader.js"></script>
 
-<!-- 3️⃣ Logikmodule -->
-<script src="bewegungslogik.js"></script>
-<script src="marker_movement.js"></script>
+  <!-- 3️⃣ Logikmodule -->
+  <script src="bewegungslogik.js"></script>
+  <script src="marker_movement.js"></script>
 
-<!-- 4️⃣ Menü und UI-Funktionen -->
-<script src="kontextmenu_v5_komplett.js"></script>
+  <!-- 4️⃣ Menü- und UI-Funktionen -->
+  <script src="kontextmenu_v5_komplett.js"></script>
 
-<!-- 5️⃣ Aktionen im Kontextmenü -->
-<script src="kontextaktionen.js"></script>
+  <!-- 5️⃣ Aktionen im Kontextmenü -->
+  <script src="kontextaktionen.js"></script>
 
-<!-- Optional -->
-<script src="aktualisiereHexfeldStile.js"></script> <!-- falls separat -->
+  <!-- 6️⃣ Visuelle Hexfeld-Stile aktualisieren -->
+  <script src="aktualisiereHexfeldStile.js"></script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", async () => {
-    await ladeDatenbanken(); // ✅ JSONs laden
+  <!-- 7️⃣ Sprungrouten anzeigen -->
+  <script src="sprungrouten_anzeige.js"></script>
 
-    const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper"); // ✅ SVG laden und anzeigen
+  <!-- 🧠 Initialisierung: DOM fertig geladen -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      await ladeDatenbanken(); // ✅ JSON-Datenbanken laden
 
-    if (svg) {
-      initialisiereKontextmenu(svg); // ✅ Kontextmenü mit SVG starten
-    }
+      const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper"); // ✅ SVG-Karte laden
 
-    console.log("[INIT] Karte und Menü initialisiert.");
-  });
-</script>
+      if (svg) {
+        initialisiereKontextmenu(svg); // ✅ Kontextmenü initialisieren
 
+        // ✅ Hexfeld-Stile anwenden (z. B. Dunkelwolken, Navigation, Systeme)
+        if (typeof aktualisiereHexfeldStile === "function") {
+          aktualisiereHexfeldStile(svg);
+        }
+
+        // ✅ Sprungrouten anzeigen
+        if (typeof zeichneSprungrouten === "function" && typeof sprungrouten_datenbank !== "undefined") {
+          zeichneSprungrouten(svg, sprungrouten_datenbank);
+        }
+      }
+
+      console.log("[INIT] Karte, Menü, Stile und Sprungrouten initialisiert.");
+    });
+  </script>
 </body>
 </html>
-
