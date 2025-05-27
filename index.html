@@ -67,24 +67,35 @@
 
 <!-- 1️⃣ Spiellogik und Zustände -->
 <script src="gameState_v2_bewegung_erweitert.js"></script>
-<script src="lade_datenbanken.js"></script> <!-- ✅ NEU: Datenbankladefunktion -->
+<script src="lade_datenbanken.js"></script>
 
-<!-- 2️⃣ Logikmodule -->
+<!-- 2️⃣ Kartenlade-Logik -->
+<script src="kartenloader.js"></script> <!-- ✅ NEU eingefügt -->
+
+<!-- 3️⃣ Logikmodule -->
 <script src="bewegungslogik.js"></script>
 <script src="marker_movement.js"></script>
 
-<!-- 3️⃣ Menü und UI-Funktionen -->
+<!-- 4️⃣ Menü und UI-Funktionen -->
 <script src="kontextmenu_v4_debugkonsole.js"></script>
+
+<!-- Optional -->
+<script src="aktualisiereHexfeldStile.js"></script> <!-- falls separat -->
 
 <script>
   document.addEventListener("DOMContentLoaded", async () => {
-    await ladeDatenbanken(); // ✅ lade alle JSONs
+    await ladeDatenbanken(); // ✅ JSONs laden
 
-    // 🔁 Starte Spielinitialisierung hier (Karte anzeigen, Menü aktivieren etc.)
-    console.log("[INIT] Datenbanken geladen. Jetzt kann das Spiel starten.");
+    const svg = await ladeKarte("SektorF_Prototyp_v3.svg", "svgwrapper"); // ✅ SVG laden und anzeigen
+
+    if (svg) {
+      initialisiereKontextmenu(svg); // ✅ Kontextmenü mit SVG starten
+    }
+
+    console.log("[INIT] Karte und Menü initialisiert.");
   });
 </script>
 
-
 </body>
 </html>
+
