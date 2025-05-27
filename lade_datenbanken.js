@@ -40,10 +40,17 @@ async function ladeDatenbanken() {
   window.sektorenDaten = sektoren;
 
   // 🧱 Startaufstellung separat laden
-  const aufstellungsdatei = szenario.startaufstellung;
-  const startaufstellung = await fetch(aufstellungsdatei).then(r => r.json());
-  window.gameState = window.gameState || {};
-  window.gameState.startaufstellung = startaufstellung;
+const aufstellungsdatei = szenario.startaufstellung;
+const startaufstellung = await fetch(aufstellungsdatei).then(r => r.json());
+window.gameState = window.gameState || {};
+window.gameState.startaufstellung = startaufstellung;
 
-  console.log(`[INIT] Szenario "${szenarioName}" + Datenbanken erfolgreich geladen.`);
+// 🔧 Bewegungseinträge initialisieren (für Kontextmenü "Bewege nach hier")
+window.gameState.startaufstellung.forEach(einheit => {
+  if (typeof einheit.bereitsBewegt === "undefined") einheit.bereitsBewegt = false;
+  if (typeof einheit.bewegungsArt === "undefined") einheit.bewegungsArt = null;
+});
+
+// ✅ Erfolgsmeldung
+console.log(`[INIT] Szenario "${szenarioName}" + Datenbanken erfolgreich geladen.`);
 }
