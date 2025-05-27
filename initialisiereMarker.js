@@ -1,64 +1,80 @@
-// ==========================================
-// initialisiereMarker.js – Marker ins SVG setzen
-// ==========================================
+
+// initialisiereMarker_debug.js
+// Erstellt Marker für Einheiten und Admiräle aus der startaufstellung
+// Debugversion mit ausführlicher Konsolenausgabe
 
 function initialisiereMarker(svg) {
-  const layer = svg.getElementById("Marker_13");
-  if (!layer) {
-    console.warn("[WARNUNG] Marker-Layer 'Marker_13' nicht gefunden.");
+  const markerLayer = svg.getElementById("Marker_13");
+  if (!markerLayer) {
+    console.warn("[FEHLER] Layer 'Marker_13' nicht gefunden!");
     return;
   }
 
-  if (!gameState.startaufstellung || !Array.isArray(gameState.startaufstellung)) {
-    console.warn("[WARNUNG] Keine gültige Startaufstellung gefunden.");
-    return;
-  }
+  const startdaten = window.gameState?.startaufstellung || [];
+  const einheitenDB = window.einheitenDaten || {};
+  const admiraleDB = window.admiraleDaten || {};
 
-  gameState.startaufstellung.forEach(einheit => {
-    const feld = einheit.feld;
-    const markerId = "marker-" + feld;
-    const isAdmiral = einheit.einheit.startsWith("admiral_");
-    const fraktion = einheit.fraktion;
+  startdaten.forEach((einheit, index) => {
+    const feldId = einheit.feld;
+    const hex = svg.getElementById(feldId);
 
-    let cssKlasse = "marker-unbekannt";
-
-    if (isAdmiral) {
-      // 🔹 Admiral: z. B. "admiral_ruzik" → "Ruzik"
-      const name = einheit.einheit.replace("admiral_", "").replace(/^\w/, c => c.toUpperCase());
-      if (admiraleDaten[fraktion] && admiraleDaten[fraktion][name]) {
-        cssKlasse = "marker-admiral-" + fraktion;
-      } else {
-        console.warn(`[WARNUNG] Admiral "${name}" in ${fraktion} nicht gefunden.`);
-      }
-    } else {
-      // 🔹 Normale Einheit
-      const nameOhneNummer = einheit.einheit.replace(/^\d+\.\s*/, "").toLowerCase();
-      const technologie = einheit.technologie || "standard";
-      if (
-        einheitenDaten[fraktion] &&
-        einheitenDaten[fraktion][nameOhneNummer] &&
-        einheitenDaten[fraktion][nameOhneNummer][technologie]
-      ) {
-        cssKlasse = "marker-" + fraktion;
-      } else {
-        console.warn(`[WARNUNG] Einheit "${einheit.einheit}" (${nameOhneNummer}) in ${fraktion}/${technologie} nicht gefunden.`);
-      }
+    if (!hex) {
+      console.warn(`[FEHLER] Feld ${feldId} nicht im SVG gefunden – Marker ${einheit.einheit} wird NICHT gesetzt.`);
+      return;
     }
 
-    // 🔸 Erzeuge SVG-Element (hier: Rechteck – kann später angepasst werden)
-    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect.setAttribute("x", "0");
-    rect.setAttribute("y", "0");
-    rect.setAttribute("width", "50");
-    rect.setAttribute("height", "50");
-    rect.setAttribute("data-hex", feld);
-    rect.setAttribute("id", markerId);
-    rect.setAttribute("class", cssKlasse);
-    rect.setAttribute("transform", `translate(0, 0)`); // spätere Positionierung: dynamisch ersetzen
-    rect.setAttribute("cursor", "pointer");
+    const bbox = hex.getBBox();
+    const cx = bbox.x + bbox.width / 2;
+    const cy = bbox.y + bbox.height / 2;
 
-    layer.appendChild(rect);
+    const isAdmiral = einheit.einheit.startsWith("admiral_");
+    const fraktion = einheit.fraktion.toLowerCase();
+
+    let markerElement = null;
+
+    if (isAdmiral) {
+      const admiralId = einheit.einheit.split("_")[1];
+      const admiralData = admiraleDB?.[fraktion]?.[admiralId];
+
+      if (!admiralData) {
+        console.warn(`[FEHLER] Admiral '${admiralId}' nicht in Datenbank für ${fraktion} gefunden.`);
+        return;
+      }
+
+      markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      markerElement.setAttribute("x", cx - 22.5);
+      markerElement.setAttribute("y", cy - 22.5);
+      markerElement.setAttribute("width", 45);
+      markerElement.setAttribute("height", 45);
+      markerElement.setAttribute("class", `marker-admiral marker-${fraktion}`);
+    } else {
+      const typ = einheit.einheit.split(". ")[1]?.split(" ")[0]?.toLowerCase();
+      const technologie = einheit.technologie?.toLowerCase();
+
+      const template = einheitenDB?.[fraktion]?.[typ]?.[technologie];
+
+      if (!template) {
+        console.warn(`[FEHLER] Einheit "${einheit.einheit}" (${typ}/${technologie}) in ${fraktion} nicht gefunden.`);
+        return;
+      }
+
+      markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      markerElement.setAttribute("x", cx - 25);
+      markerElement.setAttribute("y", cy - 25);
+      markerElement.setAttribute("width", 50);
+      markerElement.setAttribute("height", 50);
+      markerElement.setAttribute("class", `marker-einheit marker-${fraktion}`);
+    }
+
+    if (markerElement) {
+      markerElement.setAttribute("id", `marker-${feldId}`);
+      markerElement.setAttribute("data-hex", feldId);
+      markerElement.setAttribute("data-name", einheit.einheit);
+      markerLayer.appendChild(markerElement);
+
+      console.log(`[MARKER] ${einheit.einheit} gesetzt auf ${feldId} (${fraktion})`);
+    }
   });
 
-  console.log("[MARKER] Alle Marker wurden ins SVG gesetzt.");
+  console.log(`[MARKER] Alle Marker wurden ins SVG gesetzt.`);
 }
