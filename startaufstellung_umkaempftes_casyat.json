@@ -2,7 +2,7 @@
   {
     "feld": "F-4307",
     "fraktion": "arkoniden",
-    "einheit": "29. aufklärungsgeschwader",
+    "einheit": "29. Aufklärungsgeschwader",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 1
@@ -10,7 +10,7 @@
   {
     "feld": "F-4110",
     "fraktion": "arkoniden",
-    "einheit": "8. reservegeschwader",
+    "einheit": "8. Reservegeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 2
@@ -18,7 +18,7 @@
   {
     "feld": "F-3909",
     "fraktion": "arkoniden",
-    "einheit": "5. einsatzgeschwader",
+    "einheit": "5. Einsatzgeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 2
@@ -26,7 +26,7 @@
   {
     "feld": "F-3909",
     "fraktion": "arkoniden",
-    "einheit": "58. kreuzergeschwader",
+    "einheit": "58. Kreuzergeschwader",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 1
@@ -39,7 +39,7 @@
   {
     "feld": "F-3610",
     "fraktion": "arkoniden",
-    "einheit": "15. raumfort",
+    "einheit": "15. Raumfort",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 3
@@ -47,7 +47,7 @@
   {
     "feld": "F-3610",
     "fraktion": "arkoniden",
-    "einheit": "33. kreuzergeschwader",
+    "einheit": "33. Kreuzergeschwader",
     "qualitaet": "veteranen",
     "technologie": "standard",
     "struktur": 2
@@ -55,7 +55,7 @@
   {
     "feld": "F-3610",
     "fraktion": "arkoniden",
-    "einheit": "19. reservegeschwader",
+    "einheit": "19. Reservegeschwader",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 1
@@ -63,7 +63,7 @@
   {
     "feld": "F-3811",
     "fraktion": "arkoniden",
-    "einheit": "8. aufklärungsgeschwader",
+    "einheit": "8. Aufklärungsgeschwader",
     "qualitaet": "veteranen",
     "technologie": "standard",
     "struktur": 2
@@ -71,7 +71,7 @@
   {
     "feld": "F-3811",
     "fraktion": "arkoniden",
-    "einheit": "1. einsatzgeschwader",
+    "einheit": "1. Einsatzgeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 1
@@ -79,7 +79,7 @@
   {
     "feld": "F-3811",
     "fraktion": "arkoniden",
-    "einheit": "4. einsatzgeschwader",
+    "einheit": "4. Einsatzgeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 1
@@ -92,7 +92,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "3. schlachtkreuzergeschwader",
+    "einheit": "3. Schlachtkreuzergeschwader",
     "qualitaet": "elite",
     "technologie": "state_of_the_art",
     "struktur": 2
@@ -100,7 +100,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "26. schlachtkreuzergeschwader",
+    "einheit": "26. Schlachtkreuzergeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 1
@@ -108,7 +108,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "20. liniengeschwader",
+    "einheit": "20. Liniengeschwader",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 2
@@ -116,7 +116,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "10. aufklärungsgeschwader",
+    "einheit": "10. Aufklärungsgeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 2
@@ -124,7 +124,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "10. leichtes_tr\u00e4gergeschwader",
+    "einheit": "10. Leichtes_Tr\u00e4gergeschwader",
     "qualitaet": "grün",
     "technologie": "veraltet",
     "struktur": 2
@@ -132,7 +132,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "19. kreuzergeschwader",
+    "einheit": "19. Kreuzergeschwader",
     "qualitaet": "veteranen",
     "technologie": "standard",
     "struktur": 2
@@ -140,7 +140,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "74. kreuzergeschwader",
+    "einheit": "74. Kreuzergeschwader",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 2
@@ -148,7 +148,7 @@
   {
     "feld": "F-4112",
     "fraktion": "maahks",
-    "einheit": "93. kreuzergeschwader",
+    "einheit": "93. Kreuzergeschwader",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 2
@@ -161,7 +161,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "14. liniengeschwader",
+    "einheit": "14. Liniengeschwader",
     "qualitaet": "regulär",
     "technologie": "veraltet",
     "struktur": 2
@@ -169,7 +169,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "20. schlachtkreuzergeschwader",
+    "einheit": "20. Schlachtkreuzergeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 2
@@ -177,7 +177,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "12. aufklärungsgeschwader",
+    "einheit": "12. Aufklärungsgeschwader",
     "qualitaet": "regulär",
     "technologie": "standard",
     "struktur": 2
@@ -185,7 +185,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "25. kreuzergeschwader",
+    "einheit": "25. Kreuzergeschwader",
     "qualitaet": "veteranen",
     "technologie": "standard",
     "struktur": 2
@@ -193,7 +193,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "184. kreuzergeschwader",
+    "einheit": "184. Kreuzergeschwader",
     "qualitaet": "grün",
     "technologie": "veraltet",
     "struktur": 1
@@ -201,7 +201,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "185. kreuzergeschwader",
+    "einheit": "185. Kreuzergeschwader",
     "qualitaet": "grün",
     "technologie": "veraltet",
     "struktur": 1
@@ -209,7 +209,7 @@
   {
     "feld": "F-4214",
     "fraktion": "maahks",
-    "einheit": "186. kreuzergeschwader",
+    "einheit": "186. Kreuzergeschwader",
     "qualitaet": "grün",
     "technologie": "veraltet",
     "struktur": 1
