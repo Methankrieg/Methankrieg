@@ -98,6 +98,7 @@
   <script src="kartenloader.js"></script>
   <script src="bewegungslogik.js"></script>
   <script src="marker_movement.js"></script>
+  <script src="initialisiereMarker.js"></script>
   <script src="kontextaktionen.js"></script>
   <script src="kontextmenu.js"></script>
   <script src="aktualisiereHexfeldStile.js"></script>
@@ -125,6 +126,7 @@
 
     if (svg) {
       initialisiereKontextmenu(svg);
+      initialisiereMarker(svg); // ✅ Marker anzeigen
 
       if (typeof aktualisiereHexfeldStile === "function") {
         aktualisiereHexfeldStile(svg);

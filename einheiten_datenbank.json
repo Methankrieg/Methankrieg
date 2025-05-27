@@ -1,0 +1,418 @@
+{
+    "arkoniden": {
+        "liniengeschwader": {
+            "state_of_the_art": {
+                "angriff": 19,
+                "verteidigung": 23,
+                "personalkosten": 14,
+                "materialkosten": 8,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Elite",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 18,
+                "verteidigung": 22,
+                "personalkosten": 12,
+                "materialkosten": 8,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 17,
+                "verteidigung": 21,
+                "personalkosten": 8,
+                "materialkosten": 8,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "kreuzergeschwader": {
+            "state_of_the_art": {
+                "angriff": 15,
+                "verteidigung": 21,
+                "personalkosten": 7,
+                "materialkosten": 6,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Elite",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 14,
+                "verteidigung": 20,
+                "personalkosten": 6,
+                "materialkosten": 6,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 13,
+                "verteidigung": 19,
+                "personalkosten": 4,
+                "materialkosten": 6,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "schlachtkreuzergeschwader": {
+            "state_of_the_art": {
+                "angriff": 21,
+                "verteidigung": 17,
+                "personalkosten": 8,
+                "materialkosten": 12,
+                "bauzeit_monate": 4,
+                "erfahrungslevel": "Elite",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 20,
+                "verteidigung": 16,
+                "personalkosten": 8,
+                "materialkosten": 10,
+                "bauzeit_monate": 4,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 19,
+                "verteidigung": 15,
+                "personalkosten": 8,
+                "materialkosten": 8,
+                "bauzeit_monate": 4,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "aufkl\u00e4rungsgeschwader": {
+            "state_of_the_art": {
+                "angriff": 14,
+                "verteidigung": 16,
+                "personalkosten": 6,
+                "materialkosten": 7,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Elite",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 13,
+                "verteidigung": 15,
+                "personalkosten": 5,
+                "materialkosten": 5,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 12,
+                "verteidigung": 14,
+                "personalkosten": 3,
+                "materialkosten": 4,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "raumfort": {
+            "state_of_the_art": {
+                "angriff": 16,
+                "verteidigung": 24,
+                "personalkosten": 8,
+                "materialkosten": 12,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 3
+            },
+            "standard": {
+                "angriff": 14,
+                "verteidigung": 20,
+                "personalkosten": 5,
+                "materialkosten": 10,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 3
+            },
+            "veraltet": {
+                "angriff": 12,
+                "verteidigung": 14,
+                "personalkosten": 3,
+                "materialkosten": 8,
+                "bauzeit_monate": 4,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 3
+            }
+        },
+        "reservegeschwader": {
+            "standard": {
+                "angriff": 14,
+                "verteidigung": 16,
+                "personalkosten": 3,
+                "materialkosten": 4,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 12,
+                "verteidigung": 14,
+                "personalkosten": 2,
+                "materialkosten": 4,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Gr\u00fcn",
+                "lebenspunkte": 2
+            }
+        },
+        "einsatzgeschwader": {
+            "standard": {
+                "angriff": 12,
+                "verteidigung": 16,
+                "personalkosten": 3,
+                "materialkosten": 4,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 11,
+                "verteidigung": 15,
+                "personalkosten": 2,
+                "materialkosten": 3,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Gr\u00fcn",
+                "lebenspunkte": 2
+            }
+        }
+    },
+    "maahks": {
+        "liniengeschwader": {
+            "state_of_the_art": {
+                "angriff": 17,
+                "verteidigung": 20,
+                "personalkosten": 20,
+                "materialkosten": 24,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Elite",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 16,
+                "verteidigung": 19,
+                "personalkosten": 15,
+                "materialkosten": 18,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 15,
+                "verteidigung": 18,
+                "personalkosten": 10,
+                "materialkosten": 12,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "schlachtkreuzergeschwader": {
+            "state_of_the_art": {
+                "angriff": 15,
+                "verteidigung": 17,
+                "personalkosten": 12,
+                "materialkosten": 15,
+                "bauzeit_monate": 4,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 14,
+                "verteidigung": 16,
+                "personalkosten": 8,
+                "materialkosten": 10,
+                "bauzeit_monate": 4,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 13,
+                "verteidigung": 15,
+                "personalkosten": 7,
+                "materialkosten": 9,
+                "bauzeit_monate": 4,
+                "erfahrungslevel": "Gr\u00fcn",
+                "lebenspunkte": 2
+            }
+        },
+        "kreuzergeschwader": {
+            "state_of_the_art": {
+                "angriff": 10,
+                "verteidigung": 13,
+                "personalkosten": 12,
+                "materialkosten": 16,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Elite",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 9,
+                "verteidigung": 12,
+                "personalkosten": 9,
+                "materialkosten": 12,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 8,
+                "verteidigung": 11,
+                "personalkosten": 6,
+                "materialkosten": 8,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "aufkl\u00e4rungsgeschwader": {
+            "state_of_the_art": {
+                "angriff": 5,
+                "verteidigung": 12,
+                "personalkosten": 4,
+                "materialkosten": 6,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 4,
+                "verteidigung": 11,
+                "personalkosten": 3,
+                "materialkosten": 5,
+                "bauzeit_monate": 1,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 3,
+                "verteidigung": 10,
+                "personalkosten": 2,
+                "materialkosten": 4,
+                "bauzeit_monate": 1,
+                "erfahrungslevel": "Gr\u00fcn",
+                "lebenspunkte": 2
+            }
+        },
+        "schlachtschiffgeschwader": {
+            "state_of_the_art": {
+                "angriff": 20,
+                "verteidigung": 22,
+                "personalkosten": 24,
+                "materialkosten": 30,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Elite",
+                "lebenspunkte": 3
+            },
+            "standard": {
+                "angriff": 19,
+                "verteidigung": 21,
+                "personalkosten": 18,
+                "materialkosten": 24,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 3
+            },
+            "veraltet": {
+                "angriff": 18,
+                "verteidigung": 20,
+                "personalkosten": 12,
+                "materialkosten": 16,
+                "bauzeit_monate": 5,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 3
+            }
+        },
+        "leichtes_tr\u00e4gergeschwader": {
+            "standard": {
+                "angriff": 5,
+                "verteidigung": 7,
+                "personalkosten": 2,
+                "materialkosten": 3,
+                "bauzeit_monate": 1,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 4,
+                "verteidigung": 6,
+                "personalkosten": 1,
+                "materialkosten": 2,
+                "bauzeit_monate": 1,
+                "erfahrungslevel": "Gr\u00fcn",
+                "lebenspunkte": 2
+            }
+        },
+        "angriffstr\u00e4gergeschwader": {
+            "standard": {
+                "angriff": 12,
+                "verteidigung": 9,
+                "personalkosten": 14,
+                "materialkosten": 10,
+                "bauzeit_monate": 3,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "schweres_tr\u00e4gergeschwader": {
+            "state_of_the_art": {
+                "angriff": 9,
+                "verteidigung": 11,
+                "personalkosten": 18,
+                "materialkosten": 14,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Veteran",
+                "lebenspunkte": 2
+            },
+            "standard": {
+                "angriff": 8,
+                "verteidigung": 10,
+                "personalkosten": 12,
+                "materialkosten": 9,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            },
+            "veraltet": {
+                "angriff": 7,
+                "verteidigung": 9,
+                "personalkosten": 12,
+                "materialkosten": 9,
+                "bauzeit_monate": 2,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 2
+            }
+        },
+        "j\u00e4gergeschwader": {
+            "standard": {
+                "angriff": 1,
+                "verteidigung": 1,
+                "personalkosten": 6,
+                "materialkosten": 3,
+                "bauzeit_monate": 1,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 1
+            }
+        },
+        "zerst\u00f6rergeschwader": {
+            "standard": {
+                "angriff": 2,
+                "verteidigung": 1,
+                "personalkosten": 8,
+                "materialkosten": 5,
+                "bauzeit_monate": 1,
+                "erfahrungslevel": "Regul\u00e4r",
+                "lebenspunkte": 1
+            }
+        }
+    }
+}
