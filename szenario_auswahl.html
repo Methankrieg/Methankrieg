@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Szenarioauswahl – Methankrieg</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      background: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    select, button {
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Szenario auswählen</h1>
+  <label for="szenarioAuswahl">Verfügbare Szenarien:</label><br>
+  <select id="szenarioAuswahl">
+    <option value="umkaempftes_casyat">Umkämpftes Casyat</option>
+    <option value="vorstoss_erkud">Vorstoß nach Erkud</option>
+    <option value="trantor_verteidigen">Verteidigung von Trantor</option>
+  </select><br>
+  <button onclick="spielStarten()">Spiel starten</button>
+
+  <script>
+    function spielStarten() {
+      const szenario = document.getElementById("szenarioAuswahl").value;
+      const zielURL = `spiel.html?szenario=${szenario}`;
+      window.location.href = zielURL;
+    }
+  </script>
+</body>
+</html>

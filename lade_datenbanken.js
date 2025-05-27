@@ -1,9 +1,12 @@
 
 // =============================================
-// lade_datenbanken.js – Initialisiert Spiellogik
+// lade_datenbanken.js – Initialisiert Spiellogik dynamisch
 // =============================================
 
 async function ladeDatenbanken() {
+  const szenarioName = (window.gameState?.ziele?.szenario || "umkaempftes_casyat").toLowerCase();
+  const szenarioPfad = `szenario_${szenarioName}.json`;
+
   const [
     navigation,
     dunkelwolken,
@@ -18,7 +21,7 @@ async function ladeDatenbanken() {
     fetch('dunkelwolken_felder_final_v2.json').then(r => r.json()),
     fetch('sprungrouten_datenbank_erkud_luvanaar_v2.json').then(r => r.json()),
     fetch('system_datenbank_bereinigt_v3.json').then(r => r.json()),
-    fetch('szenario_umkaempftes_casyat.json').then(r => r.json()),
+    fetch(szenarioPfad).then(r => r.json()),
     fetch('einheiten_datenbank_final_v2.json').then(r => r.json()),
     fetch('admirale_datenbank__template_v3.json').then(r => r.json()),
     fetch('sektor_datenbank_luvanaar_erkud_final_v5.json').then(r => r.json())
@@ -42,5 +45,5 @@ async function ladeDatenbanken() {
   window.gameState = window.gameState || {};
   window.gameState.startaufstellung = startaufstellung;
 
-  console.log('[INIT] Alle statischen Datenbanken + Startaufstellung erfolgreich geladen.');
+  console.log(`[INIT] Szenario "${szenarioName}" + Datenbanken erfolgreich geladen.`);
 }

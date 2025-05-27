@@ -104,32 +104,39 @@
   <script src="sprungrouten_anzeige.js"></script>
 
   <script>
-    async function spielStarten() {
-      // 🎯 Szenario aus Dropdown holen
-      const szenario = document.getElementById("szenarioAuswahl").value;
-      window.gameState.ziele = { szenario: szenario };
+  async function spielStarten() {
+    // 🎯 Szenario aus Dropdown holen
+    const szenario = document.getElementById("szenarioAuswahl").value;
 
-      // 💬 Auswahlbereich ausblenden, Spielbereich einblenden
-      document.getElementById("auswahlbereich").style.display = "none";
-      document.getElementById("spielbereich").style.display = "block";
-
-      // 🔁 Spielmodule initialisieren
-      await ladeDatenbanken(); // JSON-Daten laden
-      const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper"); // SVG laden
-
-      if (svg) {
-        initialisiereKontextmenu(svg);
-
-        if (typeof aktualisiereHexfeldStile === "function") {
-          aktualisiereHexfeldStile(svg);
-        }
-        if (typeof zeichneSprungrouten === "function" && typeof sprungrouten_datenbank !== "undefined") {
-          zeichneSprungrouten(svg, sprungrouten_datenbank);
-        }
+    // ✅ GameState vorbereiten
+    window.gameState = {
+      ziele: {
+        szenario: szenario
       }
+    };
 
-      console.log("[INIT] Karte, Menü, Stile und Sprungrouten initialisiert.");
+    // 💬 Auswahlbereich ausblenden, Spielbereich einblenden
+    document.getElementById("auswahlbereich").style.display = "none";
+    document.getElementById("spielbereich").style.display = "block";
+
+    // 🔁 Spielmodule initialisieren
+    await ladeDatenbanken(); // JSON-Daten laden
+    const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper"); // SVG laden
+
+    if (svg) {
+      initialisiereKontextmenu(svg);
+
+      if (typeof aktualisiereHexfeldStile === "function") {
+        aktualisiereHexfeldStile(svg);
+      }
+      if (typeof zeichneSprungrouten === "function" && typeof sprungrouten_datenbank !== "undefined") {
+        zeichneSprungrouten(svg, sprungrouten_datenbank);
+      }
     }
-  </script>
+
+    console.log("[INIT] Karte, Menü, Stile und Sprungrouten initialisiert.");
+  }
+</script>
+
 </body>
 </html>
