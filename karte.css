@@ -81,3 +81,22 @@
   height: 40px;
   shape-rendering: crispEdges;
 }
+
+/* ===========================
+   Cursor-Stile (zentral)
+=========================== */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+.cursor-move {
+  cursor: move;
+}
