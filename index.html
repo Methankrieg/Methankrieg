@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Methankrieg – Kontextmenü Test</title>
+  <title>Methankrieg – Szenarioauswahl & Spiel</title>
 
-  <!-- ✅ Zentrale CSS-Datei für Hex-Stile und Cursor -->
+  <!-- ✅ Zentrale CSS-Datei -->
   <link rel="stylesheet" href="karte.css">
 
   <!-- ✅ Zoom-Tool (Panzoom) -->
@@ -15,9 +16,16 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
       background: white;
       font-family: sans-serif;
+    }
+    #auswahlbereich {
+      padding: 40px;
+      background: #f4f4f4;
+    }
+    #spielbereich {
+      display: none;
+      height: 100%;
     }
     #container {
       width: 100%;
@@ -47,76 +55,81 @@
 </head>
 
 <body>
-  <div id="container">
-    <div id="svgwrapper"></div>
-  </div>
-  <div id="log">[DEBUG] System bereit.</div>
-
-  <!-- ✅ Detail-Panel für Systeminformationen -->
-  <div id="detailpanel-container" style="
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 320px;
-    height: 100%;
-    background: white;
-    border-left: 1px solid #ccc;
-    display: none;
-    z-index: 2000;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.2);">
-    <button onclick="document.getElementById('detailpanel-container').style.display='none'"
-            style="position:absolute; top:10px; right:10px; z-index:2100;">
-      ✖
-    </button>
-    <iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+  <!-- 🎯 Auswahlbereich -->
+  <div id="auswahlbereich">
+    <h1>Szenario wählen</h1>
+    <select id="szenarioAuswahl">
+      <option value="umkaempftes_casyat">Umkämpftes Casyat</option>
+      <option value="vorstoss_erkud">Vorstoß nach Erkud</option>
+      <option value="trantor_verteidigen">Verteidigung von Trantor</option>
+    </select>
+    <button onclick="spielStarten()">Spiel starten</button>
   </div>
 
-  <!-- 1️⃣ Spiellogik und Zustände -->
+  <!-- 🎮 Spielbereich -->
+  <div id="spielbereich">
+    <div id="container">
+      <div id="svgwrapper"></div>
+    </div>
+    <div id="log">[DEBUG] System bereit.</div>
+
+    <div id="detailpanel-container" style="
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 320px;
+      height: 100%;
+      background: white;
+      border-left: 1px solid #ccc;
+      display: none;
+      z-index: 2000;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.2);">
+      <button onclick="document.getElementById('detailpanel-container').style.display='none'"
+              style="position:absolute; top:10px; right:10px; z-index:2100;">
+        ✖
+      </button>
+      <iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+  </div>
+
+  <!-- 📦 Spiel-Skripte -->
   <script src="gameState.js"></script>
   <script src="lade_datenbanken.js"></script>
-
-  <!-- 2️⃣ Kartenlade-Logik -->
   <script src="kartenloader.js"></script>
-
-  <!-- 3️⃣ Logikmodule -->
   <script src="bewegungslogik.js"></script>
   <script src="marker_movement.js"></script>
-
-  <!-- 4️⃣ Menü- und UI-Funktionen -->
-  <script src="kontextmenu_v5_komplett.js"></script>
-
-  <!-- 5️⃣ Aktionen im Kontextmenü -->
   <script src="kontextaktionen.js"></script>
-
-  <!-- 6️⃣ Visuelle Hexfeld-Stile aktualisieren -->
+  <script src="kontextmenu.js"></script>
   <script src="aktualisiereHexfeldStile.js"></script>
-
-  <!-- 7️⃣ Sprungrouten anzeigen -->
   <script src="sprungrouten_anzeige.js"></script>
 
-  <!-- 🧠 Initialisierung: DOM fertig geladen -->
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      await ladeDatenbanken(); // ✅ JSON-Datenbanken laden
+    async function spielStarten() {
+      // 🎯 Szenario aus Dropdown holen
+      const szenario = document.getElementById("szenarioAuswahl").value;
+      window.gameState.ziele = { szenario: szenario };
 
-      const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper"); // ✅ SVG-Karte laden
+      // 💬 Auswahlbereich ausblenden, Spielbereich einblenden
+      document.getElementById("auswahlbereich").style.display = "none";
+      document.getElementById("spielbereich").style.display = "block";
+
+      // 🔁 Spielmodule initialisieren
+      await ladeDatenbanken(); // JSON-Daten laden
+      const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper"); // SVG laden
 
       if (svg) {
-        initialisiereKontextmenu(svg); // ✅ Kontextmenü initialisieren
+        initialisiereKontextmenu(svg);
 
-        // ✅ Hexfeld-Stile anwenden (z. B. Dunkelwolken, Navigation, Systeme)
         if (typeof aktualisiereHexfeldStile === "function") {
           aktualisiereHexfeldStile(svg);
         }
-
-        // ✅ Sprungrouten anzeigen
         if (typeof zeichneSprungrouten === "function" && typeof sprungrouten_datenbank !== "undefined") {
           zeichneSprungrouten(svg, sprungrouten_datenbank);
         }
       }
 
       console.log("[INIT] Karte, Menü, Stile und Sprungrouten initialisiert.");
-    });
+    }
   </script>
 </body>
 </html>
