@@ -1,17 +1,15 @@
 
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Methankrieg – Szenarioauswahl & Spiel</title>
-
-  <!-- ✅ Zentrale CSS-Datei -->
-  <link rel="stylesheet" href="css/karte.css">
-
-  <!-- ✅ Zoom-Tool (Panzoom) -->
-  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
-
-  <style>
+<meta charset="utf-8"/>
+<title>Methankrieg – Szenarioauswahl &amp; Spiel</title>
+<!-- ✅ Zentrale CSS-Datei -->
+<link href="css/karte.css" rel="stylesheet"/>
+<!-- ✅ Zoom-Tool (Panzoom) -->
+<script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+<style>
     html, body {
       margin: 0;
       padding: 0;
@@ -53,25 +51,16 @@
     }
   </style>
 </head>
-
 <body>
-  <!-- 🎯 Auswahlbereich -->
-  <div id="auswahlbereich">
-    <h1>Szenario wählen</h1>
-    <select id="szenarioAuswahl">
-     <option disabled selected>Bitte Szenario wählen</option>
-    </select>
-    <button onclick="spielStarten()">Spiel starten</button>
-  </div>
-
-  <!-- 🎮 Spielbereich -->
-  <div id="spielbereich">
-    <div id="container">
-      <div id="svgwrapper"></div>
-    </div>
-    <div id="log">[DEBUG] System bereit.</div>
-
-    <div id="detailpanel-container" style="
+<!-- 🎯 Auswahlbereich -->
+<!-- 🔄 Entfernt: Auswahlbereich, da Szenarioauswahl nun extern erfolgt -->
+<!-- 🎮 Spielbereich -->
+<div id="spielbereich">
+<div id="container">
+<div id="svgwrapper"></div>
+</div>
+<div id="log">[DEBUG] System bereit.</div>
+<div id="detailpanel-container" style="
       position: absolute;
       top: 0;
       right: 0;
@@ -82,72 +71,54 @@
       display: none;
       z-index: 2000;
       box-shadow: -2px 0 5px rgba(0,0,0,0.2);">
-      <button onclick="document.getElementById('detailpanel-container').style.display='none'"
-              style="position:absolute; top:10px; right:10px; z-index:2100;">
+<button onclick="document.getElementById('detailpanel-container').style.display='none'" style="position:absolute; top:10px; right:10px; z-index:2100;">
         ✖
       </button>
-      <iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
-    </div>
-  </div>
+<iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+</div>
+</div>
+<!-- 📦 Spiel-Skripte -->
+<script src="js/gameState.js"></script>
+<script src="js/lade_datenbanken.js"></script>
+<script src="js/kartenloader.js"></script>
+<script src="js/bewegungslogik.js"></script>
+<script src="js/marker_movement.js"></script>
+<script src="js/initialisiereMarker.js"></script>
+<script src="js/kontextaktionen.js"></script>
+<script src="js/kontextmenu.js"></script>
+<script src="js/aktualisiereHexfeldStile.js"></script>
+<script src="js/sprungrouten_anzeige.js"></script>
+<script>// ✅ Szenario-Initialisierung basierend auf URL-Parameter
+const urlParams = new URLSearchParams(window.location.search);
+const szenario = urlParams.get("szenario");
 
-  <!-- 📦 Spiel-Skripte -->
-  <script src="js/gameState.js"></script>
-  <script src="js/lade_datenbanken.js"></script>
-  <script src="js/kartenloader.js"></script>
-  <script src="js/bewegungslogik.js"></script>
-  <script src="js/marker_movement.js"></script>
-  <script src="js/initialisiereMarker.js"></script>
-  <script src="js/kontextaktionen.js"></script>
-  <script src="js/kontextmenu.js"></script>
-  <script src="js/aktualisiereHexfeldStile.js"></script>
-  <script src="js/sprungrouten_anzeige.js"></script>
+if (!szenario) {
+  alert("Kein Szenario ausgewählt. Bitte über die Szenarioauswahl starten.");
+  window.location.href = "szenario_auswahl.html";
+} else {
+  window.gameState = {
+    ziele: {
+      szenario: szenario
+    }
+  };
 
- <script>
-  async function spielStarten() {
-    // 🎯 Szenario aus Dropdown lesen
-    const szenario = document.getElementById("szenarioAuswahl").value;
-
-    // 🧠 GameState vorbereiten
-    window.gameState = {
-      ziele: {
-        szenario: szenario
-      }
-    };
-
-    // 💬 UI umschalten: Auswahl ausblenden, Spielbereich zeigen
-    document.getElementById("auswahlbereich").style.display = "none";
+  window.addEventListener("load", async () => {
     document.getElementById("spielbereich").style.display = "block";
 
-    // 📦 Alle Datenbanken laden
-    await ladeDatenbanken(); // JSON: Szenario, Startaufstellung, Systeme, Admiräle, Einheiten, etc.
-
-    // 🗺️ Karte (SVG) laden
+    await ladeDatenbanken();
     const svg = await ladeKarte("karten/Karte_Sektor_F_v1.svg", "svgwrapper");
 
     if (svg) {
-      // 🧭 Kontextmenü initialisieren
       initialisiereKontextmenu(svg);
-
-      // 🚀 Marker für Einheiten & Admiräle setzen
-      if (typeof initialisiereMarker === "function") {
-        initialisiereMarker(svg);
-      }
-
-      // 🖌️ Hexfeld-Stile anwenden (z. B. Dunkelwolken, Navigation)
-      if (typeof aktualisiereHexfeldStile === "function") {
-        aktualisiereHexfeldStile(svg);
-      }
-
-      // 🔷 Sprungrouten einzeichnen
+      if (typeof initialisiereMarker === "function") initialisiereMarker(svg);
+      if (typeof aktualisiereHexfeldStile === "function") aktualisiereHexfeldStile(svg);
       if (typeof zeichneSprungrouten === "function" && typeof sprungrouten_datenbank !== "undefined") {
         zeichneSprungrouten(svg, sprungrouten_datenbank);
       }
     }
 
     console.log("[INIT] Spiel erfolgreich initialisiert mit Szenario:", szenario);
-  }
-</script>
-
-
+  });
+}</script>
 </body>
 </html>
