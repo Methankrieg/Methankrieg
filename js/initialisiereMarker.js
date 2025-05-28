@@ -9,7 +9,7 @@ function initialisiereMarker(svg) {
 
   const startdaten = window.gameState?.startaufstellung || [];
   const einheitenDB = window.einheitenDaten || {};
-  const admiraleDB = window.admiraleDaten || {};
+  const admiraleDB = window.admiraleDaten || [];
 
   startdaten.forEach((einheit) => {
     const feldId = einheit.feld;
@@ -34,7 +34,13 @@ function initialisiereMarker(svg) {
 
     if (isAdmiral) {
       const admiralName = name.replace("Admiral ", "").trim();
-      const admiralData = admiraleDB?.[fraktion]?.[admiralName];
+      const admiralData = Array.isArray(admiraleDB)
+        ? admiraleDB.find(a =>
+            a.fraktion?.toLowerCase() === fraktion &&
+            a.einheit?.endsWith(admiralName)
+          )
+        : null;
+
       if (!admiralData) {
         console.warn(`[FEHLER] Admiral '${admiralName}' nicht in Datenbank für Fraktion '${fraktion}' gefunden.`);
         return;
