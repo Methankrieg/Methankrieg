@@ -6,7 +6,7 @@
   <title>Methankrieg – Szenarioauswahl & Spiel</title>
 
   <!-- ✅ Zentrale CSS-Datei -->
-  <link rel="stylesheet" href="karte.css">
+  <link rel="stylesheet" href="css/karte.css">
 
   <!-- ✅ Zoom-Tool (Panzoom) -->
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
@@ -59,9 +59,7 @@
   <div id="auswahlbereich">
     <h1>Szenario wählen</h1>
     <select id="szenarioAuswahl">
-      <option value="umkaempftes_casyat">Umkämpftes Casyat</option>
-      <option value="vorstoss_erkud">Vorstoß nach Erkud</option>
-      <option value="trantor_verteidigen">Verteidigung von Trantor</option>
+     <option disabled selected>Bitte Szenario wählen</option>
     </select>
     <button onclick="spielStarten()">Spiel starten</button>
   </div>
@@ -93,16 +91,16 @@
   </div>
 
   <!-- 📦 Spiel-Skripte -->
-  <script src="gameState.js"></script>
-  <script src="lade_datenbanken.js"></script>
-  <script src="kartenloader.js"></script>
-  <script src="bewegungslogik.js"></script>
-  <script src="marker_movement.js"></script>
-  <script src="initialisiereMarker.js"></script>
-  <script src="kontextaktionen.js"></script>
-  <script src="kontextmenu.js"></script>
-  <script src="aktualisiereHexfeldStile.js"></script>
-  <script src="sprungrouten_anzeige.js"></script>
+  <script src="js/gameState.js"></script>
+  <script src="js/lade_datenbanken.js"></script>
+  <script src="js/kartenloader.js"></script>
+  <script src="js/bewegungslogik.js"></script>
+  <script src="js/marker_movement.js"></script>
+  <script src="js/initialisiereMarker.js"></script>
+  <script src="js/kontextaktionen.js"></script>
+  <script src="js/kontextmenu.js"></script>
+  <script src="js/aktualisiereHexfeldStile.js"></script>
+  <script src="js/sprungrouten_anzeige.js"></script>
 
  <script>
   async function spielStarten() {
@@ -124,7 +122,7 @@
     await ladeDatenbanken(); // JSON: Szenario, Startaufstellung, Systeme, Admiräle, Einheiten, etc.
 
     // 🗺️ Karte (SVG) laden
-    const svg = await ladeKarte("Karte_Sektor_F_v1.svg", "svgwrapper");
+    const svg = await ladeKarte("karten/Karte_Sektor_F_v1.svg", "svgwrapper");
 
     if (svg) {
       // 🧭 Kontextmenü initialisieren

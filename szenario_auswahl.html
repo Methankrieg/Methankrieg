@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -24,16 +23,32 @@
   <h1>Szenario auswählen</h1>
   <label for="szenarioAuswahl">Verfügbare Szenarien:</label><br>
   <select id="szenarioAuswahl">
-    <option value="umkaempftes_casyat">Umkämpftes Casyat</option>
-    <option value="vorstoss_erkud">Vorstoß nach Erkud</option>
-    <option value="trantor_verteidigen">Verteidigung von Trantor</option>
+    <option disabled selected>Bitte Szenario wählen</option>
   </select><br>
   <button onclick="spielStarten()">Spiel starten</button>
-
   <script>
+    async function ladeSzenarienDropdown() {
+      const manifest = await fetch("szenario_manifest.json").then(res => res.json());
+      const select = document.getElementById("szenarioAuswahl");
+
+      for (const eintrag of manifest) {
+        try {
+          const data = await fetch(`datenbanken/szenario_${eintrag}.json`).then(res => res.json());
+          const option = document.createElement("option");
+          option.value = eintrag;
+          option.textContent = data.name || eintrag;
+          select.appendChild(option);
+        } catch (err) {
+          console.warn(`Fehler beim Laden von szenario_${eintrag}.json:`, err);
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", ladeSzenarienDropdown);
+
     function spielStarten() {
       const szenario = document.getElementById("szenarioAuswahl").value;
-      const zielURL = `spiel.html?szenario=${szenario}`;
+      const zielURL = `index.html?szenario=${szenario}`;
       window.location.href = zielURL;
     }
   </script>
