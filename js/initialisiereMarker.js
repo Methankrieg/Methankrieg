@@ -43,13 +43,10 @@ function initialisiereMarker(svg) {
       markerElement.setAttribute("class", `marker marker-admiral marker-${fraktion}`);
 
     } else {
-      const typ = name.split(". ")[1]?.trim();
-      if (!typ || !einheitenDB?.[fraktion]?.[typ]?.[technologie]) {
-    console.warn(`[FEHLER] Einheit "${name}" (${typ}/${technologie}) in Datenbank für Fraktion '${fraktion}' nicht gefunden.`);
-    return;
-  }
-  const einheitsTemplate = einheitenDB[fraktion][typ][technologie];
-
+      const typMatch = name.match(/^\d+\.\s(.+)$/);
+      const typ = typMatch ? typMatch[1].trim() : "unbekannt";
+      const cssTyp = typ.toLowerCase().replace(/\s+/g, "_");
+      const einheitsTemplate = einheitenDB?.[fraktion]?.[typ]?.[technologie];
       if (!einheitsTemplate) {
         console.warn(`[FEHLER] Einheit "${name}" (${typ}/${technologie}) in Datenbank für Fraktion '${fraktion}' nicht gefunden.`);
         return;
@@ -59,7 +56,7 @@ function initialisiereMarker(svg) {
       markerElement.setAttribute("width", 50);
       markerElement.setAttribute("height", 50);
       markerElement.setAttribute("transform", `translate(${x - 25}, ${y - 25})`);
-      markerElement.setAttribute("class", `marker marker-einheit marker-${fraktion} marker-${typ.replace(/\s+/g, "_")}`);
+      markerElement.setAttribute("class", `marker marker-einheit marker-${fraktion} marker-${cssTyp}`);
     }
 
     // 🖱️ Interaktionen
