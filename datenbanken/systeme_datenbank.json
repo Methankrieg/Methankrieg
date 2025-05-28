@@ -1,0 +1,736 @@
+{
+  "F-4112": {
+    "name": "custordth",
+    "typ": "industriesystem",
+    "mp": 9,
+    "pp": 6,
+    "werften": [
+      {
+        "kapazitaet": 49
+      },
+      {
+        "kapazitaet": 12
+      },
+      {
+        "kapazitaet": 12
+      },
+      {
+        "kapazitaet": 12
+      }
+    ]
+  },
+  "F-4214": {
+    "name": "fayarb",
+    "typ": "industriesystem",
+    "mp": 8,
+    "pp": 3,
+    "werften": [
+      {
+        "kapazitaet": 38
+      },
+      {
+        "kapazitaet": 38
+      },
+      {
+        "kapazitaet": 38
+      },
+      {
+        "kapazitaet": 25
+      },
+      {
+        "kapazitaet": 25
+      }
+    ]
+  },
+  "F-4218": {
+    "name": "stypu",
+    "typ": "industriesystem",
+    "mp": 3,
+    "pp": 2,
+    "werften": [
+      {
+        "kapazitaet": 30
+      },
+      {
+        "kapazitaet": 19
+      },
+      {
+        "kapazitaet": 19
+      }
+    ]
+  },
+  "F-4122": {
+    "name": "thismeth",
+    "typ": "industriesystem",
+    "mp": 8,
+    "pp": 3,
+    "werften": [
+      {
+        "kapazitaet": 33
+      },
+      {
+        "kapazitaet": 33
+      },
+      {
+        "kapazitaet": 11
+      },
+      {
+        "kapazitaet": 11
+      }
+    ]
+  },
+  "F-4019": {
+    "name": "surnirn",
+    "typ": "industriesystem",
+    "mp": 2,
+    "pp": 4,
+    "werften": [
+      {
+        "kapazitaet": 39
+      },
+      {
+        "kapazitaet": 24
+      }
+    ]
+  },
+  "F-3922": {
+    "name": "vyrdernm",
+    "typ": "industriesystem",
+    "mp": 16,
+    "pp": 5,
+    "werften": [
+      {
+        "kapazitaet": 37
+      },
+      {
+        "kapazitaet": 16
+      }
+    ]
+  },
+  "F-4307": {
+    "name": "vingerni",
+    "typ": "industriesystem",
+    "mp": 8,
+    "pp": 5,
+    "werften": [
+      {
+        "kapazitaet": 48
+      },
+      {
+        "kapazitaet": 21
+      }
+    ]
+  },
+  "F-4110": {
+    "name": "rine",
+    "typ": "industriesystem",
+    "mp": 3,
+    "pp": 2,
+    "werften": [
+      {
+        "kapazitaet": 28
+      },
+      {
+        "kapazitaet": 13
+      }
+    ]
+  },
+  "F-3909": {
+    "name": "morderth",
+    "typ": "industriesystem",
+    "mp": 1,
+    "pp": 2,
+    "werften": [
+      {
+        "kapazitaet": 13
+      }
+    ]
+  },
+  "F-3610": {
+    "name": "casyat",
+    "typ": "industriesystem",
+    "mp": 3,
+    "pp": 4,
+    "werften": [
+      {
+        "kapazitaet": 27
+      },
+      {
+        "kapazitaet": 12
+      },
+      {
+        "kapazitaet": 12
+      },
+      {
+        "kapazitaet": 12
+      }
+    ]
+  },
+  "F-4301": {
+    "name": "f-4301",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4302": {
+    "name": "f-4302",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4311": {
+    "name": "f-4311",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4313": {
+    "name": "f-4313",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4316": {
+    "name": "f-4316",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4319": {
+    "name": "f-4319",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4323": {
+    "name": "f-4323",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4221": {
+    "name": "f-4222",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4115": {
+    "name": "f-4115",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4126": {
+    "name": "f-4126",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4003": {
+    "name": "f-4004",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4005": {
+    "name": "f-4006",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4016": {
+    "name": "f-4017",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4017": {
+    "name": "f-4018",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-4024": {
+    "name": "f-4025",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3902": {
+    "name": "f-3902",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3904": {
+    "name": "f-3904",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3919": {
+    "name": "f-3919",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3920": {
+    "name": "f-3920",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3811": {
+    "name": "f-3812",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3825": {
+    "name": "f-3826",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3705": {
+    "name": "f-3705",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3716": {
+    "name": "f-3716",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3603": {
+    "name": "f-3604",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3608": {
+    "name": "f-3609",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3619": {
+    "name": "f-3620",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3621": {
+    "name": "f-3622",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3506": {
+    "name": "f-3506",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3507": {
+    "name": "f-3507",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3511": {
+    "name": "f-3511",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3512": {
+    "name": "f-3512",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3515": {
+    "name": "f-3515",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3416": {
+    "name": "f-3417",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3420": {
+    "name": "f-3421",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3425": {
+    "name": "f-3426",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3302": {
+    "name": "f-3302",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3303": {
+    "name": "f-3303",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3313": {
+    "name": "f-3313",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3322": {
+    "name": "f-3322",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3326": {
+    "name": "f-3326",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3203": {
+    "name": "f-3204",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3206": {
+    "name": "f-3207",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3209": {
+    "name": "f-3210",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3217": {
+    "name": "f-3218",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3219": {
+    "name": "f-3220",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3223": {
+    "name": "f-3224",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3112": {
+    "name": "f-3112",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3116": {
+    "name": "f-3116",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3121": {
+    "name": "f-3121",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3125": {
+    "name": "f-3125",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3126": {
+    "name": "f-3126",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3002": {
+    "name": "f-3003",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3003": {
+    "name": "f-3004",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3009": {
+    "name": "f-3010",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-3015": {
+    "name": "f-3016",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2901": {
+    "name": "f-2901",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2913": {
+    "name": "f-2913",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2812": {
+    "name": "f-2813",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2817": {
+    "name": "f-2818",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2820": {
+    "name": "f-2821",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2823": {
+    "name": "f-2824",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2825": {
+    "name": "f-2826",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2701": {
+    "name": "f-2701",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2704": {
+    "name": "f-2704",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2709": {
+    "name": "f-2709",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2713": {
+    "name": "f-2713",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2717": {
+    "name": "f-2717",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2726": {
+    "name": "f-2726",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2604": {
+    "name": "f-2605",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2610": {
+    "name": "f-2611",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2613": {
+    "name": "f-2614",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2615": {
+    "name": "f-2616",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2619": {
+    "name": "f-2620",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2621": {
+    "name": "f-2622",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2404": {
+    "name": "f-2405",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2405": {
+    "name": "f-2406",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2409": {
+    "name": "f-2410",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2425": {
+    "name": "f-2426",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2301": {
+    "name": "f-2301",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2310": {
+    "name": "f-2310",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  },
+  "F-2324": {
+    "name": "f-2324",
+    "typ": "normalsystem",
+    "mp": 1,
+    "pp": 1,
+    "werften": []
+  }
+}
