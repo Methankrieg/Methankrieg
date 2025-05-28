@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Sprungrouten Tool – Bidirektionale Erweiterung</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
+    button { padding: 10px 20px; margin-bottom: 10px; }
+    .info { font-size: 0.9em; color: #555; }
+  </style>
+</head>
+<body>
+  <h2>Sprungrouten Tool – Bidirektionale Erweiterung</h2>
+
+  <p>Füge deine einseitige <code>sprungrouten_datenbank.json</code> in das Eingabefeld ein und klicke auf <strong>Umkehren &amp; Erweitern</strong>.</p>
+
+  <label for="input">📥 Eingabe (Originaldatenbank)</label>
+  <textarea id="input" placeholder="Hier JSON einfügen..."></textarea>
+
+  <button onclick="umkehrenUndErweitern()">🔁 Umkehren & Erweitern</button>
+
+  <label for="output">📤 Ausgabe (Erweiterte Datenbank)</label>
+  <textarea id="output" placeholder="Ergebnis erscheint hier..." readonly></textarea>
+
+  <p class="info">Das Tool erzeugt alle umgekehrten Routen automatisch und fügt sie der Datenbank hinzu.</p>
+
+  <script>
+    function umkehrenUndErweitern() {
+      const input = document.getElementById("input").value;
+      const output = document.getElementById("output");
+      output.value = "";
+
+      let parsed;
+      try {
+        parsed = JSON.parse(input);
+        if (!Array.isArray(parsed.sprungrouten)) throw new Error("Keine 'sprungrouten'-Liste gefunden.");
+      } catch (err) {
+        output.value = "❌ Fehler beim Parsen der Eingabe: " + err.message;
+        return;
+      }
+
+      const original = parsed.sprungrouten;
+      const erweitert = [...original];
+      const existingKeys = new Set();
+
+      // Schlüssel der Originalrouten merken
+      original.forEach(r => {
+        const key = `${r.von}->${r.nach}`;
+        existingKeys.add(key);
+      });
+
+      // Umgekehrte Routen erzeugen
+      original.forEach(route => {
+        const reversed = {
+          von: route.nach,
+          nach: route.von,
+          route: [...route.route].reverse()
+        };
+        const revKey = `${reversed.von}->${reversed.nach}`;
+        if (!existingKeys.has(revKey)) {
+          erweitert.push(reversed);
+          existingKeys.add(revKey);
+        }
+      });
+
+      const result = {
+        sprungrouten: erweitert
+      };
+
+      output.value = JSON.stringify(result, null, 2);
+    }
+  </script>
+</body>
+</html>
