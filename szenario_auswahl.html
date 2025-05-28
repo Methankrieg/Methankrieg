@@ -2,64 +2,59 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Szenarioauswahl – Methankrieg</title>
+  <title>Szenarioauswahl</title>
   <style>
     body {
       font-family: sans-serif;
-      padding: 40px;
-      background: #f4f4f4;
-    }
-    h1 {
-      color: #333;
+      padding: 2em;
+      background: #f0f0f0;
     }
     select, button {
-      font-size: 16px;
-      padding: 8px;
-      margin-top: 10px;
+      font-size: 1em;
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
   <h1>Szenario auswählen</h1>
-  <label for="szenarioAuswahl">Verfügbare Szenarien:</label><br>
+  <label for="szenarioAuswahl">Verfügbare Szenarien:</label>
   <select id="szenarioAuswahl">
     <option disabled selected>Bitte Szenario wählen</option>
-  </select><br>
+  </select>
+  <br>
   <button onclick="spielStarten()">Spiel starten</button>
-  <script>
-    async function ladeSzenarienDropdown() {
-      const manifest = await fetch("szenario_manifest.json").then(res => res.json());
-      const select = document.getElementById("szenarioAuswahl");
+<script>
+    async function ladeSzenarien() {
+      try {
+        const res = await fetch("szenario_manifest.json");
+        const manifest = await res.json();
+        const select = document.getElementById("szenarioAuswahl");
 
-      for (const eintrag of manifest) {
-        try {
-          const data = await fetch(`datenbanken/szenario_${eintrag}.json`).then(res => res.json());
+        manifest.forEach(eintrag => {
           const option = document.createElement("option");
           option.value = eintrag;
-          option.textContent = data.name || eintrag;
+          option.textContent = eintrag.replace(/_/g, " ").replace(/^\w/, c => c.toUpperCase());
           select.appendChild(option);
-        } catch (err) {
-          console.warn(`Fehler beim Laden von szenario_${eintrag}.json:`, err);
-        }
+        });
+      } catch (err) {
+        alert("Fehler beim Laden der Szenarien.");
+        console.error(err);
       }
     }
 
-    document.addEventListener("DOMContentLoaded", ladeSzenarienDropdown);
-
     function spielStarten() {
-  const select = document.getElementById("szenarioAuswahl");
-  const szenario = select.value;
+      const select = document.getElementById("szenarioAuswahl");
+      const szenario = select.value;
 
-  if (!szenario || select.selectedIndex === 0) {
-    alert("Bitte wähle ein gültiges Szenario aus.");
-    return;
-  }
+      if (!szenario || select.selectedIndex === 0) {
+        alert("Bitte wähle ein gültiges Szenario aus.");
+        return;
+      }
 
-  const zielURL = `index.html?szenario=${szenario}`;
-  window.location.href = zielURL;
-}`;
-      window.location.href = zielURL;
+      window.location.href = `index.html?szenario=${szenario}`;
     }
+
+    document.addEventListener("DOMContentLoaded", ladeSzenarien);
   </script>
 </body>
 </html>
