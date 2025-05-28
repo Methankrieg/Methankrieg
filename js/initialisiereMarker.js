@@ -1,4 +1,4 @@
-// initialisiereMarker.js – strukturierte Markerplatzierung mit CSS-Zuweisung und Events
+// initialisiereMarker.js – finalisierte Markerplatzierung mit CSS, Admiral-Fix und Events
 
 function initialisiereMarker(svg) {
   const markerLayer = svg.getElementById("Marker_13");
@@ -34,18 +34,20 @@ function initialisiereMarker(svg) {
     let markerBreite = 50;
     let markerHoehe = 50;
 
-    // ✅ NEU: Admiral-Erkennung über Objektstruktur
+    // ✅ Admiral-Erkennung via Key-Matching
     const admiralFraktion = admiraleDB?.[fraktion];
-    const admiralData = admiralFraktion
-      ? Object.values(admiralFraktion).find(a =>
-          a.einheit?.toLowerCase() === name.toLowerCase()
+    const admiralKey = admiralFraktion
+      ? Object.keys(admiralFraktion).find(k =>
+          k.toLowerCase() === name.toLowerCase()
         )
       : null;
-
+    const admiralData = admiralKey ? admiralFraktion[admiralKey] : null;
     const isAdmiral = !!admiralData;
 
+    // 🔧 Fraktionsname für CSS (Singular bei Maahks)
+    const cssFraktion = fraktion === "maahks" ? "maahk" : "arkoniden";
+
     if (isAdmiral) {
-      const cssFraktion = fraktion === "maahks" ? "maahk" : "arkoniden";
       markerKlasse = `marker marker-${cssFraktion}-admiral`;
       markerBreite = 45;
       markerHoehe = 45;
@@ -55,7 +57,7 @@ function initialisiereMarker(svg) {
         console.warn(`[FEHLER] Einheit "${name}" (${typ}/${technologie}) in Datenbank für Fraktion '${fraktion}' nicht gefunden.`);
         return;
       }
-      markerKlasse = `marker marker-${fraktion}`;
+      markerKlasse = `marker marker-${cssFraktion}`;
     }
 
     // 🎯 Marker erzeugen
@@ -63,7 +65,7 @@ function initialisiereMarker(svg) {
     markerElement.setAttribute("width", markerBreite);
     markerElement.setAttribute("height", markerHoehe);
     markerElement.setAttribute("class", markerKlasse);
-    markerElement.classList.add("cursor-pointer"); // optionaler Cursor-Stil
+    markerElement.classList.add("cursor-pointer");
 
     const offset = markerBreite / 2;
     markerElement.setAttribute("transform", `translate(${x - offset}, ${y - offset})`);
