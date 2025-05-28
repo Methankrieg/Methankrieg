@@ -47,8 +47,17 @@
     document.addEventListener("DOMContentLoaded", ladeSzenarienDropdown);
 
     function spielStarten() {
-      const szenario = document.getElementById("szenarioAuswahl").value;
-      const zielURL = `index.html?szenario=${szenario}`;
+  const select = document.getElementById("szenarioAuswahl");
+  const szenario = select.value;
+
+  if (!szenario || select.selectedIndex === 0) {
+    alert("Bitte wähle ein gültiges Szenario aus.");
+    return;
+  }
+
+  const zielURL = `index.html?szenario=${szenario}`;
+  window.location.href = zielURL;
+}`;
       window.location.href = zielURL;
     }
   </script>
