@@ -1,4 +1,4 @@
-// initialisiereMarker.js – Markerplatzierung mit CSS-Zuweisung, Debug, Events
+// initialisiereMarker.js – strukturierte Markerplatzierung mit CSS-Zuweisung und Events
 
 function initialisiereMarker(svg) {
   const markerLayer = svg.getElementById("Marker_13");
@@ -21,7 +21,19 @@ function initialisiereMarker(svg) {
     const typMatch = name.match(/^\d+\.\s(.+)$/);
     const typ = typMatch ? typMatch[1].trim() : name;
 
-    // 🔍 Admiral-Erkennung auf Basis von Datenbank-Eintrag (nicht mehr "Admiral " prüfen)
+    // 📍 Koordinaten berechnen
+    const pos = typeof berechneXY === "function" ? berechneXY(feldId) : null;
+    if (!pos) {
+      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen.`);
+      return;
+    }
+    const { x, y } = pos;
+
+    // 🧠 Markerparameter bestimmen
+    let markerKlasse = "";
+    let markerBreite = 50;
+    let markerHoehe = 50;
+
     const admiralData = Array.isArray(admiraleDB)
       ? admiraleDB.find(a =>
           a.fraktion?.toLowerCase() === fraktion &&
@@ -31,37 +43,27 @@ function initialisiereMarker(svg) {
 
     const isAdmiral = !!admiralData;
 
-    // 📍 Koordinaten berechnen
-    const pos = typeof berechneXY === "function" ? berechneXY(feldId) : null;
-    if (!pos) {
-      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen.`);
-      return;
-    }
-    const { x, y } = pos;
-
-    let markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-
     if (isAdmiral) {
-      // ⬛ Admiral-Marker
-      markerElement.setAttribute("width", 45);
-      markerElement.setAttribute("height", 45);
-      markerElement.setAttribute("class", `marker marker-${fraktion}-admiral`);
+      markerKlasse = `marker marker-${fraktion}-admiral`;
+      markerBreite = 45;
+      markerHoehe = 45;
     } else {
-      // 🔺 Normale Einheit
       const einheitsTemplate = einheitenDB?.[fraktion]?.[typ]?.[technologie];
       if (!einheitsTemplate) {
         console.warn(`[FEHLER] Einheit "${name}" (${typ}/${technologie}) in Datenbank für Fraktion '${fraktion}' nicht gefunden.`);
         return;
       }
-
-      markerElement.setAttribute("width", 50);
-      markerElement.setAttribute("height", 50);
-      markerElement.setAttribute("class", `marker marker-${fraktion}`);
+      markerKlasse = `marker marker-${fraktion}`;
     }
 
-    // 🔧 Gemeinsame Attribute
-    const centerOffset = parseFloat(markerElement.getAttribute("width")) / 2;
-    markerElement.setAttribute("transform", `translate(${x - centerOffset}, ${y - centerOffset})`);
+    // 🎯 Marker erzeugen
+    const markerElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    markerElement.setAttribute("width", markerBreite);
+    markerElement.setAttribute("height", markerHoehe);
+    markerElement.setAttribute("class", markerKlasse);
+
+    const offset = markerBreite / 2;
+    markerElement.setAttribute("transform", `translate(${x - offset}, ${y - offset})`);
     markerElement.setAttribute("id", `marker-${feldId}-${name}`);
     markerElement.setAttribute("data-hex", feldId);
     markerElement.setAttribute("data-name", name);
