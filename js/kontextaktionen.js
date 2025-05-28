@@ -7,6 +7,12 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
   const sprungrouten = window.sprungroutenDaten || [];
   const feindlicheFelder = new Set(); // Platzhalter – später mit Inhalt füllen
 
+  const belegteFelder = new Set(
+    (window.gameState?.startaufstellung || [])
+      .filter(e => e.feld !== zielHex) // Ziel darf frei sein
+      .map(e => e.feld)
+  );
+
   eintraege.forEach((item, i) => {
     const y = baseY + i * 20;
     const einheit = gameState.startaufstellung.find(e => e.einheit === item.name);
@@ -39,9 +45,9 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
       rect.addEventListener('click', () => {
         bewegeMarker(markerId, einheit.feld, zielHex, "taktisch");
-        einheit.feld = zielHex;
         einheit.bereitsBewegt = true;
         einheit.bewegungsArt = "taktisch";
+        einheit.feld = zielHex;
         clearContextMenu();
       });
 
@@ -74,9 +80,9 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
       rect.addEventListener('click', () => {
         bewegeMarker(markerId, einheit.feld, zielHex, "transition");
-        einheit.feld = zielHex;
         einheit.bereitsBewegt = true;
         einheit.bewegungsArt = "transition";
+        einheit.feld = zielHex;
         clearContextMenu();
       });
 
@@ -109,9 +115,44 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
       rect.addEventListener('click', () => {
         bewegeMarker(markerId, einheit.feld, zielHex, "operativ");
-        einheit.feld = zielHex;
         einheit.bereitsBewegt = true;
         einheit.bewegungsArt = "operativ";
+        einheit.feld = zielHex;
+        clearContextMenu();
+      });
+
+      menu.appendChild(rect);
+      menu.appendChild(text);
+      buttonOffset++;
+    }
+
+    // 🔹 4. Strategisch (via Sprungrouten)
+    if (StrategischeRoutenlogik.istMoeglich(einheit.feld, zielHex, belegteFelder)) {
+      const yOffset = y + buttonOffset * 20;
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', baseX + 140);
+      rect.setAttribute('y', yOffset);
+      rect.setAttribute('width', '180');
+      rect.setAttribute('height', '18');
+      rect.setAttribute('fill', '#ccf');
+      rect.setAttribute('stroke', '#666');
+      rect.setAttribute('pointer-events', 'all');
+      rect.setAttribute('style', 'cursor: pointer;');
+
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', baseX + 145);
+      text.setAttribute('y', yOffset + 13);
+      text.setAttribute('font-size', '12');
+      text.setAttribute('fill', '#000');
+      text.setAttribute('pointer-events', 'none');
+      text.textContent = `${item.name} [strategisch]`;
+
+      rect.addEventListener('click', () => {
+        bewegeMarker(markerId, einheit.feld, zielHex, "strategisch");
+        einheit.bereitsBewegt = true;
+        einheit.bewegungsArt = "strategisch";
+        einheit.feld = zielHex;
         clearContextMenu();
       });
 

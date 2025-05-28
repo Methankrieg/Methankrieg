@@ -41,6 +41,10 @@ async function ladeDatenbanken() {
     window.erschwerteNavigationFelder = new Set(Array.isArray(navigation.felder) ? navigation.felder : []);
     window.dunkelwolkenFelder = new Set(Array.isArray(dunkelwolken.felder) ? dunkelwolken.felder : []);
     window.sprungroutenDaten = Array.isArray(sprungrouten.sprungrouten) ? sprungrouten.sprungrouten : [];
+
+    // 🔁 Strategisches Routennetz aufbauen
+    StrategischeRoutenlogik.baueRoutennetzwerk(window.sprungroutenDaten);
+
     window.systemeDaten = systeme || {};
 
     // 📦 Spielstanddaten
