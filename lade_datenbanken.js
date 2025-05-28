@@ -17,14 +17,14 @@ async function ladeDatenbanken() {
     admirale,
     sektoren
   ] = await Promise.all([
-    fetch('erschwerte_navigation_felder_final_v2.json').then(r => r.json()),
-    fetch('dunkelwolken_felder_final_v2.json').then(r => r.json()),
-    fetch('sprungrouten_datenbank_erkud_luvanaar_v2.json').then(r => r.json()),
-    fetch('system_datenbank_bereinigt_v3.json').then(r => r.json()),
+    fetch('erschwerte_navigation_felderdatenbank.json').then(r => r.json()),
+    fetch('dunkelwolken_felder_datenbankjson').then(r => r.json()),
+    fetch('sprungrouten_datenbank.json').then(r => r.json()),
+    fetch('system_datenbank.json').then(r => r.json()),
     fetch(szenarioPfad).then(r => r.json()),
-    fetch('einheiten_datenbank_final_v2.json').then(r => r.json()),
-    fetch('admirale_datenbank__template_v3.json').then(r => r.json()),
-    fetch('sektor_datenbank_luvanaar_erkud_final_v5.json').then(r => r.json())
+    fetch('einheiten_datenbank.json').then(r => r.json()),
+    fetch('admirale_datenbank.json').then(r => r.json()),
+    fetch('sektoren_datenbank.json').then(r => r.json())
   ]);
 
   // 🧭 Bewegungsrelevante Felder
