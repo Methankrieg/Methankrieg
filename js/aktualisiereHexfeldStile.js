@@ -1,46 +1,38 @@
-// ===========================================
-// aktualisiereHexfeldStile.js
-// Hexfelder farblich und stilistisch markieren
-// ===========================================
-
 function aktualisiereHexfeldStile(svg) {
   if (!svg) {
     console.warn("[WARNUNG] SVG nicht übergeben an aktualisiereHexfeldStile.");
     return;
   }
 
-  // Prüfe, ob die globalen Daten existieren
-  if (!window.dunkelwolkenFelder || !window.navigationFelder || !window.systemeDatenbank) {
-    console.warn("[WARNUNG] Datenbanken nicht geladen – dunkelwolkenFelder / navigationFelder / systemeDatenbank fehlen.");
+  const dunkelwolken = window.dunkelwolkenFelder;
+  const navigation = window.erschwerteNavigationFelder;
+  const systeme = window.systemeDaten;
+
+  if (!dunkelwolken || !navigation || !systeme) {
+    console.warn("[WARNUNG] Datenbanken nicht vollständig geladen – dunkelwolkenFelder / erschwerteNavigationFelder / systemeDaten fehlen.");
     return;
   }
 
   // 🌀 Dunkelwolken markieren
-  dunkelwolkenFelder.forEach(hexId => {
+  for (const hexId of dunkelwolken) {
     const hex = svg.getElementById(hexId);
-    if (hex) {
-      hex.classList.add("dunkelwolke");
-    }
-  });
+    if (hex) hex.classList.add("dunkelwolke");
+  }
 
-  // ⛅ Erschwerte Navigation markieren
-  navigationFelder.forEach(hexId => {
+  // ⛅ Erschwerte Navigation markieren (nur wenn nicht schon dunkelwolke)
+  for (const hexId of navigation) {
     const hex = svg.getElementById(hexId);
     if (hex && !hex.classList.contains("dunkelwolke")) {
       hex.classList.add("navigation-erschwert");
     }
-  });
+  }
 
   // 🪐 Systeme & Industriesysteme markieren
-  systemeDatenbank.forEach(system => {
+  for (const system of systeme) {
     const hex = svg.getElementById(system.hex);
-    if (!hex) return;
-    if (system.istIndustriesystem) {
-      hex.classList.add("industriesystem");
-    } else {
-      hex.classList.add("system");
-    }
-  });
+    if (!hex) continue;
+    hex.classList.add(system.istIndustriesystem ? "industriesystem" : "system");
+  }
 
   console.log("[INIT] Hexfeld-Stile aktualisiert.");
 }

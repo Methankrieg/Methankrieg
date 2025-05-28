@@ -27,12 +27,12 @@ async function ladeKarte(svgURL = "karten/Karte_Sektor_F_v1.svg", zielElementID 
 
     // ✅ Sichtbare Stile anwenden
     if (typeof aktualisiereHexfeldStile === 'function') {
-      aktualisiereHexfeldStile();
+      aktualisiereHexfeldStile(svg); // <-- 🛠 Wichtig!
     } else {
       console.warn("[HINWEIS] aktualisiereHexfeldStile() nicht gefunden.");
     }
 
-    console.log("[KARTE] SVG geladen, eingefügt und gestylt.");
+    console.log(`[KARTE] "${svgURL}" geladen, eingefügt und gestylt.`);
     return svg;
 
   } catch (err) {

@@ -3,21 +3,17 @@
 // ===========================================
 
 function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
+  const dunkelwolkenFelder = window.dunkelwolkenFelder || [];
+  const sprungrouten = window.sprungroutenDaten || [];
+  const feindlicheFelder = new Set(); // Platzhalter – später mit Inhalt füllen
+
   eintraege
-    .filter(item => {
-      const einheit = gameState.startaufstellung.find(e => e.einheit === item.name);
-      return einheit && einheit.bereitsBewegt === false;
-    })
     .forEach((item, i) => {
       const y = baseY + i * 20;
       const einheit = gameState.startaufstellung.find(e => e.einheit === item.name);
-      if (!einheit) return;
+      if (!einheit || einheit.bereitsBewegt) return;
 
       let buttonOffset = 0;
-
-      const feindlicheFelder = []; // Platzhalter für spätere Übergabe
-      const dunkelwolkenFelder = [];
-      const sprungrouten = [];
 
       // 🔹 1. Taktisch
       if (Bewegungslogik.isTaktischMoeglich(einheit.feld, zielHex, feindlicheFelder, dunkelwolkenFelder)) {

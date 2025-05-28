@@ -16,12 +16,12 @@ function initialisiereMarker(svg) {
     const fraktion = einheit.fraktion?.toLowerCase() || "unbekannt";
     const name = einheit.einheit;
     const technologie = einheit.technologie;
-    const isAdmiral = admiraleDB?.[fraktion]?.hasOwnProperty(name);
+    const isAdmiral = name.startsWith("Admiral ");
 
     // 📍 Koordinaten
     const pos = typeof berechneXY === "function" ? berechneXY(feldId) : null;
     if (!pos) {
-      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen.`);
+      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen. Funktion berechneXY:`, berechneXY);
       return;
     }
     const { x, y } = pos;
@@ -43,8 +43,12 @@ function initialisiereMarker(svg) {
       markerElement.setAttribute("class", `marker marker-admiral marker-${fraktion}`);
 
     } else {
-      const typ = name.split(". ")[1]?.trim().toLowerCase();
-      const einheitsTemplate = einheitenDB?.[fraktion]?.[typ]?.[technologie];
+      const typ = name.split(". ")[1]?.trim();
+      if (!typ || !einheitenDB?.[fraktion]?.[typ]?.[technologie]) {
+    console.warn(`[FEHLER] Einheit "${name}" (${typ}/${technologie}) in Datenbank für Fraktion '${fraktion}' nicht gefunden.`);
+    return;
+  }
+  const einheitsTemplate = einheitenDB[fraktion][typ][technologie];
 
       if (!einheitsTemplate) {
         console.warn(`[FEHLER] Einheit "${name}" (${typ}/${technologie}) in Datenbank für Fraktion '${fraktion}' nicht gefunden.`);
@@ -63,6 +67,7 @@ function initialisiereMarker(svg) {
       markerElement.setAttribute("id", `marker-${feldId}-${name}`);
       markerElement.setAttribute("data-hex", feldId);
       markerElement.setAttribute("data-name", name);
+      markerElement.setAttribute("data-typ", typ);
 
       markerElement.addEventListener("contextmenu", evt => {
         evt.preventDefault();

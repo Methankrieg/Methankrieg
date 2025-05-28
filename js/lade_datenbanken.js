@@ -1,4 +1,3 @@
-
 // =============================================
 // lade_datenbanken.js – Initialisiert Spiellogik dynamisch
 // =============================================
@@ -27,11 +26,11 @@ async function ladeDatenbanken() {
     fetch('datenbanken/sektoren_datenbank.json').then(r => r.json())
   ]);
 
-  // 🧭 Bewegungsrelevante Felder
-  window.erschwerteNavigation = navigation.felder;
-  window.dunkelwolkenFelder = dunkelwolken.felder;
+  // 🧭 Bewegungsrelevante Felder als Set für schnelle Lookup-Prüfungen
+  window.erschwerteNavigationFelder = new Set(navigation.felder);
+  window.dunkelwolkenFelder = new Set(dunkelwolken.felder);
   window.sprungroutenDaten = sprungrouten.sprungrouten;
-  window.systeme = systeme;
+  window.systemeDaten = systeme;
 
   // 📦 Spielstanddaten
   window.startSzenario = szenario;
@@ -40,17 +39,17 @@ async function ladeDatenbanken() {
   window.sektorenDaten = sektoren;
 
   // 🧱 Startaufstellung separat laden
-const aufstellungsdatei = szenario.startaufstellung;
-const startaufstellung = await fetch(aufstellungsdatei).then(r => r.json());
-window.gameState = window.gameState || {};
-window.gameState.startaufstellung = startaufstellung;
+  const aufstellungsdatei = szenario.startaufstellung;
+  const startaufstellung = await fetch(aufstellungsdatei).then(r => r.json());
+  window.gameState = window.gameState || {};
+  window.gameState.startaufstellung = startaufstellung;
 
-// 🔧 Bewegungseinträge initialisieren (für Kontextmenü "Bewege nach hier")
-window.gameState.startaufstellung.forEach(einheit => {
-  if (typeof einheit.bereitsBewegt === "undefined") einheit.bereitsBewegt = false;
-  if (typeof einheit.bewegungsArt === "undefined") einheit.bewegungsArt = null;
-});
+  // 🔧 Bewegungseinträge initialisieren (für Kontextmenü "Bewege nach hier")
+  window.gameState.startaufstellung.forEach(einheit => {
+    if (typeof einheit.bereitsBewegt === "undefined") einheit.bereitsBewegt = false;
+    if (typeof einheit.bewegungsArt === "undefined") einheit.bewegungsArt = null;
+  });
 
-// ✅ Erfolgsmeldung
-console.log(`[INIT] Szenario "${szenarioName}" + Datenbanken erfolgreich geladen.`);
+  // ✅ Erfolgsmeldung
+  console.log(`[INIT] Szenario "${szenarioName}" + Datenbanken erfolgreich geladen.`);
 }

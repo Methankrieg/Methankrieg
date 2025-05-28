@@ -1,74 +1,68 @@
-// ==========================================
-// bewegungslogik.js – Bewegungsregeln für Methankrieg (Mai 2025)
-// ==========================================
+// =============================================
+// bewegungslogik.js – Validiert Bewegungsmöglichkeiten auf Hexkarte
+// =============================================
 
-// Diese Datei enthält Funktionen zur Prüfung von Bewegungsmöglichkeiten
-// für taktische, transitionale und operative Bewegungen.
-
-// 🧮 Hilfsfunktion: Berechne Distanz im Hex-Raster (F-Format)
 function hexDistanz(a, b) {
-  const getRC = hex => {
-    const m = hex.match(/F-(\d{2})(\d{2})/);
-    return m ? { r: parseInt(m[2], 10), c: parseInt(m[1], 10) } : null;
-  };
-  const A = getRC(a);
-  const B = getRC(b);
-  if (!A || !B) return 99;
-  const dx = B.c - A.c;
-  const dy = B.r - A.r;
-  const dz = -(dx + dy);
-  return Math.max(Math.abs(dx), Math.abs(dy), Math.abs(dz));
+  if (!a || !b) return 99;
+
+  const A = hexZuCube(a);
+  const B = hexZuCube(b);
+
+  if (!A || !B) {
+    console.warn(`[WARNUNG] Ungültige Koordinaten: ${a}, ${b}`);
+    return 99;
+  }
+
+  return Math.max(Math.abs(A.x - B.x), Math.abs(A.y - B.y), Math.abs(A.z - B.z));
 }
 
-// 📦 Taktische Bewegung
-function isTaktischMoeglich(start, ziel, feindlicheFelder, dunkelwolkenFelder) {
-  const dist = hexDistanz(start, ziel);
-  if (dist < 1 || dist > 3) return false;
-  if (dunkelwolkenFelder.includes(ziel)) return false;
+function hexZuCube(feld) {
+  const match = feld.match(/F-(\d{2})(\d{2})/);
+  if (!match) return null;
+
+  const q = parseInt(match[1], 10);
+  const r = parseInt(match[2], 10) - Math.floor(q % 2 === 0 ? 1 : 0) / 2;
+  const x = q - 1;
+  const z = r - 1;
+  const y = -x - z;
+  return { x, y, z };
+}
+
+function isTaktischMoeglich(start, ziel, dunkelwolkenFelder) {
+  if (start === ziel) return false;
+  if (hexDistanz(start, ziel) > 3) return false;
+  if (dunkelwolkenFelder.has(ziel)) return false; // ✅ Set-Nutzung
   return true;
 }
 
-// 📦 Transitionale Bewegung
 function isTransitionMoeglich(start, ziel) {
-  const dist = hexDistanz(start, ziel);
-  return dist >= 1 && dist <= 10;
+  return hexDistanz(start, ziel) <= 10;
 }
 
-// 📦 Operative Bewegung entlang Sprungrouten
 function isOperativMoeglich(start, ziel, sprungrouten, feindlicheFelder) {
-  // Pfadsuche entlang von Sprungrouten von start nach ziel
-  // Dabei dürfen keine Felder im Pfad feindlich besetzt sein
-
-  const visited = new Set();
-  const queue = [[start]];
+  const besuchteFelder = new Set();
+  const queue = [start];
+  besuchteFelder.add(start);
 
   while (queue.length > 0) {
-    const pfad = queue.shift();
-    const current = pfad[pfad.length - 1];
-    if (current === ziel) {
-      // Prüfe ob alle Felder im Pfad frei sind
-      for (let hex of pfad) {
-        if (feindlicheFelder.includes(hex)) return false;
-      }
-      return true;
-    }
-    visited.add(current);
+    const aktuelles = queue.shift();
+    if (aktuelles === ziel) return true;
 
-    const angrenzende = sprungrouten
-      .filter(([a, b]) => a === current || b === current)
-      .map(([a, b]) => (a === current ? b : a));
+    const nachbarn = sprungrouten
+      .filter(route => route.von === aktuelles)
+      .map(route => route.nach)
+      .filter(nachbar => !besuchteFelder.has(nachbar) && !feindlicheFelder.has(nachbar)); // ✅ Set-Nutzung
 
-    angrenzende.forEach(nachbar => {
-      if (!visited.has(nachbar)) {
-        queue.push([...pfad, nachbar]);
-      }
+    nachbarn.forEach(nachbar => {
+      besuchteFelder.add(nachbar);
+      queue.push(nachbar);
     });
   }
 
   return false;
 }
 
-// Exportiere Funktionen global
+// 🔁 Globale Bereitstellung
 window.Bewegungslogik = {
   hexDistanz,
   isTaktischMoeglich,
