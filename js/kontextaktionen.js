@@ -39,6 +39,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
       rect.addEventListener('click', () => {
         bewegeMarker(markerId, einheit.feld, zielHex, "taktisch");
+        einheit.feld = zielHex;
         einheit.bereitsBewegt = true;
         einheit.bewegungsArt = "taktisch";
         clearContextMenu();
@@ -73,6 +74,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
       rect.addEventListener('click', () => {
         bewegeMarker(markerId, einheit.feld, zielHex, "transition");
+        einheit.feld = zielHex;
         einheit.bereitsBewegt = true;
         einheit.bewegungsArt = "transition";
         clearContextMenu();
@@ -107,6 +109,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
       rect.addEventListener('click', () => {
         bewegeMarker(markerId, einheit.feld, zielHex, "operativ");
+        einheit.feld = zielHex;
         einheit.bereitsBewegt = true;
         einheit.bewegungsArt = "operativ";
         clearContextMenu();
