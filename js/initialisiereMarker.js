@@ -1,4 +1,4 @@
-// initialisiereMarker.js – finalisierte Markerplatzierung mit CSS, Admiral-Fix und Events
+// initialisiereMarker.js – finalisierte Markerplatzierung mit CSS, Admiral-Fix und Maahk-Anpassung
 
 function initialisiereMarker(svg) {
   const markerLayer = svg.getElementById("Marker_13");
@@ -57,6 +57,16 @@ function initialisiereMarker(svg) {
         console.warn(`[FEHLER] Einheit "${name}" (${typ}/${technologie}) in Datenbank für Fraktion '${fraktion}' nicht gefunden.`);
         return;
       }
+
+      // 📐 Maahk-Geschwader horizontal darstellen
+      if (fraktion === "maahks") {
+        markerBreite = 50;
+        markerHoehe = 30;
+      } else {
+        markerBreite = 50;
+        markerHoehe = 50;
+      }
+
       markerKlasse = `marker marker-${cssFraktion}`;
     }
 
