@@ -16,18 +16,22 @@ function initialisiereMarker(svg) {
     const fraktion = einheit.fraktion?.toLowerCase() || "unbekannt";
     const name = einheit.einheit;
     const technologie = einheit.technologie;
+
+    // Typ vorab definieren, auch wenn Admiral
+    const typMatch = name.match(/^\d+\.\s(.+)$/);
+    const typ = typMatch ? typMatch[1].trim() : "unbekannt";
+
     const isAdmiral = name.startsWith("Admiral ");
 
     // 📍 Koordinaten
     const pos = typeof berechneXY === "function" ? berechneXY(feldId) : null;
     if (!pos) {
-      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen. Funktion berechneXY:`, berechneXY);
+      console.warn(`[FEHLER] Kann Koordinaten für ${feldId} nicht berechnen.`);
       return;
     }
     const { x, y } = pos;
     let markerElement = null;
 
-    // 🔷 Admirale
     if (isAdmiral) {
       const admiralName = name.replace("Admiral ", "").trim();
       const admiralData = admiraleDB?.[fraktion]?.[admiralName];
@@ -43,8 +47,6 @@ function initialisiereMarker(svg) {
       markerElement.setAttribute("class", `marker marker-admiral marker-${fraktion}`);
 
     } else {
-      const typMatch = name.match(/^\d+\.\s(.+)$/);
-      const typ = typMatch ? typMatch[1].trim() : "unbekannt";
       const cssTyp = typ.toLowerCase().replace(/\s+/g, "_");
       const einheitsTemplate = einheitenDB?.[fraktion]?.[typ]?.[technologie];
       if (!einheitsTemplate) {

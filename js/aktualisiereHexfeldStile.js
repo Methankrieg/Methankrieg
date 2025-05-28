@@ -1,29 +1,25 @@
-// ===========================================
-// aktualisiereHexfeldStile.js
-// Hexfelder farblich und stilistisch markieren
-// ===========================================
-
 function aktualisiereHexfeldStile(svg) {
   if (!svg) {
     console.warn("[WARNUNG] SVG nicht übergeben an aktualisiereHexfeldStile.");
     return;
   }
 
-  // Prüfe, ob die globalen Daten existieren
-  if (!window.dunkelwolkenFelder || !window.navigationFelder || !window.systemeDatenbank) {
-    console.warn("[WARNUNG] Datenbanken nicht geladen – dunkelwolkenFelder / navigationFelder / systemeDatenbank fehlen.");
+  const dunkelwolkenFelder = window.dunkelwolkenFelder;
+  const navigationFelder = window.erschwerteNavigationFelder;
+  const systemeDaten = window.systemeDaten;
+
+  if (!dunkelwolkenFelder || !navigationFelder || !systemeDaten) {
+    console.warn("[WARNUNG] Datenbanken nicht geladen – dunkelwolkenFelder / erschwerteNavigationFelder / systemeDaten fehlen.");
     return;
   }
 
   // 🌀 Dunkelwolken markieren
   dunkelwolkenFelder.forEach(hexId => {
     const hex = svg.getElementById(hexId);
-    if (hex) {
-      hex.classList.add("dunkelwolke");
-    }
+    if (hex) hex.classList.add("dunkelwolke");
   });
 
-  // ⛅ Erschwerte Navigation markieren
+  // ⛅ Erschwerte Navigation markieren (wenn nicht schon Dunkelwolke)
   navigationFelder.forEach(hexId => {
     const hex = svg.getElementById(hexId);
     if (hex && !hex.classList.contains("dunkelwolke")) {
@@ -32,14 +28,10 @@ function aktualisiereHexfeldStile(svg) {
   });
 
   // 🪐 Systeme & Industriesysteme markieren
-  systemeDatenbank.forEach(system => {
+  Object.values(systemeDaten).forEach(system => {
     const hex = svg.getElementById(system.hex);
     if (!hex) return;
-    if (system.istIndustriesystem) {
-      hex.classList.add("industriesystem");
-    } else {
-      hex.classList.add("system");
-    }
+    hex.classList.add(system.istIndustriesystem ? "industriesystem" : "system");
   });
 
   console.log("[INIT] Hexfeld-Stile aktualisiert.");
