@@ -1,10 +1,11 @@
-
 <!DOCTYPE html>
 
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
 <title>Methankrieg – Szenarioauswahl &amp; Spiel</title>
+<!-- Meta für responsive Darstellung -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- ✅ Zentrale CSS-Datei -->
 <link href="css/karte.css" rel="stylesheet"/>
 <!-- ✅ Zoom-Tool (Panzoom) -->
@@ -16,6 +17,9 @@
       height: 100%;
       background: white;
       font-family: sans-serif;
+    }
+    body {
+      overflow: hidden;
     }
     #auswahlbereich {
       padding: 40px;
@@ -45,15 +49,15 @@
       padding-left: 10px;
       font-size: 14px;
     }
+    /*
     .selected {
       stroke: orange;
       stroke-width: 3;
     }
+    */
   </style>
 </head>
 <body>
-<!-- 🎯 Auswahlbereich -->
-<!-- 🔄 Entfernt: Auswahlbereich, da Szenarioauswahl nun extern erfolgt -->
 <!-- 🎮 Spielbereich -->
 <div id="spielbereich">
 <div id="container">
