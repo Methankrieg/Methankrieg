@@ -9,7 +9,7 @@ function initialisiereMarker(svg) {
 
   const startdaten = window.gameState?.startaufstellung || [];
   const einheitenDB = window.einheitenDaten || {};
-  const admiraleDB = window.admiraleDaten || [];
+  const admiraleDB = window.admiraleDaten || {};
 
   startdaten.forEach((einheit) => {
     const feldId = einheit.feld;
@@ -34,9 +34,10 @@ function initialisiereMarker(svg) {
     let markerBreite = 50;
     let markerHoehe = 50;
 
-    const admiralData = Array.isArray(admiraleDB)
-      ? admiraleDB.find(a =>
-          a.fraktion?.toLowerCase() === fraktion &&
+    // ✅ NEU: Admiral-Erkennung über Objektstruktur
+    const admiralFraktion = admiraleDB?.[fraktion];
+    const admiralData = admiralFraktion
+      ? Object.values(admiralFraktion).find(a =>
           a.einheit?.toLowerCase() === name.toLowerCase()
         )
       : null;
@@ -44,7 +45,8 @@ function initialisiereMarker(svg) {
     const isAdmiral = !!admiralData;
 
     if (isAdmiral) {
-      markerKlasse = `marker marker-${fraktion}-admiral`;
+      const cssFraktion = fraktion === "maahks" ? "maahk" : "arkoniden";
+      markerKlasse = `marker marker-${cssFraktion}-admiral`;
       markerBreite = 45;
       markerHoehe = 45;
     } else {
@@ -61,6 +63,7 @@ function initialisiereMarker(svg) {
     markerElement.setAttribute("width", markerBreite);
     markerElement.setAttribute("height", markerHoehe);
     markerElement.setAttribute("class", markerKlasse);
+    markerElement.classList.add("cursor-pointer"); // optionaler Cursor-Stil
 
     const offset = markerBreite / 2;
     markerElement.setAttribute("transform", `translate(${x - offset}, ${y - offset})`);
