@@ -42,10 +42,11 @@
   stroke: none;
 }
 
+/* === Selektierte Hexfelder === */
 .hex-selektiert {
-  fill: transparent;
-  stroke: orange;
-  stroke-width: 2px;
+  fill: transparent !important;
+  stroke: orange !important;
+  stroke-width: 2px !important;
 }
 
 /* === Arkoniden Marker === */
@@ -54,8 +55,17 @@
   width: 50px;
   height: 50px;
   shape-rendering: crispEdges;
+  stroke: none;
+  stroke-width: 0;
 }
 
+/* === Arkoniden Marker ausgewählt === */
+.marker-arkoniden.selected {
+  stroke: orange !important;
+  stroke-width: 3px !important;
+}
+
+/* === Arkoniden Admiral Marker === */
 .marker-arkoniden-admiral {
   fill: black;
   stroke: gold;
@@ -65,14 +75,29 @@
   shape-rendering: crispEdges;
 }
 
+/* === Arkoniden Admiral ausgewählt === */
+.marker-arkoniden-admiral.selected {
+  stroke: orange !important;
+  stroke-width: 3px !important;
+}
+
 /* === Maahk Marker === */
 .marker-maahk {
   fill: darkgreen;
   width: 30px;
   height: 50px;
   shape-rendering: crispEdges;
+  stroke: none;
+  stroke-width: 0;
 }
 
+/* === Maahk Marker ausgewählt === */
+.marker-maahk.selected {
+  stroke: orange !important;
+  stroke-width: 3px !important;
+}
+
+/* === Maahk Admiral Marker === */
 .marker-maahk-admiral {
   fill: purple;
   stroke: silver;
@@ -80,6 +105,12 @@
   width: 20px;
   height: 40px;
   shape-rendering: crispEdges;
+}
+
+/* === Maahk Admiral ausgewählt === */
+.marker-maahk-admiral.selected {
+  stroke: orange !important;
+  stroke-width: 3px !important;
 }
 
 /* ===========================
