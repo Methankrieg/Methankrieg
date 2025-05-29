@@ -3,13 +3,11 @@
 // ===========================================
 
 function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
-  const dunkelwolkenFelder = window.dunkelwolkenFelder || [];
+  const dunkelwolkenFelder = window.dunkelwolkenFelder || new Set();
   const sprungrouten = window.sprungroutenDaten || [];
-  const feindlicheFelder = new Set(); // Platzhalter – später mit Inhalt füllen
-
   const belegteFelder = new Set(
     (window.gameState?.startaufstellung || [])
-      .filter(e => e.feld !== zielHex) // Ziel darf frei sein
+      .filter(e => e.feld !== zielHex)
       .map(e => e.feld)
   );
 
@@ -22,7 +20,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
     let buttonOffset = 0;
 
     // 🔹 1. Taktisch
-    if (Bewegungslogik.isTaktischMoeglich(einheit.feld, zielHex, feindlicheFelder, dunkelwolkenFelder)) {
+    if (Bewegungslogik.isTaktischMoeglich(einheit.feld, zielHex, belegteFelder, dunkelwolkenFelder)) {
       const yOffset = y + buttonOffset * 20;
 
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -91,8 +89,8 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       buttonOffset++;
     }
 
-    // 🔹 3. Operativ
-    if (Bewegungslogik.isOperativMoeglich(einheit.feld, zielHex, sprungrouten, feindlicheFelder)) {
+    // 🔹 3. Operativ (klassisch)
+    if (Bewegungslogik.isOperativMoeglich(einheit.feld, zielHex, sprungrouten, belegteFelder)) {
       const yOffset = y + buttonOffset * 20;
 
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -126,7 +124,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       buttonOffset++;
     }
 
-    // 🔹 4. Strategisch (via Sprungrouten)
+    // 🔹 4. Operativ via Sprungrouten
     if (StrategischeRoutenlogik.istMoeglich(einheit.feld, zielHex, belegteFelder)) {
       const yOffset = y + buttonOffset * 20;
 
@@ -135,7 +133,7 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       rect.setAttribute('y', yOffset);
       rect.setAttribute('width', '180');
       rect.setAttribute('height', '18');
-      rect.setAttribute('fill', '#ccf');
+      rect.setAttribute('fill', '#cfc'); // zartgrün für Route
       rect.setAttribute('stroke', '#666');
       rect.setAttribute('pointer-events', 'all');
       rect.setAttribute('style', 'cursor: pointer;');
@@ -146,12 +144,12 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       text.setAttribute('font-size', '12');
       text.setAttribute('fill', '#000');
       text.setAttribute('pointer-events', 'none');
-      text.textContent = `${item.name} [strategisch]`;
+      text.textContent = `${item.name} [operativ via Route]`;
 
       rect.addEventListener('click', () => {
-        bewegeMarker(markerId, einheit.feld, zielHex, "strategisch");
+        bewegeMarker(markerId, einheit.feld, zielHex, "operativ");
         einheit.bereitsBewegt = true;
-        einheit.bewegungsArt = "strategisch";
+        einheit.bewegungsArt = "operativ";
         einheit.feld = zielHex;
         clearContextMenu();
       });
