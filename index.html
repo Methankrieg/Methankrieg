@@ -1,16 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
-<title>Methankrieg – Szenarioauswahl &amp; Spiel</title>
-<!-- Meta für responsive Darstellung -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- ✅ Zentrale CSS-Datei -->
-<link href="css/karte.css" rel="stylesheet"/>
-<!-- ✅ Zoom-Tool (Panzoom) -->
-<script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
-<style>
+  <meta charset="utf-8"/>
+  <title>Methankrieg – Szenarioauswahl &amp; Spiel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/karte.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+  <style>
     html, body {
       margin: 0;
       padding: 0;
@@ -49,81 +45,79 @@
       padding-left: 10px;
       font-size: 14px;
     }
-    /*
-    .selected {
-      stroke: orange;
-      stroke-width: 3;
-    }
-    */
   </style>
 </head>
 <body>
-<!-- 🎮 Spielbereich -->
-<div id="spielbereich">
-<div id="container">
-<div id="svgwrapper"></div>
-</div>
-<div id="log">[DEBUG] System bereit.</div>
-<div id="detailpanel-container" style="
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 320px;
-      height: 100%;
-      background: white;
-      border-left: 1px solid #ccc;
-      display: none;
-      z-index: 2000;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.2);">
-<button onclick="document.getElementById('detailpanel-container').style.display='none'" style="position:absolute; top:10px; right:10px; z-index:2100;">
+  <!-- 🎮 Spielbereich -->
+  <div id="spielbereich">
+    <div id="container">
+      <div id="svgwrapper"></div>
+    </div>
+    <div id="log">[DEBUG] System bereit.</div>
+    <div id="detailpanel-container" style="
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 320px;
+          height: 100%;
+          background: white;
+          border-left: 1px solid #ccc;
+          display: none;
+          z-index: 2000;
+          box-shadow: -2px 0 5px rgba(0,0,0,0.2);">
+      <button onclick="document.getElementById('detailpanel-container').style.display='none'" style="position:absolute; top:10px; right:10px; z-index:2100;">
         ✖
       </button>
-<iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
-</div>
-</div>
-<!-- 📦 Spiel-Skripte -->
-<script src="js/gameState.js"></script>
-<script src="js/lade_datenbanken.js"></script>
-<script src="js/kartenloader.js"></script>
-<script src="js/sprungrouten_logik.js"></script>
-<script src="js/bewegungslogik.js"></script>
-<script src="js/marker_movement.js"></script>
-<script src="js/initialisiereMarker.js"></script>
-<script src="js/kontextaktionen.js"></script>
-<script src="js/kontextmenu.js"></script>
-<script src="js/aktualisiereHexfeldStile.js"></script>
-<script src="js/sprungrouten_anzeige.js"></script>
-<script>// ✅ Szenario-Initialisierung basierend auf URL-Parameter
-const urlParams = new URLSearchParams(window.location.search);
-const szenario = urlParams.get("szenario");
+      <iframe id="detailpanel-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+  </div>
 
-if (!szenario) {
-  alert("Kein Szenario ausgewählt. Bitte über die Szenarioauswahl starten.");
-  window.location.href = "szenario_auswahl.html";
-} else {
-  window.gameState = {
-    ziele: {
-      szenario: szenario
+  <!-- 📦 Spiel-Skripte -->
+  <script src="js/gameState.js"></script>
+  <script src="js/lade_datenbanken.js"></script>
+  <script src="js/kartenloader.js"></script>
+  <script src="js/sprungrouten_logik.js"></script>
+  <script src="js/bewegungslogik.js"></script>
+  <script src="js/marker_movement.js"></script>
+  <script src="js/initialisiereMarker.js"></script>
+  <script src="js/kontextaktionen.js"></script>
+  <script src="js/kontextmenu.js"></script>
+  <script src="js/aktualisiereHexfeldStile.js"></script>
+  <script src="js/sprungrouten_anzeige.js"></script>
+
+  <script>
+    // ✅ Szenario-Initialisierung basierend auf URL-Parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const szenario = urlParams.get("szenario");
+
+    if (!szenario) {
+      alert("Kein Szenario ausgewählt. Bitte über die Szenarioauswahl starten.");
+      window.location.href = "szenario_auswahl.html";
+    } else {
+      window.gameState = {
+        ziele: {
+          szenario: szenario
+        }
+      };
+
+      window.addEventListener("load", async () => {
+        document.getElementById("spielbereich").style.display = "block";
+
+        await ladeDatenbanken();
+        const svg = await ladeKarte("karten/Karte_Sektor_F_v1.svg", "svgwrapper");
+
+        if (svg) {
+          initialisiereKontextmenu(svg);
+          if (typeof initialisiereMarker === "function") initialisiereMarker(svg);
+          if (typeof aktualisiereHexfeldStile === "function") aktualisiereHexfeldStile(svg);
+          if (typeof zeichneSprungrouten === "function" && Array.isArray(window.sprungroutenDaten)) {
+            zeichneSprungrouten(svg, window.sprungroutenDaten.map(r => r.route));
+          }
+        }
+
+        console.log("[INIT] Spiel erfolgreich initialisiert mit Szenario:", szenario);
+      });
     }
-  };
-
-  window.addEventListener("load", async () => {
-    document.getElementById("spielbereich").style.display = "block";
-
-    await ladeDatenbanken();
-    const svg = await ladeKarte("karten/Karte_Sektor_F_v1.svg", "svgwrapper");
-
-    if (svg) {
-      initialisiereKontextmenu(svg);
-      if (typeof initialisiereMarker === "function") initialisiereMarker(svg);
-      if (typeof aktualisiereHexfeldStile === "function") aktualisiereHexfeldStile(svg);
-      if (typeof zeichneSprungrouten === "function" && typeof sprungrouten_datenbank !== "undefined") {
-        zeichneSprungrouten(svg, sprungrouten_datenbank);
-      }
-    }
-
-    console.log("[INIT] Spiel erfolgreich initialisiert mit Szenario:", szenario);
-  });
-}</script>
+  </script>
 </body>
 </html>
