@@ -11,12 +11,11 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       .map(e => e.feld)
   );
 
-  // Container für Submenü-Hintergrund mit Scrollbereich
   const submenuGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   submenuGroup.setAttribute('id', 'submenu-scroll-container');
   menu.appendChild(submenuGroup);
 
-  const maxVisibleEntries = 15;
+  const maxVisibleEntries = 5;
   const entryHeight = 22;
   const menuWidth = 240;
 
@@ -36,7 +35,6 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
   let scrollOffset = 0;
 
   function renderSubmenu() {
-    // Clear previous entries
     while (submenuGroup.children.length > 1) {
       submenuGroup.removeChild(submenuGroup.lastChild);
     }
@@ -54,31 +52,19 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
       const bewegungstypen = [];
 
       if (Bewegungslogik.isTaktischMoeglich(einheit.feld, zielHex, belegteFelder, dunkelwolkenFelder)) {
-        bewegungstypen.push({
-          typ: 'taktisch',
-          farbe: '#cfc',
-        });
+        bewegungstypen.push({ typ: 'taktisch', farbe: '#cfc' });
       }
 
       if (Bewegungslogik.isTransitionMoeglich(einheit.feld, zielHex)) {
-        bewegungstypen.push({
-          typ: 'transition',
-          farbe: '#ccf',
-        });
+        bewegungstypen.push({ typ: 'transition', farbe: '#ccf' });
       }
 
       if (Bewegungslogik.isOperativMoeglich(einheit.feld, zielHex, sprungrouten, belegteFelder)) {
-        bewegungstypen.push({
-          typ: 'operativ',
-          farbe: '#ffc',
-        });
+        bewegungstypen.push({ typ: 'operativ', farbe: '#ffc' });
       }
 
       if (StrategischeRoutenlogik.istMoeglich(einheit.feld, zielHex, belegteFelder)) {
-        bewegungstypen.push({
-          typ: 'strategie',
-          farbe: '#fbd',
-        });
+        bewegungstypen.push({ typ: 'strategie', farbe: '#fbd' });
       }
 
       bewegungstypen.forEach((bewegung, idx) => {
@@ -101,7 +87,6 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
           clearContextMenu();
         });
 
-        // Tooltip als Title-Element (SVG-nativ)
         rect.setAttribute('title',
           `${einheit.einheit}\n` +
           `Typ: ${bewegung.typ}\n` +
@@ -121,12 +106,11 @@ function createSubmenu(menu, baseX, baseY, eintraege, zielHex) {
 
         submenuGroup.appendChild(rect);
         submenuGroup.appendChild(text);
-
         offset++;
       });
     });
 
-    // Scroll-Hinweise
+    // Scroll-Steuerung
     if (eintraege.length > maxVisibleEntries) {
       const scrollUp = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       scrollUp.setAttribute('x', baseX + 220);
